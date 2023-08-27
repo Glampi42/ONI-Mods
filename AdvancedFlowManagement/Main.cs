@@ -1,4 +1,6 @@
 ﻿using AdvancedFlowManagement;
+using HarmonyLib;
+using KMod;
 using PeterHan.PLib.Core;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ using UnityEngine.UI;
 using static ConduitFlow;
 
 namespace AdvancedFlowManagement {
-   class Main {
+   class Main : UserMod2 {
       public const string debugPrefix = "[AdvancedFlowManagement] > ";
       public static readonly ConduitType[] allConduitTypes = { ConduitType.Liquid, ConduitType.Gas };
       public static readonly FlowDirections[] allFlowDirections = { FlowDirections.Down, FlowDirections.Left, FlowDirections.Up, FlowDirections.Right };
@@ -39,6 +41,9 @@ namespace AdvancedFlowManagement {
 
       public static bool firstUpdate_Liquid = true;
       public static bool firstUpdate_Gas = true;
+
+
+      public override void OnLoad(Harmony harmony) => base.OnLoad(harmony);
 
 
       public static void DeserializeAll() {

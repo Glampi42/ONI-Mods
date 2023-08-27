@@ -363,9 +363,9 @@ namespace AdvancedFlowManagement {
          visualizerObj = null;
          buildingCellVisualizer = null;
 
-         if(!Utils.TryGetBuildingEndpoint(crossingCmp, out GameObject endpoint_go))
+         if(!Utils.TryGetBuildingEndpoint(crossingCmp, out GameObject building_go))
             return false;
-         buildingCellVisualizer = endpoint_go.GetComponent<BuildingCellVisualizer>();
+         buildingCellVisualizer = building_go.GetComponent<BuildingCellVisualizer>();
          if(buildingCellVisualizer == null)
             return false;
 
@@ -777,9 +777,7 @@ namespace AdvancedFlowManagement {
          if(TryGetBuildingEndpoint(crossingCmp, out _))
          {
             sbyte flowPriority = GetFlowPriority(crossingCmp, 4);
-            if(flowPriority == -1)
-               StoreFlowPriority(crossingCmp, 4, DefaultFlowPriority(crossingCmp, 4));
-            else if(endpointTypeChanged)
+            if(flowPriority == -1 || endpointTypeChanged)
                StoreFlowPriority(crossingCmp, 4, DefaultFlowPriority(crossingCmp, 4));
          }
          else
