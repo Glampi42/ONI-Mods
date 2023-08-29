@@ -97,25 +97,12 @@ namespace AdvancedFlowManagement.Patches {
                SortConnectionsRecursive(deadEndCrossing);
             }
             //---------------Sorting conduits---------------UP
-            //-----------------Finding loop-crossings-----------------DOWN
-            // searching for loop-crossings after managed dead-end-crossings for optimization(visitedCrossings are not checked again)
-            HashSet<int> loopCrossings = new HashSet<int>();
-
-            HashSet<int> visitedCrossings2 = new HashSet<int>();
-            visitedCrossings2.AddRange(visitedCrossings);
-            Stack<int> recursionStack = new Stack<int>();
-            foreach(int crossing in crossings)
-            {
-               recursionStack.Clear();
-               if(!visitedCrossings2.Contains(crossing))
-                  FindLoopsRecursive(crossing);
-            }
-            //-----------------Finding loop-crossings-----------------UP
             //---------------Sorting conduits---------------DOWN
-            foreach(int loopCrossing in loopCrossings)
+            foreach(int leftoverCrossing in crossings)
             {
-               // should sort loop-crossings after dead-end-crossings
-               SortConnectionsRecursive(loopCrossing);
+               // sorting crossings that weren't sorted yet(if there are any):
+               if(!visitedCrossings.Contains(leftoverCrossing))
+                  SortConnectionsRecursive(leftoverCrossing);
             }
             //---------------Sorting conduits---------------UP
 
@@ -142,37 +129,10 @@ namespace AdvancedFlowManagement.Patches {
                }
             }
 
-            void FindLoopsRecursive(int crossing_cell) {
-               recursionStack.Push(crossing_cell);
-
-               byte permittedFlow = (byte)conduitFlow.GetPermittedFlow(crossing_cell);
-               CrossingCmp crossingCmp = cachedCrossingCmps[crossing_cell];
-               for(int direction = 0; direction < 4; direction++)
-               {
-                  if(!Utils.IsBitSet(permittedFlow, 1 << direction))
-                     continue;
-
-                  PipeEnding pipeEnding = crossingCmp.pipeEndings[direction];
-                  if(pipeEnding.type == PipeEnding.Type.CROSSING)
-                  {
-                     if(visitedCrossings2.Contains(pipeEnding.endingCell))
-                        continue;
-
-                     if(recursionStack.Contains(pipeEnding.endingCell))
-                     {
-                        loopCrossings.Add(crossing_cell);
-                        break;
-                     }
-                     else
-                        FindLoopsRecursive(pipeEnding.endingCell);
-                  }
-               }
-               visitedCrossings2.Add(crossing_cell);
-               recursionStack.Pop();
-            }
-
             void SortConnectionsRecursive(int crossing_cell) {
                CrossingCmp crossingCmp = cachedCrossingCmps[crossing_cell];
+               SOAInfo soaInfo = conduitFlow.soaInfo;
+
                // forwards directions that lead to some pipeEnding other than another crossing:
                byte permittedFlowDirections = (byte)conduitFlow.GetPermittedFlow(crossing_cell);
                for(int direction = 0; direction < 4; direction++)
@@ -183,22 +143,17 @@ namespace AdvancedFlowManagement.Patches {
                   PipeEnding pipeEnding = crossingCmp.pipeEndings[direction];
                   if(pipeEnding.type != PipeEnding.Type.CROSSING && pipeEnding.pipeLength != 0)
                   {
-                     int currentCell = crossing_cell;
-                     FlowDirections directionToNext = (FlowDirections)(1 << direction);
-                     int[] cellsInAscendingOrder = new int[pipeEnding.pipeLength];
-                     int i = 0;
-                     do
-                     {
-                        currentCell = ConduitFlow.GetCellFromDirection(currentCell, directionToNext);
-                        directionToNext = conduitFlow.GetPermittedFlow(currentCell);
+                     network.cells.Add(pipeEnding.endingCell);
 
-                        cellsInAscendingOrder[i] = currentCell;
-                        i++;
-                     } while(currentCell != pipeEnding.endingCell);
-
-                     for(int k = pipeEnding.pipeLength - 1; k > -1; k--)
+                     int previous_idx = conduitFlow.GetConduit(pipeEnding.endingCell).idx;
+                     int current_idx = soaInfo.GetConduitFromDirection(previous_idx, pipeEnding.backwardsDirection).idx;
+                     while(soaInfo.GetCell(current_idx) != crossing_cell)
                      {
-                        network.cells.Add(cellsInAscendingOrder[k]);
+                        network.cells.Add(soaInfo.GetCell(current_idx));
+
+                        int temp_idx = current_idx;
+                        current_idx = Utils.GetNextIdx(current_idx, previous_idx, conduitFlow, out _);
+                        previous_idx = temp_idx;
                      }
                   }
                }
@@ -207,7 +162,6 @@ namespace AdvancedFlowManagement.Patches {
                network.cells.Add(crossing_cell);
 
                // backwards directions:
-
                int[] directions = { 0, 1, 2, 3 };
                Array.Sort(directions, (dir1, dir2) => Utils.GetFlowPriority(crossingCmp, (sbyte)dir2) -
                Utils.GetFlowPriority(crossingCmp, (sbyte)dir1));// sorting directions from highest to lowest priority
@@ -224,23 +178,16 @@ namespace AdvancedFlowManagement.Patches {
                      {
                         if(pipeEnding.pipeLength != 0)
                         {
-                           int currentCell = pipeEnding.endingCell;
-                           FlowDirections directionToNext = pipeEnding.backwardsDirection;
-                           int[] cellsInAscendingOrder = new int[pipeEnding.pipeLength];
-                           int i = 0;
-                           while(currentCell != crossing_cell)
+                           int previous_idx = conduitFlow.GetConduit(crossing_cell).idx;
+                           int current_idx = soaInfo.GetConduitFromDirection(previous_idx, (FlowDirections)(1 << direction)).idx;
+                           do
                            {
-                              cellsInAscendingOrder[i] = currentCell;
-                              i++;
+                              network.cells.Add(soaInfo.GetCell(current_idx));
 
-                              currentCell = ConduitFlow.GetCellFromDirection(currentCell, directionToNext);
-                              directionToNext = conduitFlow.GetPermittedFlow(currentCell);
-                           }
-
-                           for(int k = pipeEnding.pipeLength - 1; k > -1; k--)
-                           {
-                              network.cells.Add(cellsInAscendingOrder[k]);
-                           }
+                              int temp_idx = current_idx;
+                              current_idx = Utils.GetNextIdx(current_idx, previous_idx, conduitFlow, out _);
+                              previous_idx = temp_idx;
+                           } while(soaInfo.GetCell(previous_idx) != pipeEnding.endingCell);
                         }
                      }
                      else
@@ -254,65 +201,58 @@ namespace AdvancedFlowManagement.Patches {
                            // a loop leading to the same crossing:
                            var utilityNetworkMngr = Utils.ConduitTypeToUtilityNetworkManager(conduitFlow.conduitType);
 
-                           int previousCell = crossing_cell;
-                           int currentCell = ConduitFlow.GetCellFromDirection(crossing_cell, (FlowDirections)(1 << direction));
-                           UtilityConnections directionToNext = utilityNetworkMngr.GetConnections(currentCell, true) &
-                              ~UtilityConnectionsExtensions.DirectionFromToCell(currentCell, previousCell);
+                           int previous_idx = conduitFlow.GetConduit(crossing_cell).idx;
+                           int current_idx = soaInfo.GetConduitFromDirection(previous_idx, (FlowDirections)(1 << direction)).idx;
+                           Utils.GetNextIdx(current_idx, previous_idx, conduitFlow, out FlowDirections directionToNext);
 
                            // going from 1st direction:
-                           while(currentCell != crossing_cell/*just for safety*/ &&
-                              !Utils.IsBitSet((byte)conduitFlow.GetPermittedFlow(currentCell), (byte)Utils.DURL_To_URLD_Single(directionToNext))/*!reachedMiddle*/)
+                           while(soaInfo.GetCell(current_idx) != crossing_cell/*just for safety*/ &&
+                              !Utils.IsBitSet((byte)conduitFlow.GetPermittedFlow(current_idx), (byte)directionToNext)/*!reachedMiddle*/)
                            {
-                              network.cells.Add(currentCell);
+                              network.cells.Add(soaInfo.GetCell(current_idx));
 
-                              previousCell = currentCell;
-                              currentCell = UtilityConnectionsExtensions.CellInDirection(directionToNext, currentCell);
-                              directionToNext = utilityNetworkMngr.GetConnections(currentCell, true) &
-                              ~UtilityConnectionsExtensions.DirectionFromToCell(currentCell, previousCell);
+                              int temp_idx = current_idx;
+                              current_idx = Utils.GetNextIdx(current_idx, previous_idx, conduitFlow, out directionToNext);
+                              previous_idx = temp_idx;
                            }
 
-                           int middleCell = currentCell;
+                           int middle_idx = current_idx;
 
-                           previousCell = crossing_cell;
-                           currentCell = ConduitFlow.GetCellFromDirection(crossing_cell, pipeEnding.backwardsDirection);
-                           directionToNext = utilityNetworkMngr.GetConnections(currentCell, true) &
-                              ~UtilityConnectionsExtensions.DirectionFromToCell(currentCell, previousCell);
-
-                           // going from 2nd direction:
-                           while(currentCell != middleCell)
+                           if(soaInfo.GetCell(middle_idx) != crossing_cell)
                            {
-                              network.cells.Add(currentCell);
+                              previous_idx = conduitFlow.GetConduit(crossing_cell).idx;
+                              current_idx = soaInfo.GetConduitFromDirection(previous_idx, pipeEnding.backwardsDirection).idx;
+                              Utils.GetNextIdx(current_idx, previous_idx, conduitFlow, out directionToNext);
 
-                              previousCell = currentCell;
-                              currentCell = UtilityConnectionsExtensions.CellInDirection(directionToNext, currentCell);
-                              directionToNext = utilityNetworkMngr.GetConnections(currentCell, true) &
-                              ~UtilityConnectionsExtensions.DirectionFromToCell(currentCell, previousCell);
+                              // going from 2nd direction:
+                              while(current_idx != middle_idx)
+                              {
+                                 network.cells.Add(soaInfo.GetCell(current_idx));
+
+                                 int temp_idx = current_idx;
+                                 current_idx = Utils.GetNextIdx(current_idx, previous_idx, conduitFlow, out directionToNext);
+                                 previous_idx = temp_idx;
+                              }
+
+                              // adding middle cell:
+                              network.cells.Add(soaInfo.GetCell(middle_idx));
                            }
-
-                           // adding middle cell:
-                           network.cells.Add(middleCell);
                         }
                         else
                         {
                            if(pipeEnding.pipeLength != 0)
                            {
                               // adding conduits between this crossing and the other:
-                              int currentCell = ConduitFlow.GetCellFromDirection(pipeEnding.endingCell, pipeEnding.backwardsDirection);
-                              FlowDirections directionToNext = conduitFlow.GetPermittedFlow(currentCell);
-                              int[] cellsInAscendingOrder = new int[pipeEnding.pipeLength];
-                              int i = 0;
-                              while(currentCell != crossing_cell)
-                              {
-                                 cellsInAscendingOrder[i] = currentCell;
-                                 i++;
+                              int previous_idx = conduitFlow.GetConduit(crossing_cell).idx;
+                              int current_idx = soaInfo.GetConduitFromDirection(previous_idx, (FlowDirections)(1 << direction)).idx;
 
-                                 currentCell = ConduitFlow.GetCellFromDirection(currentCell, directionToNext);
-                                 directionToNext = conduitFlow.GetPermittedFlow(currentCell);
-                              }
-
-                              for(int k = pipeEnding.pipeLength - 1; k > -1; k--)
+                              while(soaInfo.GetCell(current_idx) != pipeEnding.endingCell)
                               {
-                                 network.cells.Add(cellsInAscendingOrder[k]);
+                                 network.cells.Add(soaInfo.GetCell(current_idx));
+
+                                 int temp_idx = current_idx;
+                                 current_idx = Utils.GetNextIdx(current_idx, previous_idx, conduitFlow, out _);
+                                 previous_idx = temp_idx;
                               }
                            }
 
@@ -335,7 +275,7 @@ namespace AdvancedFlowManagement.Patches {
                                     if(checkedDirections[followingCrossingCell][i])// if wasThisDirectionChecked
                                        permittedFlow &= (byte)~(1 << i);
 
-                              if(permittedFlow == 0x0)// if allDirectionsWereChecked
+                              if(permittedFlow == 0b0)// if allDirectionsWereChecked
                               {
                                  crossingsToRecurse.Add(followingCrossingCell);
                               }
@@ -427,6 +367,7 @@ namespace AdvancedFlowManagement.Patches {
 
       [HarmonyPatch(typeof(ConduitFlow), "UpdateConduit")]
       public static class OnUpdateConduit_Patch {
+         [HarmonyPriority(Priority.HigherThanNormal)]
          public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator) {
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
 
