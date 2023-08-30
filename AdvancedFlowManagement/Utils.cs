@@ -636,7 +636,7 @@ namespace AdvancedFlowManagement {
          } while(!reachedEnd);
       }
 
-      private static int GetNextIdx(int currentIdx, int previousIdx, ConduitFlow conduitFlow, out ConduitFlow.FlowDirections directionToNextIdx) {
+      public static int GetNextIdx(int currentIdx, int previousIdx, ConduitFlow conduitFlow, out ConduitFlow.FlowDirections directionToNextIdx) {
          ConduitFlow.ConduitConnections connections = conduitFlow.soaInfo.GetConduitConnections(currentIdx);
          if(connections.down != -1 && connections.down != previousIdx)
          {
