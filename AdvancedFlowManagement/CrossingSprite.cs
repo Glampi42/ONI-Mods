@@ -20,7 +20,7 @@ namespace AdvancedFlowManagement {
          GameObject crossingIcon_go = Util.KInstantiateUI(crossingIconPrefab, GameScreenManager.Instance.worldSpaceCanvas, true);
          crossingCmp.crossingIcon = crossingIcon_go;
          crossingIcon_go.name = "JunctionIcon";
-         if(!forceFirstSibling && Utils.TryGetBuildingEndpoint(crossingCmp, out _))
+         if(!forceFirstSibling && Utils.TryGetVisualEndpoint(crossingCmp, out _))
          {
             if(Utils.TryGetEndpointVisualizerObj(crossingCmp, false, out GameObject endpoint_go, out _))
             {
@@ -98,7 +98,7 @@ namespace AdvancedFlowManagement {
          int inputscount = 0;
          int outputscount = 0;
 
-         if(Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type))
+         if(Utils.TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type))
          {
             if(endpoint_type == Endpoint.Sink)
                outputscount++;

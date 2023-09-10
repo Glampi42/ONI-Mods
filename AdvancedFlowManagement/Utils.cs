@@ -187,7 +187,7 @@ namespace AdvancedFlowManagement {
             return 0;
 
          int connectionscount = 0;
-         if(includeEndpoint && TryGetBuildingEndpoint(FakeCrossingCmp(conduit_cell, conduit_type), out _))
+         if(includeEndpoint && TryGetRealEndpointType(FakeCrossingCmp(conduit_cell, conduit_type), out _))
          {
             connectionscount++;
          }
@@ -195,46 +195,13 @@ namespace AdvancedFlowManagement {
          return connectionscount;
       }
       //---------------------------EndpointType stuff---------------------------DOWN
-      public static bool TryGetBuildingEndpoint(CrossingCmp fakeCrossingCmp, out GameObject building_go) {
+      public static bool TryGetVisualEndpoint(CrossingCmp fakeCrossingCmp, out GameObject building_go) {
          return (building_go = Grid.Objects[fakeCrossingCmp.crossingCell, (int)(fakeCrossingCmp.conduitType == ConduitType.Liquid ? ObjectLayer.LiquidConduitConnection : ObjectLayer.GasConduitConnection)]) != null;
       }
-      public static bool TryGetBuildingEndpointType(CrossingCmp fakeCrossingCmp, out Endpoint endpoint_type, bool tryGetValueFirst = true) {
-         if(tryGetValueFirst && IsCrossingRegistered(fakeCrossingCmp))
-         {
-            EndpointType savedEndpoint = fakeCrossingCmp.endpointType;
-            if(savedEndpoint != EndpointType.NOT_SET)
-            {
-               endpoint_type = FromEndpointType(savedEndpoint);
-               return endpoint_type != Endpoint.Conduit;
-            }
-         }
-
-         endpoint_type = Endpoint.Conduit;// = no type
-         if(!TryGetBuildingEndpoint(fakeCrossingCmp, out _))
-         {
-            if(IsCrossingRegistered(fakeCrossingCmp))
-               fakeCrossingCmp.endpointType = EndpointType.NO_ENDPOINT;
-            return false;
-         }
-
-         FlowUtilityNetwork network = (FlowUtilityNetwork)ConduitTypeToUtilityNetworkManager(fakeCrossingCmp.conduitType).GetNetworkForCell(fakeCrossingCmp.crossingCell);
-         if(network.sinks.Exists(match => match.Cell == fakeCrossingCmp.crossingCell))
-         {
-            endpoint_type = Endpoint.Sink;
-         }
-         else if(network.sources.Exists(match => match.Cell == fakeCrossingCmp.crossingCell))
-         {
-            endpoint_type = Endpoint.Source;
-         }
-
-         if(fakeCrossingCmp != null)
-            fakeCrossingCmp.endpointType = FromEndpoint(endpoint_type);
-         return endpoint_type != Endpoint.Conduit;
-      }
-      public static bool TryGetBuildingEndpointType(CrossingCmp fakeCrossingCmp, out Endpoint endpoint_type, out bool isSecondary) {
+      public static bool TryGetVisualEndpointType(CrossingCmp fakeCrossingCmp, out Endpoint endpoint_type, out bool isSecondary) {
          endpoint_type = Endpoint.Conduit;// = no type
          isSecondary = false;
-         if(!TryGetBuildingEndpoint(fakeCrossingCmp, out GameObject building_go))
+         if(!TryGetVisualEndpoint(fakeCrossingCmp, out GameObject building_go))
             return false;
          Building building = building_go?.GetComponent<Building>();
          if(building != null)
@@ -277,31 +244,16 @@ namespace AdvancedFlowManagement {
          return false;
       }
 
-      public static Endpoint FromEndpointType(EndpointType endpointType) {
-         switch(endpointType)
+      public static bool TryGetRealEndpointType(CrossingCmp fakeCrossingCmp, out Endpoint endpoint_type) {
+         endpoint_type = Endpoint.Conduit;
+
+         if(ConduitTypeToEndpointsDict(fakeCrossingCmp.conduitType).ContainsKey(fakeCrossingCmp.crossingCell))
          {
-            case EndpointType.NOT_SET:
-            case EndpointType.NO_ENDPOINT:
-            default:
-               return Endpoint.Conduit;
-            case EndpointType.SOURCE:
-               return Endpoint.Source;
-            case EndpointType.SINK:
-               return Endpoint.Sink;
+            endpoint_type = ConduitTypeToEndpointsDict(fakeCrossingCmp.conduitType)[fakeCrossingCmp.crossingCell];
+            return true;
          }
-      }
-      public static EndpointType FromEndpoint(Endpoint endpointType) {
-         switch(endpointType)
-         {
-            case Endpoint.Conduit:
-               return EndpointType.NO_ENDPOINT;
-            case Endpoint.Source:
-               return EndpointType.SOURCE;
-            case Endpoint.Sink:
-               return EndpointType.SINK;
-            default:
-               return EndpointType.NOT_SET;
-         }
+
+         return false;
       }
       //---------------------------EndpointType stuff---------------------------UP
       //--------------ConduitType-Everything Converting--------------DOWN
@@ -337,6 +289,12 @@ namespace AdvancedFlowManagement {
       public static Dictionary<int, List<int>> ConduitTypeToNetworksCrossings(ConduitType conduit_type) {
          return (conduit_type == ConduitType.Liquid) ? Main.crossingsNetworks_liquid : Main.crossingsNetworks_gas;
       }
+      public static Dictionary<int, Endpoint> ConduitTypeToEndpointsDict(ConduitType conduit_type) =>
+         conduit_type == ConduitType.Liquid ? Main.endpoints_liquid : Main.endpoints_gas;
+      public static object ConduitTypeToCrossingsLock(ConduitType conduit_type) =>
+         conduit_type == ConduitType.Liquid ? Main.lockCrossings_liquid : Main.lockCrossings_gas;
+      public static object ConduitTypeToBuffersLock(ConduitType conduit_type) =>
+         conduit_type == ConduitType.Liquid ? Main.lockBuffers_liquid : Main.lockBuffers_gas;
 
       public static ConduitType ConduitTypeFromOverlayMode(OverlayModes.Mode mode) {
          if(mode is OverlayModes.LiquidConduits)
@@ -363,13 +321,13 @@ namespace AdvancedFlowManagement {
          visualizerObj = null;
          buildingCellVisualizer = null;
 
-         if(!Utils.TryGetBuildingEndpoint(crossingCmp, out GameObject building_go))
+         if(!Utils.TryGetVisualEndpoint(crossingCmp, out GameObject building_go))
             return false;
          buildingCellVisualizer = building_go.GetComponent<BuildingCellVisualizer>();
          if(buildingCellVisualizer == null)
             return false;
 
-         if(TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type, out bool isSecondary))
+         if(TryGetVisualEndpointType(crossingCmp, out Endpoint endpoint_type, out bool isSecondary))
          {
             if(endpoint_type.Equals(Endpoint.Sink))
             {
@@ -499,7 +457,7 @@ namespace AdvancedFlowManagement {
                }
                else if(connectionsCount > 1)// if !isDeadEnd
                {
-                  if(TryGetBuildingEndpointType(FakeCrossingCmp(nextCell, crossingCmp.conduitType), out Endpoint endpoint_type))
+                  if(TryGetRealEndpointType(FakeCrossingCmp(nextCell, crossingCmp.conduitType), out Endpoint endpoint_type))
                   {
                      pipeEnding.type = endpoint_type == Endpoint.Sink ? PipeEnding.Type.SINK : PipeEnding.Type.SOURCE;
                      pipeEnding.endingCell = nextCell;
@@ -665,14 +623,14 @@ namespace AdvancedFlowManagement {
       public static char GetFlowDirection(CrossingCmp crossingCmp, sbyte direction) {
          if(direction == 4)
          {
-            return !TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type) ? '0' : (endpoint_type == Endpoint.Sink ? '2' : '1');
+            return !TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type) ? '0' : (endpoint_type == Endpoint.Sink ? '2' : '1');
          }
          return crossingCmp.crossingID[direction];
       }
       public static char GetFlowDirection(CrossingCmp crossingCmp, string crossingID, sbyte direction) {
          if(direction == 4)
          {
-            return !TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type) ? '0' : (endpoint_type == Endpoint.Sink ? '2' : '1');
+            return !TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type) ? '0' : (endpoint_type == Endpoint.Sink ? '2' : '1');
          }
          return crossingID[direction];
       }
@@ -737,7 +695,7 @@ namespace AdvancedFlowManagement {
       public static sbyte DefaultFlowPriority(CrossingCmp crossingCmp, int direction) {
          if(direction == 4)
          {
-            return (sbyte)(!TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type) ? -1 : (endpoint_type == Endpoint.Sink ? 2 : 0));
+            return (sbyte)(!TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type) ? -1 : (endpoint_type == Endpoint.Sink ? 2 : 0));
          }
          else
          {
@@ -774,7 +732,7 @@ namespace AdvancedFlowManagement {
       }
 
       public static void UpdateEndpointFlowPriority(CrossingCmp crossingCmp, bool endpointTypeChanged) {
-         if(TryGetBuildingEndpoint(crossingCmp, out _))
+         if(TryGetRealEndpointType(crossingCmp, out _))
          {
             sbyte flowPriority = GetFlowPriority(crossingCmp, 4);
             if(flowPriority == -1 || endpointTypeChanged)
@@ -787,7 +745,7 @@ namespace AdvancedFlowManagement {
       }
 
       public static bool ConduitRequiresBuffer(CrossingCmp fakeCrossingCmp) {
-         return IsCrossingRegistered(fakeCrossingCmp) && (TryGetBuildingEndpointType(fakeCrossingCmp, out Endpoint endpoint_type) &&
+         return IsCrossingRegistered(fakeCrossingCmp) && (TryGetRealEndpointType(fakeCrossingCmp, out Endpoint endpoint_type) &&
             (endpoint_type == Endpoint.Sink && fakeCrossingCmp.shouldManageOutPriorities) ||
             (endpoint_type == Endpoint.Source && fakeCrossingCmp.shouldManageInPriorities));
       }
@@ -835,7 +793,7 @@ namespace AdvancedFlowManagement {
          sbyte flowPriority = GetFlowPriority(crossingCmp, 4);
          if(flowPriority != -1)
          {
-            if(TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type))
+            if(TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type))
             {
                if(endpoint_type == Endpoint.Sink)
                {
@@ -973,7 +931,7 @@ namespace AdvancedFlowManagement {
             bufferStorageCmp.conduitType = crossingCmp.conduitType;
             bufferStorageCmp.bufferStorage = Enumerable.Repeat(ConduitContents.Empty, 2).ToArray();
 
-            lock(Main.lockBuffersHashSet)
+            lock(ConduitTypeToBuffersLock(crossingCmp.conduitType))
             {
                ConduitTypeToBuffersSet(crossingCmp.conduitType).Add(bufferStorageCmp.conduitCell);
             }

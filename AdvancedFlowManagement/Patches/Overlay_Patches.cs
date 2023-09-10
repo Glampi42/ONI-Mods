@@ -115,7 +115,7 @@ namespace AdvancedFlowManagement {
                return;
 
             if(Utils.ConduitTypeToShowCrossingsBool(conduit_type) && Utils.ConduitTypeToCrossingsSet(conduit_type).Contains(cell) &&
-                    Utils.TryGetBuildingEndpointType(Utils.GetCrossingCmp(cell, conduit_type), out Endpoint endpoint_type))
+                    Utils.TryGetRealEndpointType(Utils.GetCrossingCmp(cell, conduit_type), out Endpoint endpoint_type))
             {
                __instance.icons[visualizerObj].sprite = endpoint_type.Equals(Endpoint.Sink) ? MYSPRITES.GetSprite("afm_input_round") : MYSPRITES.GetSprite("afm_output_round");
                visualizerObj.transform.localScale = Vector3.one * 1f;
@@ -128,15 +128,17 @@ namespace AdvancedFlowManagement {
          {
             if(shouldBeAdapted)
             {
-               Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type);
-               Dictionary<GameObject, Image> icons = buildingCellVisualizer.icons;
+               if(Utils.TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type))
+               {
+                  Dictionary<GameObject, Image> icons = buildingCellVisualizer.icons;
 
-               //-----Deleting pulsing-----DOWN
-               if(visualizerObj.gameObject.TryGetComponent(out SizePulse sizePulse))
-                  UnityEngine.Object.Destroy(sizePulse);// Needed for the size of the sprite to change(otherwise it won't)
-               //-----Deleting pulsing-----UP
-               icons[visualizerObj].sprite = endpoint_type.Equals(Endpoint.Sink) ? MYSPRITES.GetSprite("afm_input_round") : MYSPRITES.GetSprite("afm_output_round");
-               visualizerObj.transform.localScale = Vector3.one * 1f;
+                  //-----Deleting pulsing-----DOWN
+                  if(visualizerObj.gameObject.TryGetComponent(out SizePulse sizePulse))
+                     UnityEngine.Object.Destroy(sizePulse);// Needed for the size of the sprite to change(otherwise it won't)
+                                                           //-----Deleting pulsing-----UP
+                  icons[visualizerObj].sprite = endpoint_type.Equals(Endpoint.Sink) ? MYSPRITES.GetSprite("afm_input_round") : MYSPRITES.GetSprite("afm_output_round");
+                  visualizerObj.transform.localScale = Vector3.one * 1f;
+               }
             }
          }
       }

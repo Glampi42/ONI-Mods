@@ -26,7 +26,6 @@ namespace AdvancedFlowManagement {
       public bool swappedBufferStorage;
       // when modifying which fields are serialized change the method CopySerializationFields() as well
       //-------Serializable fields-------UP
-      public EndpointType endpointType;
       public bool isIllegal;
       public PipeEnding[] pipeEndings;
       public bool shouldManageInPriorities;
@@ -47,7 +46,6 @@ namespace AdvancedFlowManagement {
          shouldManageInPriorities = false;
          shouldManageOutPriorities = false;
          flowPriorities = new List<(List<sbyte>, sbyte)>(2);
-         endpointType = EndpointType.NOT_SET;
       }
 
       public CrossingCmp CloneSerializationFields(CrossingCmp otherCmp) {
@@ -66,14 +64,6 @@ namespace AdvancedFlowManagement {
       public CrossingCmp(int crossing_cell, ConduitType conduit_type) {
          crossingCell = crossing_cell;
          conduitType = conduit_type;
-      }
-
-
-      public enum EndpointType : byte {
-         NOT_SET = 0,
-         NO_ENDPOINT = 1,
-         SOURCE = 2,
-         SINK = 3
       }
    }
 }

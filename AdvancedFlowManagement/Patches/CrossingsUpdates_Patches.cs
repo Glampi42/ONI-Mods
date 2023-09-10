@@ -6,10 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static ConduitFlow;
+using static STRINGS.UI.SPACEARTIFACTS;
 
 namespace AdvancedFlowManagement.Patches {
    class CrossingsUpdates_Patches {
-      public static void PostProcessNetworksRebuild(ICollection<int> allUpdatedCells, ConduitType conduit_type, bool firstUpdate) {
+      public static void PostProcessNetworksRebuild(ICollection<int> allUpdatedCells, bool firstUpdate, ConduitFlow conduitFlow) {
+         ConduitType conduit_type = conduitFlow.conduitType;
+
+         CacheAllEndpoints(conduitFlow.networks, conduit_type, out Dictionary<int, Endpoint> oldEndpoints);
+
          var registeredCrossings = Utils.ConduitTypeToCrossingsSet(conduit_type);
          Dictionary<int, CrossingCmp> savedCrossingCmps = new Dictionary<int, CrossingCmp>(registeredCrossings.Count);
          foreach(int crossing_cell in registeredCrossings)
@@ -208,16 +213,15 @@ namespace AdvancedFlowManagement.Patches {
             if(!checkedCrossings[crossing_cell])// if !skipUpdate
             {
                Utils.FollowAllDirections(crossingCmp);
-               Utils.TryGetBuildingEndpointType(crossingCmp, out _, false);
                Utils.UpdateCrossing(crossingCmp);
             }
             else
             {
                // things that have to be updated in either case:
                Utils.FollowAllDirections(crossingCmp);
-               Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint savedEndpoint);// get saved before calculating real
-               Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint realEndpoint, false);
 
+               Endpoint savedEndpoint = oldEndpoints.ContainsKey(crossing_cell) ? oldEndpoints[crossing_cell] : Endpoint.Conduit;
+               Utils.TryGetRealEndpointType(crossingCmp, out Endpoint realEndpoint);
                //--needed if a sink/source was removed above the crossing--DOWN
                if(savedEndpoint != realEndpoint)
                {
@@ -361,7 +365,7 @@ namespace AdvancedFlowManagement.Patches {
                string crossingID = crossingsCluster[beginningCrossingCell].Item1;
                int inputscount = 0;
                int outputscount = 0;
-               if(Utils.TryGetBuildingEndpointType(beginningCrossingCmp, out Endpoint endpoint_type))
+               if(Utils.TryGetRealEndpointType(beginningCrossingCmp, out Endpoint endpoint_type))
                {
                   if(endpoint_type == Endpoint.Sink)
                      outputscount++;
@@ -429,7 +433,7 @@ namespace AdvancedFlowManagement.Patches {
          GameObject crossing_go = Utils.GetConduitGO(crossing_cell, conduit_type);
          CrossingCmp crossingCmp = crossing_go.AddComponent<CrossingCmp>();
          crossingCmp.SetFieldsToDefault(crossing_cell, conduit_type);
-         lock(Main.lockCrossingsHashSet)
+         lock(Utils.ConduitTypeToCrossingsLock(conduit_type))
          {
             Utils.ConduitTypeToCrossingsSet(conduit_type).Add(crossing_cell);
          }
@@ -478,12 +482,30 @@ namespace AdvancedFlowManagement.Patches {
          if(selectedObject != null && selectedObject.Equals(crossingCmp.gameObject))
             DetailsScreen.Instance.DeselectAndClose();
 
-         lock(Main.lockCrossingsHashSet)
+         lock(Utils.ConduitTypeToCrossingsLock(crossingCmp.conduitType))
          {
             Utils.ConduitTypeToCrossingsSet(crossingCmp.conduitType).Remove(crossingCmp.crossingCell);
          }
          if(destroyCmps)
             UnityEngine.Object.Destroy(crossingCmp);
+      }
+
+      private static void CacheAllEndpoints(List<Network> networks, ConduitType conduit_type, out Dictionary<int, Endpoint> oldEndpoints) {
+         oldEndpoints = new Dictionary<int, Endpoint>(Utils.ConduitTypeToEndpointsDict(conduit_type));
+
+         Utils.ConduitTypeToEndpointsDict(conduit_type).Clear();
+
+         foreach(var network in networks)
+         {
+            foreach(var sink in network.network.sinks)
+            {
+               Utils.ConduitTypeToEndpointsDict(conduit_type).Add(sink.Cell, sink.EndpointType);
+            }
+            foreach(var source in network.network.sources)
+            {
+               Utils.ConduitTypeToEndpointsDict(conduit_type).Add(source.Cell, source.EndpointType);
+            }
+         }
       }
    }
 }

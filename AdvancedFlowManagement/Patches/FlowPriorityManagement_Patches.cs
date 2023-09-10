@@ -931,7 +931,7 @@ namespace AdvancedFlowManagement.Patches {
                         selectable.RemoveStatusItem(Main.bufferContentsSI, true);
                      }
 
-                     lock(Main.lockBuffersHashSet)
+                     lock(Utils.ConduitTypeToBuffersLock(bufferStorageCmp.conduitType))
                      {
                         Utils.ConduitTypeToBuffersSet(bufferStorageCmp.conduitType).Remove(bufferStorageCmp.conduitCell);
                      }
@@ -1312,7 +1312,7 @@ namespace AdvancedFlowManagement.Patches {
                   //-------------------Swapping ConduitContents-BufferStorage-------------------DOWN
                   // swapping ConduitContents-BufferStorage(for unswapping process see the beginning of OnUpdateConduit_Patch)
                   ConduitContents tempContents = GetContentsDirectly(crossing_cell, conduit_flow);
-                  if(Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type))
+                  if(Utils.TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type))
                   {
                      if(endpoint_type == Endpoint.Sink)
                      {
@@ -1366,7 +1366,7 @@ namespace AdvancedFlowManagement.Patches {
                bufferContents.diseaseIdx, bufferContents.diseaseCount);
          }
 
-         lock(Main.lockBuffersHashSet)
+         lock(Utils.ConduitTypeToBuffersLock(bufferStorageCmp.conduitType))
          {
             Utils.ConduitTypeToBuffersSet(bufferStorageCmp.conduitType).Remove(bufferStorageCmp.conduitCell);
          }
@@ -1507,7 +1507,7 @@ namespace AdvancedFlowManagement.Patches {
 
          bool endpointFlowOccured = inFlowManagementIsDefined && crossingCmp.inputsFlowManagement.Item4;
          sbyte endpointFlowPriority = -1;
-         if(Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type) && endpoint_type == Endpoint.Source)
+         if(Utils.TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type) && endpoint_type == Endpoint.Source)
          {
             endpointFlowPriority = Utils.GetFlowPriority(crossingCmp, 4);
             if(!endpointFlowOccured && endpointFlowPriority > flowPriorityCluster.Item2)// sourceFlowPriority > thisFlowPriority

@@ -18,20 +18,24 @@ namespace AdvancedFlowManagement {
       public static readonly ConduitType[] allConduitTypes = { ConduitType.Liquid, ConduitType.Gas };
       public static readonly FlowDirections[] allFlowDirections = { FlowDirections.Down, FlowDirections.Left, FlowDirections.Up, FlowDirections.Right };
 
-      public static readonly object lockBuffersHashSet = new object();
-      public static readonly object lockCrossingsHashSet = new object();
-
       public static Dictionary<string, (string, byte)>/*rotatedID, (unrotatedID, rotation)*/ allCrossingIDs = new Dictionary<string, (string, byte)>();
       public static StatusItem bufferContentsSI;
 
       public static HashSet<int> crossings_liquid = new HashSet<int>();
+      public static readonly object lockCrossings_liquid = new object();
       public static HashSet<int> crossings_gas = new HashSet<int>();
+      public static readonly object lockCrossings_gas = new object();
 
       public static HashSet<int> buffers_liquid = new HashSet<int>();
+      public static readonly object lockBuffers_liquid = new object();
       public static HashSet<int> buffers_gas = new HashSet<int>();
+      public static readonly object lockBuffers_gas = new object();
 
       public static HashSet<int> customFlowConduits_liquid = new HashSet<int>();
       public static HashSet<int> customFlowConduits_gas = new HashSet<int>();
+
+      public static Dictionary<int, Endpoint> endpoints_liquid = new Dictionary<int, Endpoint>();
+      public static Dictionary<int, Endpoint> endpoints_gas = new Dictionary<int, Endpoint>();
 
       public static Dictionary<int, List<int>>/*network_id, List<crossing_cell>*/ crossingsNetworks_liquid = new Dictionary<int, List<int>>();
       public static Dictionary<int, List<int>>/*network_id, List<crossing_cell>*/ crossingsNetworks_gas = new Dictionary<int, List<int>>();

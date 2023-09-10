@@ -380,7 +380,7 @@ namespace AdvancedFlowManagement {
                   prioritySpacers_DLRU_unrotated[rotatedi].SetActive(true);
                }
             }
-            if(Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type) &&
+            if(Utils.TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type) &&
                ((showInputsPri && !(endpoint_type == Endpoint.Sink)) || (showOutputsPri && (endpoint_type == Endpoint.Sink))))
             {
                priorityToggles_DLRU_unrotated[4].SetActive(true);
@@ -504,7 +504,7 @@ namespace AdvancedFlowManagement {
                }
             }
          }
-         if(Utils.TryGetBuildingEndpointType(crossingCmp, out Endpoint endpoint_type))
+         if(Utils.TryGetRealEndpointType(crossingCmp, out Endpoint endpoint_type))
          {
             priorityToggles_DLRU_unrotated[4].transform.localRotation = counter_rotation;
 

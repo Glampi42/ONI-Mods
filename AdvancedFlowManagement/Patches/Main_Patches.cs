@@ -87,6 +87,8 @@ namespace AdvancedFlowManagement.Patches {
             Main.buffers_gas.Clear();
             Main.customFlowConduits_liquid.Clear();
             Main.customFlowConduits_gas.Clear();
+            Main.endpoints_liquid.Clear();
+            Main.endpoints_gas.Clear();
             Main.crossingsNetworks_liquid.Clear();
             Main.crossingsNetworks_gas.Clear();
             Main.showCrossings_Liquid = true;
@@ -104,7 +106,7 @@ namespace AdvancedFlowManagement.Patches {
             ref bool firstUpdate = ref (__instance.conduitType == ConduitType.Liquid ? ref Main.firstUpdate_Liquid : ref Main.firstUpdate_Gas);
 
             // registering & unregistering crossings, redirecting flow directions:
-            CrossingsUpdates_Patches.PostProcessNetworksRebuild(root_nodes, __instance.conduitType, firstUpdate);
+            CrossingsUpdates_Patches.PostProcessNetworksRebuild(root_nodes, firstUpdate, __instance);
             if(!firstUpdate)
             {
                FlowPriorityManagement_Patches.RecalculateUpdateOrder(__instance.networks, __instance);
