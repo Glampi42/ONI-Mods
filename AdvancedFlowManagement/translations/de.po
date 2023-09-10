@@ -7,7 +7,7 @@ msgstr ""
 "Language-Team: GLaMPI\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
+"Language: de\n"
 
 msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
 msgid "Show Junctions"
