@@ -468,6 +468,12 @@ namespace AdvancedFlowManagement.Patches {
 
                if(bufferIsEmpty)
                {
+                  KSelectable selectable = Grid.Objects[crossingCmp.crossingCell, (int)Utils.ConduitTypeToObjectLayer(crossingCmp.conduitType)]?.GetComponent<KSelectable>();
+                  if(selectable != null)
+                  {
+                     selectable.RemoveStatusItem(Main.bufferContentsSI, true);
+                  }
+
                   lock(Utils.ConduitTypeToBuffersLock(bufferStorageCmp.conduitType))
                   {
                      Utils.ConduitTypeToBuffersSet(bufferStorageCmp.conduitType).Remove(bufferStorageCmp.conduitCell);
