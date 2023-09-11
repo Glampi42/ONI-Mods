@@ -467,7 +467,13 @@ namespace AdvancedFlowManagement.Patches {
                }
 
                if(bufferIsEmpty)
+               {
+                  lock(Utils.ConduitTypeToBuffersLock(bufferStorageCmp.conduitType))
+                  {
+                     Utils.ConduitTypeToBuffersSet(bufferStorageCmp.conduitType).Remove(bufferStorageCmp.conduitCell);
+                  }
                   UnityEngine.Object.Destroy(bufferStorageCmp);
+               }
             }
 
             CopyBuildingSettings copysettings = crossingCmp.gameObject.GetComponent<CopyBuildingSettings>();
