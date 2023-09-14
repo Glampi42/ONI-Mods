@@ -24,7 +24,9 @@ namespace AdvancedFlowManagement.Patches {
                savedCrossingCmps.Add(crossing_cell, crossingCmp);
          }
 
-         FirstUpdates();
+         FirstUpdates(out bool shouldReturn);
+         if(shouldReturn)
+            return;
 
          Dictionary<int, int[]> previousCrossingsCells = new Dictionary<int, int[]>(registeredCrossings.Count);
          SavePreviousCrossingsCells();
@@ -75,10 +77,14 @@ namespace AdvancedFlowManagement.Patches {
 
 
 
-         void FirstUpdates() {
+         void FirstUpdates(out bool shouldReturn_inner) {
+            shouldReturn_inner = false;
+
             if(firstUpdate)
             {
                Main.DeserializeAll();
+
+               shouldReturn_inner = true;
                return;// ignoring first update because it's broken(or so do I think)
             }
             if(savedCrossingCmps.Count() != 0 &&
