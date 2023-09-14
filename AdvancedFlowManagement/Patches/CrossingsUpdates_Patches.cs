@@ -23,44 +23,15 @@ namespace AdvancedFlowManagement.Patches {
             if(crossingCmp != null)
                savedCrossingCmps.Add(crossing_cell, crossingCmp);
          }
-         //---------------------------First update---------------------------DOWN
-         if(firstUpdate)
-         {
-            Main.DeserializeAll();
-            return;// ignoring first update because it's broken(or so do I think)
-         }
-         if(savedCrossingCmps.Count() != 0 &&
-            savedCrossingCmps.Values.First().pipeEndings == default)// this is only the case after a game load
-         {
-            // this code is part of first update-code but is executed afterwards(second update) because first update is broken
-            foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
-            {
-               CrossingSprite.Create(crossingCmp, true/*<--this fixes layering issues*/);
-               crossingCmp.gameObject.AddComponent<CopyBuildingSettings>();
-               Utils.UpdateShouldManageFlowPriorities(crossingCmp);
 
-               crossingCmp.pipeEndings = Enumerable.Repeat(PipeEnding.Invalid, 4).ToArray();
-            }
-            foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
-            {
-               Utils.FollowAllDirections(crossingCmp);// each crossing has to have a value for pipeEndings before executing this
-            }
-         }
-         //---------------------------First update---------------------------UP
-         //----------------Saving previousCrossingsCells----------------DOWN
+         FirstUpdates();
+
          Dictionary<int, int[]> previousCrossingsCells = new Dictionary<int, int[]>(registeredCrossings.Count);
-         foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
-         {
-            previousCrossingsCells.Add(crossingCmp.crossingCell, new int[4]);
-            for(int direction = 0; direction < 4; direction++)
-            {
-               PipeEnding[] pipeEndings = crossingCmp.pipeEndings;
-               previousCrossingsCells[crossingCmp.crossingCell][direction] = pipeEndings[direction].type == PipeEnding.Type.CROSSING ? pipeEndings[direction].endingCell : -1;// <--this is important
-            }
-         }
-         //----------------Saving previousCrossingsCells----------------UP
+         SavePreviousCrossingsCells();
+
          GameObject selectedObject = SelectTool.Instance.selected?.gameObject;
          bool selectedIsNotNull = selectedObject != null;
+
          //----------------Deleting all PipeEndings values----------------DOWN
          foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
          {
@@ -84,114 +55,7 @@ namespace AdvancedFlowManagement.Patches {
                }
                else if(!checkedCrossings.ContainsKey(conduit_cell))
                {
-                  //----------------Finding the cluster----------------DOWN
-                  crossingsCluster.Clear();
-                  FindConnectedCrossings(conduit_cell);
-                  //----------------Finding the cluster----------------UP
-                  if(crossingsCluster.Count > 1 || crossingsCluster.Values.First().Item2[0].Item1 != -1)// if clusterSize > 1 OR crossing has wrong flow direction(s) towards sinks/sources
-                  {
-                     if(crossingsCluster.Count > 1)// shouldn't search for legal path if only one crossing is in the cluster
-                     {
-                        //----------------Trying to fix illegal configurations----------------DOWN
-                        Dictionary<int, int>/*crossing_cell, legal_direction*/ legalPath =
-                            new Dictionary<int, int>();
-                        int[] temp2 = crossingsCluster.Keys.ToArray();
-                        foreach(int crossing_cell in temp2)
-                        {
-                           var clusterEntry = crossingsCluster[crossing_cell];
-                           int swappedDirectionsCount = 0;
-                           foreach(var forwardsDirection in clusterEntry.Item2)
-                              if(forwardsDirection.Item1 != -1)
-                                 swappedDirectionsCount++;
-                           if(clusterEntry.Item3.Item2)
-                              swappedDirectionsCount++;
-
-                           for(int tryNum = 0; tryNum < 4; tryNum++)
-                           {
-                              legalPath.Clear();
-
-                              bool acceptDeadEnds = tryNum > 1;
-                              bool reverseSearchOrder = tryNum % 2 == 1;
-
-                              if(reverseSearchOrder && swappedDirectionsCount < 2)
-                                 continue;// if there is only one swapped direction, it is not necessary to reverse the search order
-
-                              if(FindLegalPath(crossing_cell, legalPath, -1, acceptDeadEnds, reverseSearchOrder))
-                              {
-                                 // !acceptDeadEnds & !reverseSearchOrder; !acceptDeadEnds & reverseSearchOrder;
-                                 // acceptDeadEnds & !reverseSearchOrder; acceptDeadEnds & reverseSearchOrder(00; 01; 10; 11)
-                                 foreach(int crossing in legalPath.Keys)
-                                 {
-                                    //-------Unsetting the legal direction for the crossing-------DOWN
-                                    // by unsetting is meant that this direction will not be switched in the following code
-                                    var crossingEntry = crossingsCluster[crossing];
-                                    if(crossingEntry.Item3.Item1 == legalPath[crossing])// if it's a backwardDirection
-                                    {
-                                       var entry = crossingEntry;
-                                       entry.Item3.Item2 = false;
-                                       crossingEntry = entry;
-                                    }
-                                    else// else it's a forwardDirection
-                                    {
-                                       var entry2 = crossingEntry;
-                                       int index = Array.IndexOf(crossingEntry.Item2, crossingEntry.Item2
-                                           .FindOrDefault(dir => dir.Item1 == legalPath[crossing], (-1, false)));
-                                       if(index != -1)
-                                       {
-                                          entry2.Item2[index] = (-1, false);
-                                          crossingEntry = entry2;
-                                       }
-                                    }
-                                    //-------Unsetting the legal direction for the crossing-------UP
-                                    //-------Unsetting the legal direction for the other crossing-------DOWN
-                                    PipeEnding pipeEnding = Utils.FollowPipe(savedCrossingCmps[crossing], legalPath[crossing]);
-                                    int legal_direction = Utils.CountTrailingZeros((int)pipeEnding.backwardsDirection);
-                                    var otherCrossingEntry = crossingsCluster[pipeEnding.endingCell];
-                                    if(otherCrossingEntry.Item3.Item1 == legal_direction)// if it's a backwardDirection
-                                    {
-                                       var entry = otherCrossingEntry;
-                                       entry.Item3.Item2 = false;
-                                       otherCrossingEntry = entry;
-                                    }
-                                    else// else it's a forwardDirection
-                                    {
-                                       var entry2 = otherCrossingEntry;
-                                       int index = Array.IndexOf(otherCrossingEntry.Item2, otherCrossingEntry.Item2
-                                           .FindOrDefault(dir => dir.Item1 == legal_direction, (-1, false)));
-                                       if(index != -1)
-                                       {
-                                          entry2.Item2[index] = (-1, false);
-                                          otherCrossingEntry = entry2;
-                                       }
-                                    }
-                                    //-------Unsetting the legal direction for the other crossing-------UP
-                                 }
-                                 break;
-                              }
-                           }
-                        }
-                        //----------------Trying to fix illegal configurations----------------DOWN
-                     }
-                     //----------------Switching flow directions back----------------DOWN
-                     foreach(int crossing_cell in crossingsCluster.Keys)
-                     {
-                        CrossingCmp crossingCmp = savedCrossingCmps[crossing_cell];
-                        foreach((int, bool) forwardDir in crossingsCluster[crossing_cell].Item2)
-                        {
-                           if(forwardDir.Item2 && forwardDir.Item1 != -1)
-                           {
-                              Utils.FollowPipe(crossingCmp, forwardDir.Item1);// the PipeEnding is not defined at this point
-                              Utils.SwitchFlowDirection(crossingCmp, (ConduitFlow.FlowDirections)(1 << forwardDir.Item1), false);
-                           }
-                        }
-                     }
-                     //----------------Switching flow directions back----------------UP
-                  }
-                  foreach(int crossing in crossingsCluster.Keys)
-                  {
-                     if(!checkedCrossings.ContainsKey(crossing))
-                        checkedCrossings.Add(crossing, crossingsCluster[crossing].Item4);
-                  }
+                  MonitorCrossing(conduit_cell);
                }
             }
             else if(connectionsCount > 2)
@@ -206,44 +70,199 @@ namespace AdvancedFlowManagement.Patches {
             RegisterNewCrossing(newCrossingCell, conduit_type);// should register new crossings after clearing the networksCrossings dictionary
          }
 
-         //----------------------Updating all crossings----------------------DOWN
-         foreach(int crossing_cell in checkedCrossings.Keys)
-         {
-            CrossingCmp crossingCmp = savedCrossingCmps[crossing_cell];
-            if(!checkedCrossings[crossing_cell])// if !skipUpdate
-            {
-               Utils.FollowAllDirections(crossingCmp);
-               Utils.UpdateCrossing(crossingCmp);
-            }
-            else
-            {
-               // things that have to be updated in either case:
-               Utils.FollowAllDirections(crossingCmp);
+         UpdateAllCrossings();
 
-               Endpoint savedEndpoint = oldEndpoints.ContainsKey(crossing_cell) ? oldEndpoints[crossing_cell] : Endpoint.Conduit;
-               Utils.TryGetRealEndpointType(crossingCmp, out Endpoint realEndpoint);
-               //--needed if a sink/source was removed above the crossing--DOWN
-               if(savedEndpoint != realEndpoint)
+
+
+
+         void FirstUpdates() {
+            if(firstUpdate)
+            {
+               Main.DeserializeAll();
+               return;// ignoring first update because it's broken(or so do I think)
+            }
+            if(savedCrossingCmps.Count() != 0 &&
+               savedCrossingCmps.Values.First().pipeEndings == default)// this is only the case after a game load
+            {
+               // this code is part of first update-code but is executed afterwards(second update) because first update is broken
+               foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
                {
-                  CrossingSprite.UpdateIsIllegal(crossingCmp);
-                  Utils.UpdateEndpointFlowPriority(crossingCmp, savedEndpoint != Endpoint.Conduit && realEndpoint != Endpoint.Conduit);
+                  CrossingSprite.Create(crossingCmp, true/*<--this fixes layering issues*/);
+                  crossingCmp.gameObject.AddComponent<CopyBuildingSettings>();
                   Utils.UpdateShouldManageFlowPriorities(crossingCmp);
+
+                  crossingCmp.pipeEndings = Enumerable.Repeat(PipeEnding.Invalid, 4).ToArray();
                }
-               //--[...]--UP
+               foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
+               {
+                  Utils.FollowAllDirections(crossingCmp);// each crossing has to have a value for pipeEndings before executing this
+               }
             }
-
-            if(selectedIsNotNull)
-            {
-               GameObject crossing_go = crossingCmp.gameObject;
-               if(selectedObject.Equals(crossing_go))
-                  DetailsScreen.Instance.Refresh(crossing_go);// Needed for the Flow Configuration SideScreen to update
-            }
-
-            // saving crossing's network(used for optimization):
-            Utils.StoreCrossingsNetwork(crossingCmp);
          }
-         //----------------------Updating all crossings----------------------UP
 
+
+         void SavePreviousCrossingsCells() {
+            foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
+            {
+               previousCrossingsCells.Add(crossingCmp.crossingCell, new int[4]);
+               for(int direction = 0; direction < 4; direction++)
+               {
+                  PipeEnding[] pipeEndings = crossingCmp.pipeEndings;
+                  previousCrossingsCells[crossingCmp.crossingCell][direction] = pipeEndings[direction].type == PipeEnding.Type.CROSSING ? pipeEndings[direction].endingCell : -1;// <--this is important
+               }
+            }
+         }
+
+
+         void MonitorCrossing(int conduit_cell) {
+            //----------------Finding the cluster----------------DOWN
+            crossingsCluster.Clear();
+            FindConnectedCrossings(conduit_cell);
+            //----------------Finding the cluster----------------UP
+            if(crossingsCluster.Count > 1 || crossingsCluster.Values.First().Item2[0].Item1 != -1)// if clusterSize > 1 OR crossing has wrong flow direction(s) towards sinks/sources
+            {
+               if(crossingsCluster.Count > 1)// shouldn't search for legal path if only one crossing is in the cluster
+               {
+                  //----------------Trying to fix illegal configurations----------------DOWN
+                  Dictionary<int, int>/*crossing_cell, legal_direction*/ legalPath =
+                      new Dictionary<int, int>();
+                  int[] temp2 = crossingsCluster.Keys.ToArray();
+                  foreach(int crossing_cell in temp2)
+                  {
+                     var clusterEntry = crossingsCluster[crossing_cell];
+                     int swappedDirectionsCount = 0;
+                     foreach(var forwardsDirection in clusterEntry.Item2)
+                        if(forwardsDirection.Item1 != -1)
+                           swappedDirectionsCount++;
+                     if(clusterEntry.Item3.Item2)
+                        swappedDirectionsCount++;
+
+                     for(int tryNum = 0; tryNum < 4; tryNum++)
+                     {
+                        legalPath.Clear();
+
+                        bool acceptDeadEnds = tryNum > 1;
+                        bool reverseSearchOrder = tryNum % 2 == 1;
+
+                        if(reverseSearchOrder && swappedDirectionsCount < 2)
+                           continue;// if there is only one swapped direction, it is not necessary to reverse the search order
+
+                        if(FindLegalPath(crossing_cell, legalPath, -1, acceptDeadEnds, reverseSearchOrder))
+                        {
+                           // !acceptDeadEnds & !reverseSearchOrder; !acceptDeadEnds & reverseSearchOrder;
+                           // acceptDeadEnds & !reverseSearchOrder; acceptDeadEnds & reverseSearchOrder(00; 01; 10; 11)
+                           foreach(int crossing in legalPath.Keys)
+                           {
+                              //-------Unsetting the legal direction for the crossing-------DOWN
+                              // by unsetting is meant that this direction will not be switched in the following code
+                              var crossingEntry = crossingsCluster[crossing];
+                              if(crossingEntry.Item3.Item1 == legalPath[crossing])// if it's a backwardDirection
+                              {
+                                 var entry = crossingEntry;
+                                 entry.Item3.Item2 = false;
+                                 crossingEntry = entry;
+                              }
+                              else// else it's a forwardDirection
+                              {
+                                 var entry2 = crossingEntry;
+                                 int index = Array.IndexOf(crossingEntry.Item2, crossingEntry.Item2
+                                     .FindOrDefault(dir => dir.Item1 == legalPath[crossing], (-1, false)));
+                                 if(index != -1)
+                                 {
+                                    entry2.Item2[index] = (-1, false);
+                                    crossingEntry = entry2;
+                                 }
+                              }
+                              //-------Unsetting the legal direction for the crossing-------UP
+                              //-------Unsetting the legal direction for the other crossing-------DOWN
+                              PipeEnding pipeEnding = Utils.FollowPipe(savedCrossingCmps[crossing], legalPath[crossing]);
+                              int legal_direction = Utils.CountTrailingZeros((int)pipeEnding.backwardsDirection);
+                              var otherCrossingEntry = crossingsCluster[pipeEnding.endingCell];
+                              if(otherCrossingEntry.Item3.Item1 == legal_direction)// if it's a backwardDirection
+                              {
+                                 var entry = otherCrossingEntry;
+                                 entry.Item3.Item2 = false;
+                                 otherCrossingEntry = entry;
+                              }
+                              else// else it's a forwardDirection
+                              {
+                                 var entry2 = otherCrossingEntry;
+                                 int index = Array.IndexOf(otherCrossingEntry.Item2, otherCrossingEntry.Item2
+                                     .FindOrDefault(dir => dir.Item1 == legal_direction, (-1, false)));
+                                 if(index != -1)
+                                 {
+                                    entry2.Item2[index] = (-1, false);
+                                    otherCrossingEntry = entry2;
+                                 }
+                              }
+                              //-------Unsetting the legal direction for the other crossing-------UP
+                           }
+                           break;
+                        }
+                     }
+                  }
+                  //----------------Trying to fix illegal configurations----------------DOWN
+               }
+               //----------------Switching flow directions back----------------DOWN
+               foreach(int crossing_cell in crossingsCluster.Keys)
+               {
+                  CrossingCmp crossingCmp = savedCrossingCmps[crossing_cell];
+                  foreach((int, bool) forwardDir in crossingsCluster[crossing_cell].Item2)
+                  {
+                     if(forwardDir.Item2 && forwardDir.Item1 != -1)
+                     {
+                        Utils.FollowPipe(crossingCmp, forwardDir.Item1);// the PipeEnding is not defined at this point
+                        Utils.SwitchFlowDirection(crossingCmp, (ConduitFlow.FlowDirections)(1 << forwardDir.Item1), false);
+                     }
+                  }
+               }
+               //----------------Switching flow directions back----------------UP
+            }
+            foreach(int crossing in crossingsCluster.Keys)
+            {
+               if(!checkedCrossings.ContainsKey(crossing))
+                  checkedCrossings.Add(crossing, crossingsCluster[crossing].Item4);
+            }
+         }
+
+
+         void UpdateAllCrossings() {
+            foreach(int crossing_cell in checkedCrossings.Keys)
+            {
+               CrossingCmp crossingCmp = savedCrossingCmps[crossing_cell];
+               if(!checkedCrossings[crossing_cell])// if !skipUpdate
+               {
+                  Utils.FollowAllDirections(crossingCmp);
+                  Utils.UpdateCrossing(crossingCmp);
+               }
+               else
+               {
+                  // things that have to be updated in either case:
+                  Utils.FollowAllDirections(crossingCmp);
+
+                  Endpoint savedEndpoint = oldEndpoints.ContainsKey(crossing_cell) ? oldEndpoints[crossing_cell] : Endpoint.Conduit;
+                  Utils.TryGetRealEndpointType(crossingCmp, out Endpoint realEndpoint);
+                  //--needed if a sink/source was removed above the crossing--DOWN
+                  if(savedEndpoint != realEndpoint)
+                  {
+                     CrossingSprite.UpdateIsIllegal(crossingCmp);
+                     Utils.UpdateEndpointFlowPriority(crossingCmp, savedEndpoint != Endpoint.Conduit && realEndpoint != Endpoint.Conduit);
+                     Utils.UpdateShouldManageFlowPriorities(crossingCmp);
+                  }
+                  //--[...]--UP
+               }
+
+               if(selectedIsNotNull)
+               {
+                  GameObject crossing_go = crossingCmp.gameObject;
+                  if(selectedObject.Equals(crossing_go))
+                     DetailsScreen.Instance.Refresh(crossing_go);// Needed for the Flow Configuration SideScreen to update
+               }
+
+               // saving crossing's network(used for optimization):
+               Utils.StoreCrossingsNetwork(crossingCmp);
+            }
+         }
 
 
          void FindConnectedCrossings(int beginningCrossingCell, int backwardsDirection = -1, char previousCrossingPreviousFlow = '_'/*some random char*/) {
