@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 using static ConduitFlow;
 
 namespace AdvancedFlowManagement.Patches {
@@ -93,8 +94,8 @@ namespace AdvancedFlowManagement.Patches {
             Main.crossingsNetworks_gas.Clear();
             Main.showCrossings_Liquid = true;
             Main.showCrossings_Gas = true;
-            Main.firstUpdate_Liquid = true;
-            Main.firstUpdate_Gas = true;
+            Main.deserializedCmps_liquid = false;
+            Main.deserializedCmps_gas = false;
             CrossingSprite.crossingIconPrefab = null;
          }
       }
@@ -103,17 +104,16 @@ namespace AdvancedFlowManagement.Patches {
       public static class OnNetworksRebuilt_Patch {
          public static void Postfix(IList<UtilityNetwork> networks/*as far as I'm concerned, these networks are the same as __instance.networks, but I'm not 100% sure*/,
             ICollection<int> root_nodes, ConduitFlow __instance) {
-            ref bool firstUpdate = ref (__instance.conduitType == ConduitType.Liquid ? ref Main.firstUpdate_Liquid : ref Main.firstUpdate_Gas);
+            bool ignoreUpdate = __instance.soaInfo.NumEntries == 0;
 
-            // registering & unregistering crossings, redirecting flow directions:
-            CrossingsUpdates_Patches.PostProcessNetworksRebuild(root_nodes, firstUpdate, __instance);
-            if(!firstUpdate)
+            if(!ignoreUpdate)
             {
+               // registering & unregistering crossings, redirecting flow directions:
+               CrossingsUpdates_Patches.PostProcessNetworksRebuild(root_nodes, __instance);
+
                FlowPriorityManagement_Patches.RecalculateUpdateOrder(__instance.networks, __instance);
                FlowPriorityManagement_Patches.SaveCustomFlowConduits(__instance.networks, __instance);
             }
-
-            firstUpdate = false;
          }
       }
 

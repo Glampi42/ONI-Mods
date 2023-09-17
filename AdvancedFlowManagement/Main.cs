@@ -43,61 +43,82 @@ namespace AdvancedFlowManagement {
       public static bool showCrossings_Liquid = true;
       public static bool showCrossings_Gas = true;
 
-      public static bool firstUpdate_Liquid = true;
-      public static bool firstUpdate_Gas = true;
+      public static bool deserializedCmps_liquid = false;
+      public static bool deserializedCmps_gas = false;
 
 
       public override void OnLoad(Harmony harmony) => base.OnLoad(harmony);
 
 
-      public static void DeserializeAll() {
+      public static void DeserializeCmpsIfNeeded(ConduitType conduit_type, out bool deserialized) {
+         deserialized = false;
          //------------------------Re-instantiating serialized components------------------------DOWN
-         foreach(CrossingCmp crossingCmp in SaveModState.Instance.savedCrossingCmps_liquid)
+         if(conduit_type == ConduitType.Liquid)
          {
-            if(Utils.TryGetConduitGO(crossingCmp.crossingCell, crossingCmp.conduitType, out GameObject conduitGO))
-            {
-               CrossingCmp newCrossingCmp = conduitGO.AddComponent<CrossingCmp>();
-               newCrossingCmp.CloneSerializationFields(crossingCmp);
+            if(deserializedCmps_liquid)
+               return;
 
-               Main.crossings_liquid.Add(newCrossingCmp.crossingCell);
+            foreach(CrossingCmp crossingCmp in SaveModState.Instance.savedCrossingCmps_liquid)
+            {
+               if(Utils.TryGetConduitGO(crossingCmp.crossingCell, crossingCmp.conduitType, out GameObject conduitGO))
+               {
+                  CrossingCmp newCrossingCmp = conduitGO.AddComponent<CrossingCmp>();
+                  newCrossingCmp.CloneSerializationFields(crossingCmp);
+
+                  Main.crossings_liquid.Add(newCrossingCmp.crossingCell);
+               }
             }
+
+            foreach(BufferStorageCmp bufferStorageCmp in SaveModState.Instance.savedBufferStorageCmps_liquid)
+            {
+               if(Utils.TryGetConduitGO(bufferStorageCmp.conduitCell, bufferStorageCmp.conduitType, out GameObject conduitGO))
+               {
+                  BufferStorageCmp newBufferStorageCmp = conduitGO.AddComponent<BufferStorageCmp>();
+                  newBufferStorageCmp.CloneSerializationFields(bufferStorageCmp);
+
+                  Main.buffers_liquid.Add(newBufferStorageCmp.conduitCell);
+               }
+            }
+
+            SaveModState.Instance.savedCrossingCmps_liquid.Clear();
+            SaveModState.Instance.savedBufferStorageCmps_liquid.Clear();
+
+            deserializedCmps_liquid = true;
+            deserialized = true;
          }
-         foreach(CrossingCmp crossingCmp in SaveModState.Instance.savedCrossingCmps_gas)
+         else
          {
-            if(Utils.TryGetConduitGO(crossingCmp.crossingCell, crossingCmp.conduitType, out GameObject conduitGO))
+            if(deserializedCmps_gas)
+               return;
+
+            foreach(CrossingCmp crossingCmp in SaveModState.Instance.savedCrossingCmps_gas)
             {
-               CrossingCmp newCrossingCmp = conduitGO.AddComponent<CrossingCmp>();
-               newCrossingCmp.CloneSerializationFields(crossingCmp);
+               if(Utils.TryGetConduitGO(crossingCmp.crossingCell, crossingCmp.conduitType, out GameObject conduitGO))
+               {
+                  CrossingCmp newCrossingCmp = conduitGO.AddComponent<CrossingCmp>();
+                  newCrossingCmp.CloneSerializationFields(crossingCmp);
 
-               Main.crossings_gas.Add(newCrossingCmp.crossingCell);
+                  Main.crossings_gas.Add(newCrossingCmp.crossingCell);
+               }
             }
-         }
 
-         foreach(BufferStorageCmp bufferStorageCmp in SaveModState.Instance.savedBufferStorageCmps_liquid)
-         {
-            if(Utils.TryGetConduitGO(bufferStorageCmp.conduitCell, bufferStorageCmp.conduitType, out GameObject conduitGO))
+            foreach(BufferStorageCmp bufferStorageCmp in SaveModState.Instance.savedBufferStorageCmps_gas)
             {
-               BufferStorageCmp newBufferStorageCmp = conduitGO.AddComponent<BufferStorageCmp>();
-               newBufferStorageCmp.CloneSerializationFields(bufferStorageCmp);
+               if(Utils.TryGetConduitGO(bufferStorageCmp.conduitCell, bufferStorageCmp.conduitType, out GameObject conduitGO))
+               {
+                  BufferStorageCmp newBufferStorageCmp = conduitGO.AddComponent<BufferStorageCmp>();
+                  newBufferStorageCmp.CloneSerializationFields(bufferStorageCmp);
 
-               Main.buffers_liquid.Add(newBufferStorageCmp.conduitCell);
+                  Main.buffers_gas.Add(newBufferStorageCmp.conduitCell);
+               }
             }
-         }
-         foreach(BufferStorageCmp bufferStorageCmp in SaveModState.Instance.savedBufferStorageCmps_gas)
-         {
-            if(Utils.TryGetConduitGO(bufferStorageCmp.conduitCell, bufferStorageCmp.conduitType, out GameObject conduitGO))
-            {
-               BufferStorageCmp newBufferStorageCmp = conduitGO.AddComponent<BufferStorageCmp>();
-               newBufferStorageCmp.CloneSerializationFields(bufferStorageCmp);
 
-               Main.buffers_gas.Add(newBufferStorageCmp.conduitCell);
-            }
-         }
+            SaveModState.Instance.savedCrossingCmps_gas.Clear();
+            SaveModState.Instance.savedBufferStorageCmps_gas.Clear();
 
-         SaveModState.Instance.savedCrossingCmps_liquid.Clear();
-         SaveModState.Instance.savedCrossingCmps_gas.Clear();
-         SaveModState.Instance.savedBufferStorageCmps_liquid.Clear();
-         SaveModState.Instance.savedBufferStorageCmps_gas.Clear();
+            deserializedCmps_gas = true;
+            deserialized = true;
+         }
          //------------------------Re-instantiating serialized components------------------------UP
       }
    }

@@ -10,10 +10,12 @@ using static STRINGS.UI.SPACEARTIFACTS;
 
 namespace AdvancedFlowManagement.Patches {
    class CrossingsUpdates_Patches {
-      public static void PostProcessNetworksRebuild(ICollection<int> allUpdatedCells, bool firstUpdate, ConduitFlow conduitFlow) {
+      public static void PostProcessNetworksRebuild(ICollection<int> allUpdatedCells, ConduitFlow conduitFlow) {
          ConduitType conduit_type = conduitFlow.conduitType;
 
          CacheAllEndpoints(conduitFlow.networks, conduit_type, out Dictionary<int, Endpoint> oldEndpoints);
+
+         Main.DeserializeCmpsIfNeeded(conduit_type, out bool deserialized);
 
          var registeredCrossings = Utils.ConduitTypeToCrossingsSet(conduit_type);
          Dictionary<int, CrossingCmp> savedCrossingCmps = new Dictionary<int, CrossingCmp>(registeredCrossings.Count);
@@ -24,9 +26,8 @@ namespace AdvancedFlowManagement.Patches {
                savedCrossingCmps.Add(crossing_cell, crossingCmp);
          }
 
-         FirstUpdates(out bool shouldReturn);
-         if(shouldReturn)
-            return;
+         if(deserialized)
+            ManageDeserializedCrossings();
 
          Dictionary<int, int[]> previousCrossingsCells = new Dictionary<int, int[]>(registeredCrossings.Count);
          SavePreviousCrossingsCells();
@@ -41,10 +42,12 @@ namespace AdvancedFlowManagement.Patches {
          }
          //----------------Deleting all PipeEndings values----------------UP
 
+         var networksCrossings = Utils.ConduitTypeToNetworksCrossings(conduit_type);
+         networksCrossings.Clear();// resetting this after the rebuild(see StoreCrossingsNetwork() below)
+
          Dictionary<int, bool>/*crossing_cell, skipUpdate*/ checkedCrossings = new Dictionary<int, bool>();
          Dictionary<int, (string, (int, bool)[], (int, bool), bool)>/*crossing_cell, (newID, (forwards_direction, shouldBeSwitched)[], (backwards_direction, isSwitched), skipUpdate)*/ crossingsCluster =
              new Dictionary<int, (string, (int, bool)[], (int, bool), bool)>();
-         List<int> crossingsToRegister = new List<int>();
 
          foreach(int conduit_cell in allUpdatedCells)
          {
@@ -61,48 +64,26 @@ namespace AdvancedFlowManagement.Patches {
                }
             }
             else if(connectionsCount > 2)
-               crossingsToRegister.Add(conduit_cell);
+               RegisterNewCrossing(conduit_cell, conduit_type);
          }
 
-         var networksCrossings = Utils.ConduitTypeToNetworksCrossings(conduit_type);
-         networksCrossings.Clear();// resetting this after the rebuild(see StoreCrossingsNetwork() below)
-
-         foreach(int newCrossingCell in crossingsToRegister)
-         {
-            RegisterNewCrossing(newCrossingCell, conduit_type);// should register new crossings after clearing the networksCrossings dictionary
-         }
-
-         UpdateAllCrossings();
+         UpdateAllMonitoredCrossings();
 
 
 
 
-         void FirstUpdates(out bool shouldReturn_inner) {
-            shouldReturn_inner = false;
-
-            if(firstUpdate)
+         void ManageDeserializedCrossings() {
+            foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
             {
-               Main.DeserializeAll();
+               CrossingSprite.Create(crossingCmp, true/*<--this fixes layering issues*/);
+               crossingCmp.gameObject.AddComponent<CopyBuildingSettings>();
+               Utils.UpdateShouldManageFlowPriorities(crossingCmp);
 
-               shouldReturn_inner = true;
-               return;// ignoring first update because it's broken(or so do I think)
+               crossingCmp.pipeEndings = Enumerable.Repeat(PipeEnding.Invalid, 4).ToArray();
             }
-            if(savedCrossingCmps.Count() != 0 &&
-               savedCrossingCmps.Values.First().pipeEndings == default)// this is only the case after a game load
+            foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
             {
-               // this code is part of first update-code but is executed afterwards(second update) because first update is broken
-               foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
-               {
-                  CrossingSprite.Create(crossingCmp, true/*<--this fixes layering issues*/);
-                  crossingCmp.gameObject.AddComponent<CopyBuildingSettings>();
-                  Utils.UpdateShouldManageFlowPriorities(crossingCmp);
-
-                  crossingCmp.pipeEndings = Enumerable.Repeat(PipeEnding.Invalid, 4).ToArray();
-               }
-               foreach(CrossingCmp crossingCmp in savedCrossingCmps.Values)
-               {
-                  Utils.FollowAllDirections(crossingCmp);// each crossing has to have a value for pipeEndings before executing this
-               }
+               Utils.FollowAllDirections(crossingCmp);// each crossing has to have a value for pipeEndings before executing this
             }
          }
 
@@ -232,7 +213,7 @@ namespace AdvancedFlowManagement.Patches {
          }
 
 
-         void UpdateAllCrossings() {
+         void UpdateAllMonitoredCrossings() {
             foreach(int crossing_cell in checkedCrossings.Keys)
             {
                CrossingCmp crossingCmp = savedCrossingCmps[crossing_cell];

@@ -135,7 +135,7 @@ namespace AdvancedFlowManagement {
                   //-----Deleting pulsing-----DOWN
                   if(visualizerObj.gameObject.TryGetComponent(out SizePulse sizePulse))
                      UnityEngine.Object.Destroy(sizePulse);// Needed for the size of the sprite to change(otherwise it won't)
-                                                           //-----Deleting pulsing-----UP
+                  //-----Deleting pulsing-----UP
                   icons[visualizerObj].sprite = endpoint_type.Equals(Endpoint.Sink) ? MYSPRITES.GetSprite("afm_input_round") : MYSPRITES.GetSprite("afm_output_round");
                   visualizerObj.transform.localScale = Vector3.one * 1f;
                }
