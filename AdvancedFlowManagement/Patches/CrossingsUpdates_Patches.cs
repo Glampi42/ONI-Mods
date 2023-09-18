@@ -32,7 +32,7 @@ namespace AdvancedFlowManagement.Patches {
          Dictionary<int, int[]> previousCrossingsCells = new Dictionary<int, int[]>(registeredCrossings.Count);
          SavePreviousCrossingsCells();
 
-         GameObject selectedObject = SelectTool.Instance.selected?.gameObject;
+         GameObject selectedObject = (SelectTool.Instance.selected?.selected ?? false) ? SelectTool.Instance.selected.gameObject : null;
          bool selectedIsNotNull = selectedObject != null;
 
          //----------------Deleting all PipeEndings values----------------DOWN
