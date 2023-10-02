@@ -64,10 +64,23 @@ namespace AdvancedFlowManagement.Patches {
          }
       }
 
-      [HarmonyPatch(typeof(DragTool), "OnDragComplete")]
+      [HarmonyPatch(typeof(DragTool), "OnLeftClickUp")]
       public static class OnCopyConfigurationsComplete_Patch {
-         public static void Postfix(DragTool __instance) {
-            if(__instance is CopySettingsTool)
+         public static void Prefix(Vector3 cursor_pos, DragTool __instance, out bool __state) {
+            __state = false;
+
+            if(!(__instance is CopySettingsTool) || !__instance.dragging)
+               return;
+
+            DragTool.Mode mode = __instance.GetMode();
+            if(mode != DragTool.Mode.Box && mode != DragTool.Mode.Line || __instance.areaVisualizer == null)
+               return;
+
+            __state = true;
+         }
+
+         public static void Postfix(Vector3 cursor_pos, bool __state) {
+            if(__state)
             {
                foreach(var network in dirtyNetworks)
                {

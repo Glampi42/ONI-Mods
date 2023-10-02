@@ -55,8 +55,8 @@
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="PLib, Version=4.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PLib.4.12.0\lib\net471\PLib.dll</HintPath>
+    <Reference Include="PLib, Version=4.13.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PLib.4.13.0\lib\net471\PLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Specialized, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -147,7 +147,7 @@
   </Target>
   <Target Name="Publicise" AfterTargets="Clean">
     <ItemGroup>
-      <PubliciseInputAssemblies Include="&#xD;&#xA;	  ..\lib\Assembly-CSharp.dll;&#xD;&#xA;	  ..\lib\Assembly-CSharp-firstpass.dll" />
+      <PubliciseInputAssemblies Include="..\lib\Assembly-CSharp.dll; ..\lib\Assembly-CSharp-firstpass.dll" />
     </ItemGroup>
     <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="..\lib\" PubliciseCompilerGenerated="true" />
   </Target>
