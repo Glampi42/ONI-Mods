@@ -62,16 +62,20 @@ namespace AdvancedFlowManagement {
                OverlayLegend.OverlayInfoUnit crossing_infoUnit1 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingThick_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME), CrossingSprite.normalColor, Color.white);
                crossing_infoUnit1.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME + "</b>\n" +
                        MYSTRINGS.OVERLAYITEMS.JUNCTION.TOOLTIP;
+
                OverlayLegend.OverlayInfoUnit crossing_infoUnit2 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingInput_L_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME), CrossingSprite.normalColor, Color.white);
                crossing_infoUnit2.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME + "</b>\n" +
                        (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_GAS);
+
                OverlayLegend.OverlayInfoUnit crossing_infoUnit3 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingOutput_R_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME), CrossingSprite.normalColor, Color.white);
                crossing_infoUnit3.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME + "</b>\n" +
                        (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_GAS);
+
                OverlayLegend.OverlayInfoUnit crossing_infoUnit4 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingThick_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME), CrossingSprite.highlightedColor, Color.white);
                crossing_infoUnit4.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME + "</b>\n" +
                        (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_GAS);
-               overlayInfo.infoUnits.AddRange(new OverlayLegend.OverlayInfoUnit[4] { crossing_infoUnit1, crossing_infoUnit2, crossing_infoUnit3, crossing_infoUnit4 });
+
+               overlayInfo.infoUnits.AddRange(new OverlayLegend.OverlayInfoUnit[] { crossing_infoUnit1, crossing_infoUnit2, crossing_infoUnit3, crossing_infoUnit4 });
                overlayInfo.isProgrammaticallyPopulated = true;// Needed for the crossings filter to appear
             }
          }

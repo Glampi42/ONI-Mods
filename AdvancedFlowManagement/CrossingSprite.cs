@@ -20,6 +20,7 @@ namespace AdvancedFlowManagement {
          GameObject crossingIcon_go = Util.KInstantiateUI(crossingIconPrefab, GameScreenManager.Instance.worldSpaceCanvas, true);
          crossingCmp.crossingIcon = crossingIcon_go;
          crossingIcon_go.name = "JunctionIcon";
+
          if(!forceFirstSibling && Utils.TryGetVisualEndpoint(crossingCmp, out _))
          {
             if(Utils.TryGetEndpointVisualizerObj(crossingCmp, false, out GameObject endpoint_go, out _))
@@ -32,7 +33,9 @@ namespace AdvancedFlowManagement {
          {
             crossingIcon_go.transform.SetAsFirstSibling();// needed so that the icon is displayed underneath the SelectMarker
          }
+
          crossingIcon_go.transform.position = Grid.CellToPosCCC(crossingCmp.crossingCell, Grid.SceneLayer.SceneMAX);
+
          Update(crossingCmp);
       }
 
@@ -119,10 +122,12 @@ namespace AdvancedFlowManagement {
       public static GameObject crossingIconPrefab = null;
       public static void CreateCrossingIconPrefab() {
          crossingIconPrefab = new GameObject("JunctionIconPrefab");
-         crossingIconPrefab.transform.localScale = new Vector3(0.0118f, 0.0118f, 1f);
+         crossingIconPrefab.transform.localScale = new Vector3(0.0117f, 0.0117f, 1f);
          crossingIconPrefab.SetActive(false);
-         GameObject pulsing_go = new GameObject("SizePulsingGO");// Needed so that the localScale is a reasonable number(not 0.0118)
+
+         GameObject pulsing_go = new GameObject("SizePulsingGO");// Needed so that the localScale is a reasonable number(not 0.0119)
          pulsing_go.transform.SetParent(crossingIconPrefab.transform, false);
+
          Image image = pulsing_go.AddComponent<Image>();
          image.type = Image.Type.Simple;
          image.raycastTarget = false;

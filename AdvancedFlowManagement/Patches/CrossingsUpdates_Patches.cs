@@ -261,7 +261,7 @@ namespace AdvancedFlowManagement.Patches {
             string newCrossingID = Utils.GetRotatedCrossingID(beginningCrossingCmp);
             crossingsCluster.Add(beginningCrossingCell, (default, forwardsDirections, default, default));// beginningCrossingCell should be added to the cluster before findingConnectedCrossings
 
-            if(backwardsDirection == -1 ? (newCrossingID != oldCrossingID) : (oldCrossingID.Remove(3 - backwardsDirection, 1) != newCrossingID.Remove(3 - backwardsDirection, 1)))
+            if(backwardsDirection == -1 ? (newCrossingID != oldCrossingID) : (oldCrossingID.Remove(backwardsDirection, 1) != newCrossingID.Remove(backwardsDirection, 1)))
             {
                for(int direction = 0; direction < 4; direction++)
                {
