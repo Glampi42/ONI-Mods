@@ -1,0 +1,111 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+
+msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
+msgid "Show Junctions"
+msgstr "Kreuzungen Zeigen"
+
+msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
+msgid "Hide Junctions"
+msgstr "Kreuzungen Verstecken"
+
+msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
+msgid "Buffer Contents: {Contents}"
+msgstr "Pufferinhalt: {Contents}"
+
+msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
+msgid "This pipe's buffer contains: {Contents}"
+msgstr "Der Puffer dieser Rohrleitung enthält: {Contents}"
+
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME"
+msgid "Junction"
+msgstr "Kreuzung"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.TOOLTIP"
+msgid "A pipe section with more than 2 connections"
+msgstr "Ein Rohrabschnitt mit mehr als 2 Verbindungen"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME"
+msgid "Junction Input"
+msgstr "Eingang der Kreuzung"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_LIQUID"
+msgid "Direction from which liquid enters the junction"
+msgstr "Richtung, aus welcher Flüssigkeit in die Kreuzung eintritt"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_GAS"
+msgid "Direction from which gas enters the junction"
+msgstr "Richtung, aus welcher Gas in die Kreuzung eintritt"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME"
+msgid "Junction Output"
+msgstr "Ausgang der Kreuzung"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_LIQUID"
+msgid "Direction in which liquid escapes the junction"
+msgstr "Richtung, in welcher Flüssigkeit die Kreuzung verlässt"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_GAS"
+msgid "Direction in which gas escapes the junction"
+msgstr "Richtung, in welcher Gas die Kreuzung verlässt"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME"
+msgid "Illegal Junction"
+msgstr "Verkehrte Kreuzung"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_LIQUID"
+msgid "A junction which liquid cannot enter or escape"
+msgstr "Eine Kreuzung, in die Flüssigkeit nicht eintreten/verlassen kann"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_GAS"
+msgid "A junction which gas cannot enter or escape"
+msgstr "Eine Kreuzung, in die Gas nicht eintreten/verlassen kann"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.TITLE"
+msgid "Flow Configuration"
+msgstr "Flusskonfiguration"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.DIRECTION"
+msgid "Direction"
+msgstr "Richtung"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.SWITCHDIRECTION"
+msgid "Switch Flow Direction"
+msgstr "Flussrichtung Wechseln"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.FIXEDDIRECTION"
+msgid "Fixed Flow Direction"
+msgstr "Feste Flussrichtung"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.PRIORITY"
+msgid "Priority"
+msgstr "Priorität"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.SHOWPRIORITIES"
+msgid "Show flow priorities of:"
+msgstr "Fluss-Prioritäten anzeigen von:"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.INPUTS"
+msgid "Inputs"
+msgstr "Eingängen"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.OUTPUTS"
+msgid "Outputs"
+msgstr "Ausgängen"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.BOTH"
+msgid "Both"
+msgstr "Beiden"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.CHANGEPRIORITY"
+msgid "Change Flow Priority"
+msgstr "Fluss-Priorität Wechseln"

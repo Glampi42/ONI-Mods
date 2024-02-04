@@ -1,0 +1,111 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+
+msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
+msgid "Show Junctions"
+msgstr "Показати Перехрестя"
+
+msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
+msgid "Hide Junctions"
+msgstr "Сховати Перехрестя"
+
+msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
+msgid "Buffer Contents: {Contents}"
+msgstr "Вміст Буферу: {Contents}"
+
+msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
+msgid "This pipe's buffer contains: {Contents}"
+msgstr "Буфер цієї труби містить: {Contents}"
+
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME"
+msgid "Junction"
+msgstr "Перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.TOOLTIP"
+msgid "A pipe section with more than 2 connections"
+msgstr "Сегмент труби в якого більше 2-х з'єднаннь"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME"
+msgid "Junction Input"
+msgstr "Вхід Перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_LIQUID"
+msgid "Direction from which liquid enters the junction"
+msgstr "Напрямок з якого рідина поступає в перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_GAS"
+msgid "Direction from which gas enters the junction"
+msgstr "Напрямок з якого газ поступає в перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME"
+msgid "Junction Output"
+msgstr "Вихід Перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_LIQUID"
+msgid "Direction in which liquid escapes the junction"
+msgstr "Напрямок в якому рідина покидає перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_GAS"
+msgid "Direction in which gas escapes the junction"
+msgstr "Напрямок в якому газ покидає перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME"
+msgid "Illegal Junction"
+msgstr "Неправильне Перехрестя"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_LIQUID"
+msgid "A junction which liquid cannot enter or escape"
+msgstr "Перехрестя в яке рідина не може попасти або покинути"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_GAS"
+msgid "A junction which gas cannot enter or escape"
+msgstr "Перехрестя в яке газ не може попасти або покинути"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.TITLE"
+msgid "Flow Configuration"
+msgstr "Налаштування Течії"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.DIRECTION"
+msgid "Direction"
+msgstr "Напрямок"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.SWITCHDIRECTION"
+msgid "Switch Flow Direction"
+msgstr "Змінити Напрямок Течії"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.FIXEDDIRECTION"
+msgid "Fixed Flow Direction"
+msgstr "Фіксований Напрямок Течії"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.PRIORITY"
+msgid "Priority"
+msgstr "Пріоритет"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.SHOWPRIORITIES"
+msgid "Show flow priorities of:"
+msgstr "Показати пріоритети течій:"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.INPUTS"
+msgid "Inputs"
+msgstr "Входів"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.OUTPUTS"
+msgid "Outputs"
+msgstr "Виходів"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.BOTH"
+msgid "Both"
+msgstr "Обох"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.CHANGEPRIORITY"
+msgid "Change Flow Priority"
+msgstr "Змінити Пріоритет Течії"

@@ -1,0 +1,111 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+
+msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
+msgid "Show Junctions"
+msgstr "Показать Перекрестки"
+
+msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
+msgid "Hide Junctions"
+msgstr "Спрятать Перекрестки"
+
+msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
+msgid "Buffer Contents: {Contents}"
+msgstr "Содержимое Буфера: {Contents}"
+
+msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
+msgid "This pipe's buffer contains: {Contents}"
+msgstr "Буфер этой трубы содержит: {Contents}"
+
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME"
+msgid "Junction"
+msgstr "Перекресток"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.TOOLTIP"
+msgid "A pipe section with more than 2 connections"
+msgstr "Сегмент трубы у которого больше 2-х соединений"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME"
+msgid "Junction Input"
+msgstr "Вход Перекрестка"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_LIQUID"
+msgid "Direction from which liquid enters the junction"
+msgstr "Направление из которого жидкость поступает в перекресток"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_GAS"
+msgid "Direction from which gas enters the junction"
+msgstr "Направление из которого газ поступает в перекресток"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME"
+msgid "Junction Output"
+msgstr "Выход Перекрестка"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_LIQUID"
+msgid "Direction in which liquid escapes the junction"
+msgstr "Направление в котором жидкость выходит из перекрестка"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_GAS"
+msgid "Direction in which gas escapes the junction"
+msgstr "Направление в котором газ выходит из перекрестка"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME"
+msgid "Illegal Junction"
+msgstr "Неверный Перекресток"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_LIQUID"
+msgid "A junction which liquid cannot enter or escape"
+msgstr "Перекресток в который жидкость не может попасть или выйти"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_GAS"
+msgid "A junction which gas cannot enter or escape"
+msgstr "Перекресток в который газ не может попасть или выйти"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.TITLE"
+msgid "Flow Configuration"
+msgstr "Настройка Потока"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.DIRECTION"
+msgid "Direction"
+msgstr "Направление"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.SWITCHDIRECTION"
+msgid "Switch Flow Direction"
+msgstr "Изменить Направление Потока"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.FIXEDDIRECTION"
+msgid "Fixed Flow Direction"
+msgstr "Фиксированое Направление Потока"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.PRIORITY"
+msgid "Priority"
+msgstr "Приоритет"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.SHOWPRIORITIES"
+msgid "Show flow priorities of:"
+msgstr "Показать приоритеты потоков:"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.INPUTS"
+msgid "Inputs"
+msgstr "Входов"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.OUTPUTS"
+msgid "Outputs"
+msgstr "Выходов"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.BOTH"
+msgid "Both"
+msgstr "Обоих"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.CHANGEPRIORITY"
+msgid "Change Flow Priority"
+msgstr "Изменить Приоритет Потока"
