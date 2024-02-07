@@ -44,7 +44,7 @@ namespace HighlightOverlay.Strings {
 
                   public class ELEMENT {
                      public static LocString CONSIDEROPTION1 = "Consider Aggregate State";
-                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider this element's aggregate state when highlighting its consumers, producers, produce & copies";
+                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider elements' aggregate state when highlighting their consumers, producers, produce & copies";
                      public static LocString CONSUMERS_TOOLTIP = "Highlight objects that can consume/store this element";
                      public static LocString PRODUCERS_TOOLTIP = "Highlight objects that can produce this element";
                      public static LocString PRODUCE_TOOLTIP = "Highlight elements that can be emitted by this element or be achieved via thermal transition from this element\n(f.e. Petroleum from Crude Oil)";
@@ -57,7 +57,7 @@ namespace HighlightOverlay.Strings {
                   }
                   public class BUILDING {
                      public static LocString CONSIDEROPTION1 = "Consider Building's Settings";
-                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider this building's settings(storage filters, production queue) when highlighting its consumables, produce & building material";
+                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider buildings' settings(storage filters, production queue) when highlighting their consumables, produce & building material";
                      public static LocString CONSUMABLES_TOOLTIP = "Highlight objects that can be consumed/stored/used by this building";
                      public static LocString PRODUCE_TOOLTIP = "Highlight objects that can be produced by this building";
                      public static LocString BUILDINGMATERIAL_TOOLTIP = "If \"Consider Building's Settings\" option is on:\nHighlight materials this specific building was built with\n\n" +
@@ -74,7 +74,7 @@ namespace HighlightOverlay.Strings {
                   }
                   public class CRITTEROREGG {
                      public static LocString CONSIDEROPTION1 = "Consider Critter's Morph";
-                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider this critter's morph when highlighting its consumers, consumables, produce & copies";
+                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider critters' morph when highlighting their consumers, consumables, produce & copies";
                      public static LocString CONSUMERS_TOOLTIP = "Highlight objects that can consume/store this critter's egg or trap/release/interact with this critter";
                      public static LocString CONSUMABLES_TOOLTIP = "Highlight objects that can be consumed by this critter";
                      public static LocString PRODUCE_TOOLTIP = "Highlight objects that can be produced by this critter";
@@ -84,12 +84,12 @@ namespace HighlightOverlay.Strings {
                      public static LocString CONSUMERS_TOOLTIP = "Highlight buildings that this duplicant can work on/that are assigned to this duplicant";
                      public static LocString CONSUMABLES_TOOLTIP = "Highlight objects that can be consumed by this duplicant(considering their permitted food)";
                      public static LocString PRODUCE_TOOLTIP = "Highlight objects that can be produced by this duplicant(considering traits such as Flatulent)";
-                     public static LocString COPIES_TOOLTIP = "Highlight all duplicants(because why not)";
+                     public static LocString COPIES_TOOLTIP = "Highlight all duplicants";
                   }
                   public class GEYSER {
                      public static LocString PRODUCE_TOOLTIP = "Highlight elements that can be emitted by this geyser";
                      public static LocString COPIES_TOOLTIP = "Highlight all geysers";
-                     public static LocString EXACTCOPIES_TOOLTIP = "Highlight all geysers that emit the same element";
+                     public static LocString EXACTCOPIES_TOOLTIP = "Highlight all geysers of this type";
                   }
                   public class DEFAULTSTRINGS {
                      public static LocString CONSUMERS_TOOLTIP = "Highlight objects that can consume this object";
@@ -112,7 +112,7 @@ namespace HighlightOverlay.Strings {
             public static LocString GEYSER = "Geyser";
             public static LocString ROBOT = "Robot";
             public static LocString OILWELL = "Oil Reservoir";
-            public static LocString SAPTREE = "Experiment 52b";
+            public static LocString SAPTREE = "Experiment 52B";
             public static LocString RADBOLT = "Radbolt";
          }
       }

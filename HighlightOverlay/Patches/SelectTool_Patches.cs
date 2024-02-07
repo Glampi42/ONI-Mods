@@ -35,11 +35,11 @@ namespace HighlightOverlay.Patches {
                Main.selectedCell = Grid.PosToCell(selected);
                Main.selectedTile = null;
             }
-            else if(selected.GetComponent<PrimaryElement>() != null && !selected.HasTag(GameTags.UnderConstruction))
+            else if(Utils.IsObjectValidForHighlight(selected, out PrimaryElement primaryElement))
             {
                bool isTile = Utils.IsTile(selected, out _);
 
-               Main.selectedObjProperties = new ObjectProperties(selected);
+               Main.selectedObjProperties = new ObjectProperties(primaryElement);
                Main.selectedObj = isTile ? null : selected;
                Main.selectedCell = -1;
                Main.selectedTile = isTile ? selected : null;

@@ -177,12 +177,12 @@ namespace HighlightOverlay {
                      switch(consumable.objectType)
                      {
                         case ObjectType.ELEMENT:
-                           if(CASE_PLANTORSEED_CONSUMABLES_ELEMENT(new ObjectProperties(plot.plant.gameObject), consumable))
+                           if(CASE_PLANTORSEED_CONSUMABLES_ELEMENT(new ObjectProperties(plot.plant.GetComponent<PrimaryElement>()), consumable))
                               return true;
                            break;
 
                         case ObjectType.ITEM:
-                           if(CASE_PLANTORSEED_CONSUMABLES_ITEM(new ObjectProperties(plot.plant.gameObject), consumable))
+                           if(CASE_PLANTORSEED_CONSUMABLES_ITEM(new ObjectProperties(plot.plant.GetComponent<PrimaryElement>()), consumable))
                               return true;
                            break;
                      }
@@ -341,6 +341,11 @@ namespace HighlightOverlay {
 
          return false;
       }
+      private static bool CASE_BUILDING_CONSUMABLES_RADBOLT(ObjectProperties building, ObjectProperties radbolt) {
+         BuildingInfo buildingInfo = (BuildingInfo)building.info;
+         return ObjectProperties.IsRadboltConsumer(buildingInfo.buildingGO);
+      }
+
       private static bool CASE_BUILDING_PRODUCE_ELEMENT_ITEM(ObjectProperties building, ObjectProperties produce) {
          BuildingInfo buildingInfo = (BuildingInfo)building.info;
          bool considerBuildingSettings = building.objectType.ConsiderOption1();
@@ -503,6 +508,11 @@ namespace HighlightOverlay {
          }
 
          return false;
+      }
+
+      private static bool CASE_BUILDING_PRODUCE_RADBOLT(ObjectProperties building, ObjectProperties radbolt) {
+         BuildingInfo buildingInfo = (BuildingInfo)building.info;
+         return ObjectProperties.IsRadboltProducer(buildingInfo.buildingGO);
       }
 
       private static bool CASE_BUILDING_BUILDINGMATERIAL_ELEMENT_ITEM(ObjectProperties building, ObjectProperties elemoritem) {
@@ -1028,28 +1038,38 @@ namespace HighlightOverlay {
       }
 
       private static bool CASE_OILWELL_CONSUMABLES_ELEMENT(ObjectProperties well, ObjectProperties element) {
-         return CASE_BUILDING_CONSUMABLES_ELEMENT_ITEM_PLANTORSEED_CRITTEROREGG(new ObjectProperties(Assets.GetPrefab(OilWellCapConfig.ID)), element);
+         return CASE_BUILDING_CONSUMABLES_ELEMENT_ITEM_PLANTORSEED_CRITTEROREGG(new ObjectProperties(Assets.GetPrefab(OilWellCapConfig.ID).GetComponent<PrimaryElement>()), element);
       }
 
       private static bool CASE_OILWELL_PRODUCE_ELEMENT(ObjectProperties well, ObjectProperties element) {
-         return CASE_BUILDING_PRODUCE_ELEMENT_ITEM(new ObjectProperties(Assets.GetPrefab(OilWellCapConfig.ID)), element);
+         return CASE_BUILDING_PRODUCE_ELEMENT_ITEM(new ObjectProperties(Assets.GetPrefab(OilWellCapConfig.ID).GetComponent<PrimaryElement>()), element);
       }
 
       private static bool CASE_OILWELL_COPIES_OILWELL(ObjectProperties well, ObjectProperties obj) {
          return true;
       }
 
+      private static bool CASE_SAPTREE_CONSUMABLES_ITEM(ObjectProperties saptree, ObjectProperties item) {
+         ItemInfo itemInfo = (ItemInfo)item.info;
+         return itemInfo.itemGO.HasTag(GameTags.Edible);
+      }
 
-      public static Dictionary<string, Func<ObjectProperties, ObjectProperties, bool>> caseNameToMethod = new Dictionary<string, Func<ObjectProperties, ObjectProperties, bool>>();
+      private static bool CASE_SAPTREE_PRODUCE_ELEMENT(ObjectProperties saptree, ObjectProperties element) {
+         bool considerState = ObjectType.ELEMENT.ConsiderOption1();
+         return (considerState && element.element.id == SimHashes.Resin) || (!considerState && Utils.OtherAggregateStatesIDs(SimHashes.Resin).Contains(element.element.id));
+      }
+
+      private static bool CASE_RADBOLT_COPIES_RADBOLT(ObjectProperties radbolt, ObjectProperties obj) {
+         return true;
+      }
+
+
+      public static Dictionary<int, Func<ObjectProperties, ObjectProperties, bool>> caseMethods = new Dictionary<int, Func<ObjectProperties, ObjectProperties, bool>>();
 
 
       public static class CasesUtils {
-         private static bool DefaultCase(ObjectProperties param1, ObjectProperties param2) {
-            return false;
-         }
-
-
-         public static void CreateDictionaryEntries() {
+         public static void RegisterCases() {
+            //Debug.Log(Main.debugPrefix + "Registering highlight cases...");
             foreach(ObjectType objType in Enum.GetValues(typeof(ObjectType)))
             {
                if(objType == ObjectType.NOTVALID)
@@ -1065,7 +1085,7 @@ namespace HighlightOverlay {
                      if(objType2 == ObjectType.NOTVALID)
                         continue;
 
-                     bool isReversed = highlightOption == HighlightOptions.CONSUMERS || highlightOption == HighlightOptions.PRODUCERS;
+                     bool isReversed = highlightOption == HighlightOptions.CONSUMERS || highlightOption == HighlightOptions.PRODUCERS;// these are reversed to CONSUMABLES & PRODUCE respectively
 
                      MethodInfo correspondingCase;
                      if(isReversed)
@@ -1076,6 +1096,9 @@ namespace HighlightOverlay {
                      {
                         correspondingCase = FindCorrespondingCase(objType.ToString(), highlightOption.ToString(), objType2.ToString());
                      }
+
+                     if(correspondingCase == null)
+                        continue;
 
                      var param1 = ParameterExpression.Parameter(typeof(ObjectProperties));
                      var param2 = ParameterExpression.Parameter(typeof(ObjectProperties));
@@ -1092,8 +1115,10 @@ namespace HighlightOverlay {
 
                      Func<ObjectProperties, ObjectProperties, bool> caseFunc = LambdaExpression.Lambda<Func<ObjectProperties, ObjectProperties, bool>>(callExpr, param1, param2).Compile();
 
-                     string dictKey = objType.ToString() + "_" + highlightOption.ToString() + "_" + objType2.ToString();
-                     caseNameToMethod.Add(dictKey, caseFunc);
+                     int dictKey = CasesUtils.CalculateCaseKey(objType, highlightOption, objType2);
+                     caseMethods.Add(dictKey, caseFunc);
+
+                     //Debug.Log($"Registered case CASE_{objType}_{highlightOption}_{objType2}");
                   }
                }
             }
@@ -1117,7 +1142,7 @@ namespace HighlightOverlay {
                }
             }
 
-            return typeof(ShouldHighlightCases.CasesUtils).GetMethod(nameof(DefaultCase), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            return null;
          }
 
          public static void ValidateCasesMethods() {
@@ -1194,6 +1219,10 @@ namespace HighlightOverlay {
             stringSegments.RemoveAt(0);// removing CASE segment
 
             return stringSegments;
+         }
+
+         public static int CalculateCaseKey(ObjectType objType1, HighlightOptions highlightOption, ObjectType objType2) {
+            return ((int)objType1 << 20) | (Utils.CountTrailingZeros((int)highlightOption) << 10) | (int)objType2;// every enum has 10 bits = 1024 possible combinations(their bits won't overlap = the result is unique for every case)
          }
       }
    }

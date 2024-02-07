@@ -22,6 +22,8 @@ namespace HighlightOverlay {
       public static bool preservePreviousHighlightOptions = false;
 
 
+      public static Dictionary<Tag, Tag> cachedPrefabIDs = new Dictionary<Tag, Tag>();
+
       public static Dictionary<Tag, List<GameObject>> speciesMorphs = new Dictionary<Tag, List<GameObject>>();
       public static Dictionary<Tag, List<GameObject>> speciesMorphsBabies = new Dictionary<Tag, List<GameObject>>();
 
@@ -49,6 +51,46 @@ namespace HighlightOverlay {
             considerOption1.Add(objectType, objectType.DefaultConsiderOption1());
 
             lastHighlightOption.Add(objectType, HighlightOptions.NONE);
+         }
+      }
+
+      public static void CacheCrittersMorphs() {
+         foreach(var prefab in Assets.Prefabs)
+         {
+            if(prefab == null || prefab.gameObject == null)
+               continue;
+
+            if(prefab.TryGetComponent(out CreatureBrain brain))
+            {
+               if(prefab.GetDef<BabyMonitor.Def>() == null)
+               {
+                  if(!speciesMorphs.ContainsKey(brain.species))
+                     speciesMorphs.Add(brain.species, new List<GameObject>(4));
+
+                  speciesMorphs[brain.species].Add(prefab.gameObject);
+               }
+               else
+               {
+                  if(!speciesMorphsBabies.ContainsKey(brain.species))
+                     speciesMorphsBabies.Add(brain.species, new List<GameObject>(4));
+
+                  speciesMorphsBabies[brain.species].Add(prefab.gameObject);
+               }
+            }
+         }
+      }
+
+      public static void CacheObjectsPrefabIDs() {
+         foreach(var prefab in Assets.Prefabs)
+         {
+            if(prefab == null || prefab.gameObject == null)
+               continue;
+
+            if(Utils.IsObjectValidForHighlight(prefab.gameObject, out PrimaryElement primaryElement))
+            {
+               ObjectProperties properties = new ObjectProperties(primaryElement);
+               cachedPrefabIDs.Add(prefab.PrefabTag, properties.prefabID);
+            }
          }
       }
    }

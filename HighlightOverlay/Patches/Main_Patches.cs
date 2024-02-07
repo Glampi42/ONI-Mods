@@ -13,7 +13,7 @@ namespace HighlightOverlay.Patches {
       public static class Db_Initialize_Patch {
          public static void Postfix() {
             ShouldHighlightCases.CasesUtils.ValidateCasesMethods();
-            ShouldHighlightCases.CasesUtils.CreateDictionaryEntries();
+            ShouldHighlightCases.CasesUtils.RegisterCases();
          }
       }
 
@@ -23,28 +23,7 @@ namespace HighlightOverlay.Patches {
          public static void Postfix() {
             Utils.SaveSpriteToAssets("ho_overlayicon");
 
-            //---------------Storing species morphs---------------DOWN
-            foreach(var prefab in Assets.Prefabs)
-            {
-               if(prefab.TryGetComponent(out CreatureBrain brain))
-               {
-                  if(prefab.GetDef<BabyMonitor.Def>() == null)
-                  {
-                     if(!Main.speciesMorphs.ContainsKey(brain.species))
-                        Main.speciesMorphs.Add(brain.species, new List<GameObject>(4));
-
-                     Main.speciesMorphs[brain.species].Add(prefab.gameObject);
-                  }
-                  else
-                  {
-                     if(!Main.speciesMorphsBabies.ContainsKey(brain.species))
-                        Main.speciesMorphsBabies.Add(brain.species, new List<GameObject>(4));
-
-                     Main.speciesMorphsBabies[brain.species].Add(prefab.gameObject);
-                  }
-               }
-            }
-            //---------------Storing species morphs---------------UP
+            Main.CacheCrittersMorphs();
 
             Utils.CacheElementsAggregateStates();
             Utils.CacheElementsSublimationElement();
@@ -53,6 +32,8 @@ namespace HighlightOverlay.Patches {
             Utils.CacheBuildingsHighlightOptions();
             Utils.CachePlantsHighlightOptions();
             Utils.CacheCrittersHighlightOptions();
+
+            Main.CacheObjectsPrefabIDs();
          }
       }
 

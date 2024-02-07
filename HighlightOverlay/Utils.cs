@@ -15,6 +15,7 @@ using HighlightOverlay;
 using static HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE;
 using static HighlightOverlay.Structs.ObjectProperties;
 using HighlightOverlay.Structs;
+using ProcGen.Noise;
 
 namespace HighlightOverlay {
    public static class Utils {
@@ -200,12 +201,17 @@ namespace HighlightOverlay {
          return selectable == null || !selectable.IsSelectable;
       }
 
+      public static bool IsObjectValidForHighlight(GameObject go, out PrimaryElement primaryElement) {
+         primaryElement = default;
+         return go != null && go.TryGetComponent(out primaryElement) && !go.HasTag(GameTags.UnderConstruction);
+      }
+
       //-------------------------------------Elements stuff-------------------------------------DOWN
       public static List<Element> OtherAggregateStates(Element element) {
-         if(!otherAggregateStates.ContainsKey(element))
+         if(!otherAggregateStates.ContainsKey(element.id))
             throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(otherAggregateStates)} dictionary");
 
-         return otherAggregateStates[element];
+         return otherAggregateStates[element.id];
       }
       public static List<Element> OtherAggregateStates(SimHashes element) {
          return OtherAggregateStates(ElementLoader.GetElement(element.CreateTag()));
@@ -221,35 +227,35 @@ namespace HighlightOverlay {
       }
 
       public static SimHashes GetElementsSublimationElement(Element element) {
-         if(!sublimationElement.ContainsKey(element))
+         if(!sublimationElement.ContainsKey(element.id))
             throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(sublimationElement)} dictionary");
 
-         return sublimationElement[element];
+         return sublimationElement[element.id];
       }
       public static bool ElementSublimates(Element element) {
          return GetElementsSublimationElement(element) != default;
       }
 
       public static List<SimHashes> GetElementsTransitionElements(Element element) {
-         if(!transitionElements.ContainsKey(element))
+         if(!transitionElements.ContainsKey(element.id))
             throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(transitionElements)} dictionary");
 
-         return transitionElements[element];
+         return transitionElements[element.id];
       }
       public static bool ElementTransitsIntoOther(Element element) {
          return GetElementsTransitionElements(element).Count > 0;
       }
       public static List<SimHashes> GetElementsTransitionOreElements(Element element) {
-         if(!transitionOreElements.ContainsKey(element))
+         if(!transitionOreElements.ContainsKey(element.id))
             throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(transitionOreElements)} dictionary");
 
-         return transitionOreElements[element];
+         return transitionOreElements[element.id];
       }
 
 
-      private static Dictionary<Element, List<Element>> otherAggregateStates;
+      private static Dictionary<SimHashes, List<Element>> otherAggregateStates;
       public static void CacheElementsAggregateStates() {
-         otherAggregateStates = new Dictionary<Element, List<Element>>(ElementLoader.elements.Count);
+         otherAggregateStates = new Dictionary<SimHashes, List<Element>>(ElementLoader.elements.Count);
 
          foreach(Element element in ElementLoader.elements)
          {
@@ -261,7 +267,7 @@ namespace HighlightOverlay {
 
             if(element.id == SimHashes.Vacuum)
             {
-               otherAggregateStates.Add(element, otherStates);
+               otherAggregateStates.Add(element.id, otherStates);
                continue;
             }
 
@@ -303,13 +309,13 @@ namespace HighlightOverlay {
                }
             }
 
-            otherAggregateStates.Add(element, otherStates);
+            otherAggregateStates.Add(element.id, otherStates);
          }
       }
 
-      private static Dictionary<Element, SimHashes> sublimationElement;
+      private static Dictionary<SimHashes, SimHashes> sublimationElement;
       public static void CacheElementsSublimationElement() {
-         sublimationElement = new Dictionary<Element, SimHashes>(ElementLoader.elements.Count);
+         sublimationElement = new Dictionary<SimHashes, SimHashes>(ElementLoader.elements.Count);
 
          foreach(Element element in ElementLoader.elements)
          {
@@ -318,30 +324,30 @@ namespace HighlightOverlay {
 
             if(element.id == SimHashes.Vacuum || element.id == SimHashes.Void)
             {
-               sublimationElement.Add(element, default);
+               sublimationElement.Add(element.id, default);
                continue;
             }
 
             if(element.sublimateId != default)
             {
-               sublimationElement.Add(element, element.sublimateId);
+               sublimationElement.Add(element.id, element.sublimateId);
                continue;
             }
 
             Sublimates sublimates = Assets.GetPrefab(element.id.CreateTag())?.GetComponent<Sublimates>();
             if(sublimates != null)
             {
-               sublimationElement.Add(element, sublimates.info.sublimatedElement);
+               sublimationElement.Add(element.id, sublimates.info.sublimatedElement);
                continue;
             }
 
-            sublimationElement.Add(element, default);
+            sublimationElement.Add(element.id, default);
          }
       }
 
-      private static Dictionary<Element, List<SimHashes>> transitionElements;
+      private static Dictionary<SimHashes, List<SimHashes>> transitionElements;
       public static void CacheElementsTransitionElements() {
-         transitionElements = new Dictionary<Element, List<SimHashes>>(ElementLoader.elements.Count);
+         transitionElements = new Dictionary<SimHashes, List<SimHashes>>(ElementLoader.elements.Count);
 
          foreach(Element element in ElementLoader.elements)
          {
@@ -352,7 +358,7 @@ namespace HighlightOverlay {
 
             if(element.id == SimHashes.Vacuum)
             {
-               transitionElements.Add(element, elements);
+               transitionElements.Add(element.id, elements);
                continue;
             }
 
@@ -362,13 +368,13 @@ namespace HighlightOverlay {
             if(element.lowTempTransition != null && element.lowTempTransitionTarget != element.id && element.lowTempTransition.highTempTransitionTarget != element.id)
                elements.Add(element.lowTempTransitionTarget);
 
-            transitionElements.Add(element, elements);
+            transitionElements.Add(element.id, elements);
          }
       }
 
-      private static Dictionary<Element, List<SimHashes>> transitionOreElements;
+      private static Dictionary<SimHashes, List<SimHashes>> transitionOreElements;
       public static void CacheElementsTransitionOreElements() {
-         transitionOreElements = new Dictionary<Element, List<SimHashes>>(ElementLoader.elements.Count);
+         transitionOreElements = new Dictionary<SimHashes, List<SimHashes>>(ElementLoader.elements.Count);
 
          foreach(Element element in ElementLoader.elements)
          {
@@ -379,7 +385,7 @@ namespace HighlightOverlay {
 
             if(element.id == SimHashes.Vacuum)
             {
-               transitionOreElements.Add(element, elements);
+               transitionOreElements.Add(element.id, elements);
                continue;
             }
 
@@ -389,7 +395,7 @@ namespace HighlightOverlay {
             if(element.lowTempTransitionOreID != default && element.lowTempTransitionOreID != SimHashes.Vacuum && element.lowTempTransitionOreID != element.id)
                elements.Add(element.lowTempTransitionOreID);
 
-            transitionOreElements.Add(element, elements);
+            transitionOreElements.Add(element.id, elements);
          }
       }
       //-------------------------------------Elements stuff-------------------------------------UP
@@ -568,6 +574,15 @@ namespace HighlightOverlay {
             declaringType = declaringType.DeclaringType;
          }
          return false;
+      }
+
+      public static int CountTrailingZeros(int num) {
+         int mask = 1;
+         for(int i = 0; i < 32; i++, mask <<= 1)
+            if((num & mask) != 0)
+               return i;
+
+         return 32;
       }
    }
 }

@@ -34,14 +34,11 @@ namespace HighlightOverlay.Structs {
          if(prefabID == Tag.Invalid)
             throw new Exception(Main.debugPrefix + $"The {nameof(prefabID)} was not given a value in ObjectType {objectType}'s case");
       }
-      public ObjectProperties(GameObject obj) {
-         objectType = GetObjectType(obj);
-
-         if(objectType == ObjectType.NOTVALID)
-            throw new ArgumentException(Main.debugPrefix + $"GameObject {obj.name} is not a valid object for generating its {nameof(ObjectProperties)}");
+      public ObjectProperties(PrimaryElement obj, ObjectType objType = ObjectType.NOTVALID) {
+         objectType = objType == ObjectType.NOTVALID ? GetObjectType(obj.gameObject) : objType;
 
          highlightOptions = HighlightOptions.NONE;
-         element = obj.GetComponent<PrimaryElement>().Element;
+         element = obj.Element;
          prefabID = Tag.Invalid;
 
          info = null;
@@ -54,31 +51,43 @@ namespace HighlightOverlay.Structs {
                break;
 
             case ObjectType.ITEM:
-               CASE_ITEM(obj);
+               CASE_ITEM(obj.gameObject);
                break;
 
             case ObjectType.BUILDING:
-               CASE_BUILDING(obj);
+               CASE_BUILDING(obj.gameObject);
                break;
 
             case ObjectType.PLANTORSEED:
-               CASE_PLANTORSEED(obj);
+               CASE_PLANTORSEED(obj.gameObject);
                break;
 
             case ObjectType.CRITTEROREGG:
-               CASE_CRITTEROREGG(obj);
+               CASE_CRITTEROREGG(obj.gameObject);
                break;
 
             case ObjectType.DUPLICANT:
-               CASE_DUPLICANT(obj);
+               CASE_DUPLICANT(obj.gameObject);
                break;
 
             case ObjectType.GEYSER:
-               CASE_GEYSER(obj);
+               CASE_GEYSER(obj.gameObject);
+               break;
+
+            case ObjectType.ROBOT:
+               CASE_ROBOT(obj.gameObject);
                break;
 
             case ObjectType.OILWELL:
-               CASE_OILWELL(obj);
+               CASE_OILWELL(obj.gameObject);
+               break;
+
+            case ObjectType.SAPTREE:
+               CASE_SAPTREE(obj.gameObject);
+               break;
+
+            case ObjectType.RADBOLT:
+               CASE_RADBOLT(obj.gameObject);
                break;
 
             default:
@@ -184,14 +193,26 @@ namespace HighlightOverlay.Structs {
             building.GetComponent<SingleEntityReceptacle>() != null || building.GetComponent<Tinkerable>() != null ||
             building.GetComponent<SuitLocker>() != null || building.GetSMI<SpiceGrinder.StatesInstance>() != null ||
             building.GetComponent<TrapTrigger>() != null || building.GetDef<RanchStation.Def>() != null ||
-            building.GetComponent<RocketEngine>() != null || building.GetComponent<RocketEngineCluster>() != null;
+            building.GetComponent<RocketEngine>() != null || building.GetComponent<RocketEngineCluster>() != null ||
+
+            IsRadboltConsumer(building);
+      }
+      public static bool IsRadboltConsumer(GameObject building) {
+         return building.TryGetComponent(out HighEnergyParticlePort port) && port.particleInputEnabled && !building.TryGetComponent(out HighEnergyParticleRedirector _);
       }
       public static bool BuildingHasProduce(GameObject building) {
          return building.GetComponent<ComplexFabricator>() != null || building.GetComponent<ElementConverter>() != null ||
             ((building.GetComponent<EnergyGenerator>()?.formula.outputs?.Length ?? 0) > 0) || building.GetComponent<BuildingElementEmitter>() != null ||
             building.GetComponent<TinkerStation>() != null || building.GetComponent<OilWellCap>() != null ||
             building.GetComponent<Toilet>() != null || building.GetComponent<FlushToilet>() != null ||
-            building.GetComponent<RocketEngine>() != null || building.GetComponent<RocketEngineCluster>() != null;
+            building.GetComponent<RocketEngine>() != null || building.GetComponent<RocketEngineCluster>() != null ||
+
+            building.PrefabID() == SweepBotStationConfig.ID || building.PrefabID() == ScoutLanderConfig.ID || building.PrefabID() == ScoutModuleConfig.ID || building.PrefabID() == MorbRoverMakerConfig.ID ||
+
+            IsRadboltProducer(building);
+      }
+      public static bool IsRadboltProducer(GameObject building) {
+         return building.TryGetComponent(out HighEnergyParticlePort port) && port.particleOutputEnabled && !building.TryGetComponent(out HighEnergyParticleRedirector _);
       }
       public static bool BuildingHasBuildingMaterial(GameObject building) {
          return building.GetComponent<BuildingComplete>()?.Def.ShowInBuildMenu ?? false;// otherwise this option is irrelevant
@@ -361,7 +382,7 @@ namespace HighlightOverlay.Structs {
 
          CaseDuplicant_HighlightOptions();
 
-         prefabID = duplicantInfo.duplicantInfo.PrefabID();
+         prefabID = obj.PrefabID();
       }
       private void CaseDuplicant_HighlightOptions() {
          highlightOptions |= HighlightOptions.CONSUMERS | HighlightOptions.CONSUMABLES | HighlightOptions.PRODUCE | HighlightOptions.COPIES;
@@ -399,6 +420,25 @@ namespace HighlightOverlay.Structs {
       private void CaseOilwell_HighlightOptions() {
          highlightOptions |= HighlightOptions.CONSUMABLES | HighlightOptions.PRODUCE | HighlightOptions.COPIES;
       }
+
+      private void CASE_SAPTREE(GameObject obj) {
+         CaseSaptree_HighlightOptions();
+
+         prefabID = obj.PrefabID();
+      }
+      private void CaseSaptree_HighlightOptions() {
+         highlightOptions |= HighlightOptions.CONSUMABLES | HighlightOptions.PRODUCE;
+      }
+
+      private void CASE_RADBOLT(GameObject obj) {
+         CaseRadbolt_HighlightOptions();
+
+         prefabID = obj.PrefabID();
+      }
+      private void CaseRadbolt_HighlightOptions() {
+         highlightOptions |= HighlightOptions.CONSUMERS | HighlightOptions.PRODUCERS | HighlightOptions.COPIES;
+      }
+
 
 
 
@@ -471,18 +511,25 @@ namespace HighlightOverlay.Structs {
          {
             return ObjectType.OILWELL;
          }
+         if(prefabID.HasTag(SapTreeConfig.ID))
+         {
+            return ObjectType.SAPTREE;
+         }
+         if(prefabID.HasTag(GameTags.HighEnergyParticle))
+         {
+            return ObjectType.RADBOLT;
+         }
          return ObjectType.ELEMENT;// assuming that the object has the PrimaryElement component(which it should)
       }
 
-      public object ObjectForShouldHighlight() {
+      public static object ObjectForShouldHighlight(ObjectType objectType, PrimaryElement obj) {
          switch(objectType)
          {
             case ObjectType.BUILDING:
-               if((highlightOptions & (HighlightOptions.CONSUMABLES | HighlightOptions.PRODUCE)) == 0 ||
-                  (((highlightOptions & HighlightOptions.CONSUMABLES) == 0) || Main.highlightOption != HighlightOptions.CONSUMABLES.Reverse()) &&
+               if((((highlightOptions & HighlightOptions.CONSUMABLES) == 0) || Main.highlightOption != HighlightOptions.CONSUMABLES.Reverse()) &&
                   (((highlightOptions & HighlightOptions.PRODUCE) == 0) || Main.highlightOption != HighlightOptions.PRODUCE.Reverse()))
                {
-                  return prefabID.hash + ((long)element.id << 32);
+                  return prefabID.hash + ((long)obj.Element.id << 32);
                }
                else
                {
@@ -491,9 +538,6 @@ namespace HighlightOverlay.Structs {
 
             case ObjectType.DUPLICANT:
                return null;// calculating shouldHighlight for each duplicant individually
-
-            case ObjectType.GEYSER:
-               return ((GeyserInfo)info).outputElement;
 
             default:
                return prefabID.hash;
