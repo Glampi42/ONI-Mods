@@ -224,9 +224,9 @@ namespace HighlightOverlay.Structs {
          if(!obj.TryGetComponent(out PlantableSeed seed))
          {
             string seedID;
-            if(obj.TryGetComponent(out TreeBud arborTreeBranch))
+            if(obj.TryGetComponent(out TreeBud _))
             {
-               seedID = arborTreeBranch.buddingTrunk.Get().GetComponent<SeedProducer>().seedInfo.seedId;
+               seedID = ForestTreeConfig.SEED_ID;
             }
             else
             {
@@ -305,7 +305,17 @@ namespace HighlightOverlay.Structs {
          if(!Utils.crittersCachedOptions.ContainsKey(critterInfo.critterID))
             throw new Exception(Main.debugPrefix + $"Critter {critterInfo.critterID} was not found in {nameof(Utils.crittersCachedOptions)} dictionary");
 
-         highlightOptions |= Utils.crittersCachedOptions[critterInfo.critterID];
+         if(ObjectType.CRITTEROREGG.ConsiderOption1())// if considerCritterMorph
+         {
+            highlightOptions |= Utils.crittersCachedOptions[critterInfo.critterID];
+         }
+         else if(Main.speciesMorphs.ContainsKey(critterInfo.species))
+         {
+            foreach(GameObject morph in Main.speciesMorphs[critterInfo.species])
+            {
+               highlightOptions |= Utils.crittersCachedOptions[morph.PrefabID()];
+            }
+         }
          highlightOptions |= HighlightOptions.CONSUMERS | HighlightOptions.COPIES;
       }
       public static bool CritterHasConsiderOption1(GameObject critter) {
@@ -313,64 +323,10 @@ namespace HighlightOverlay.Structs {
          return species != Tag.Invalid && Main.speciesMorphs.ContainsKey(species) && Main.speciesMorphs[species].Count > 1;
       }
       public static bool CritterHasConsumables(GameObject critter) {
-         if(ObjectType.CRITTEROREGG.ConsiderOption1())// if considerCritterMorph
-         {
-            if(CheckMorph(critter))
-               return true;
-         }
-         else
-         {
-            Tag species = critter.GetComponent<CreatureBrain>()?.species ?? Tag.Invalid;
-            if(Main.speciesMorphs.ContainsKey(species))
-            {
-               foreach(GameObject morph in Main.speciesMorphs[species])
-               {
-                  if(CheckMorph(morph))
-                     return true;
-               }
-            }
-         }
-
-         return false;
-
-         bool CheckMorph(GameObject morph) {
-            if(((morph.GetDef<CreatureCalorieMonitor.Def>()?.diet?.consumedTags?.Count ?? 0) > 0) || (morph.GetDef<DrinkMilkMonitor.Def>()?.consumesMilk ?? false))
-            {
-               return true;
-            }
-
-            return false;
-         }
+         return ((critter.GetDef<CreatureCalorieMonitor.Def>()?.diet?.consumedTags?.Count ?? 0) > 0) || (critter.GetDef<DrinkMilkMonitor.Def>()?.consumesMilk ?? false);
       }
       public static bool CritterHasProduce(GameObject critter) {
-         if(ObjectType.CRITTEROREGG.ConsiderOption1())// if considerCritterMorph
-         {
-            if(CheckMorph(critter))
-               return true;
-         }
-         else
-         {
-            Tag species = critter.GetComponent<CreatureBrain>()?.species ?? Tag.Invalid;
-            if(Main.speciesMorphs.ContainsKey(species))
-            {
-               foreach(GameObject morph in Main.speciesMorphs[species])
-               {
-                  if(CheckMorph(morph))
-                     return true;
-               }
-            }
-         }
-
-         return false;
-
-         bool CheckMorph(GameObject morph) {
-            if(((morph.GetDef<CreatureCalorieMonitor.Def>()?.diet?.producedTags?.Count ?? 0) > 0) || morph.GetDef<ScaleGrowthMonitor.Def>() != null)
-            {
-               return true;
-            }
-
-            return false;
-         }
+         return ((critter.GetDef<CreatureCalorieMonitor.Def>()?.diet?.producedTags?.Count ?? 0) > 0) || critter.GetDef<ScaleGrowthMonitor.Def>() != null;
       }
 
       private void CASE_DUPLICANT(GameObject obj) {
@@ -391,7 +347,7 @@ namespace HighlightOverlay.Structs {
       private void CASE_GEYSER(GameObject obj) {
          GeyserInfo geyserInfo = new GeyserInfo();
 
-         geyserInfo.outputElement = obj.GetComponent<Geyser>().emitter.outputElement.elementHash;
+         geyserInfo.geyser = obj.GetComponent<Geyser>();
 
          info = geyserInfo;
 
@@ -522,12 +478,26 @@ namespace HighlightOverlay.Structs {
          return ObjectType.ELEMENT;// assuming that the object has the PrimaryElement component(which it should)
       }
 
-      public static object ObjectForShouldHighlight(ObjectType objectType, PrimaryElement obj) {
+      public static object ObjectForShouldHighlight(ObjectType objectType, PrimaryElement obj, int cell) {
+         if(obj == null)
+         {
+            if(cell != -1)
+               return Grid.Element[cell].id;
+
+            return null;
+         }
+
+         KPrefabID objID = obj.GetComponent<KPrefabID>();
+         if(!Main.cachedPrefabIDs.ContainsKey(objID.PrefabTag))
+            throw new Exception(Main.debugPrefix + $"No cached prefabID found for {objID.PrefabTag} inside of {nameof(Main.cachedPrefabIDs)}");
+
+         Tag prefabID = Main.cachedPrefabIDs[objID.PrefabTag];// prefabID != prefab tag of the object itself (f.e. prefabID for seeds is the prefab tag of their plant)
+
          switch(objectType)
          {
             case ObjectType.BUILDING:
-               if((((highlightOptions & HighlightOptions.CONSUMABLES) == 0) || Main.highlightOption != HighlightOptions.CONSUMABLES.Reverse()) &&
-                  (((highlightOptions & HighlightOptions.PRODUCE) == 0) || Main.highlightOption != HighlightOptions.PRODUCE.Reverse()))
+               if((((Utils.buildingsCachedOptions[prefabID] & HighlightOptions.CONSUMABLES) == 0) || Main.highlightOption != HighlightOptions.CONSUMABLES.Reverse()) &&
+                  (((Utils.buildingsCachedOptions[prefabID] & HighlightOptions.PRODUCE) == 0) || Main.highlightOption != HighlightOptions.PRODUCE.Reverse()))
                {
                   return prefabID.hash + ((long)obj.Element.id << 32);
                }
@@ -564,7 +534,7 @@ namespace HighlightOverlay.Structs {
          public GameObject plantPrefab;
       }
       public struct GeyserInfo : AdditionalInfo {
-         public SimHashes outputElement;
+         public Geyser geyser;
       }
       public struct CritterInfo : AdditionalInfo {
          public Tag critterID;

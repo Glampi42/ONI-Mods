@@ -201,9 +201,11 @@ namespace HighlightOverlay {
          return selectable == null || !selectable.IsSelectable;
       }
 
-      public static bool IsObjectValidForHighlight(GameObject go, out PrimaryElement primaryElement) {
+      public static bool IsObjectValidForHighlight(GameObject go, out PrimaryElement primaryElement, out ObjectType objectType) {
          primaryElement = default;
-         return go != null && go.TryGetComponent(out primaryElement) && !go.HasTag(GameTags.UnderConstruction);
+         objectType = default;
+         return go != null && go.TryGetComponent(out primaryElement) && ((objectType = ObjectProperties.GetObjectType(go)) != ObjectType.ELEMENT || primaryElement.Element != null) &&
+            !go.HasTag(GameTags.UnderConstruction);
       }
 
       //-------------------------------------Elements stuff-------------------------------------DOWN

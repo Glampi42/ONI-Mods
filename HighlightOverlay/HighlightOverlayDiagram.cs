@@ -12,6 +12,11 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using VoronoiTree;
+using PeterHan.PLib.Core;
+using PeterHan.PLib.UI;
+using static STRINGS.UI.TOOLS;
+using KSerialization;
+using static HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE;
 
 namespace HighlightOverlay {
    public class HighlightOverlayDiagram : MonoBehaviour {
@@ -80,11 +85,12 @@ namespace HighlightOverlay {
       public GameObject exactCopies_Label;
       public MultiToggle exactCopies_Toggle;
 
+      public GameObject filtersContainer;
+
 
       public static void InitPrefab() {
          diagramPrefab = new GameObject(nameof(HighlightOverlayDiagram));
          diagramPrefab.SetActive(true);
-         //diagramPrefab.layer = LayerMask.NameToLayer("UI");
          diagramPrefab.AddOrGet<RectTransform>();
          //UnityEngine.Object.DontDestroyOnLoad(prefab);
 
@@ -271,6 +277,29 @@ namespace HighlightOverlay {
          }
          //----------------------------Options----------------------------UP
          //----------------------------Highlight Options----------------------------UP
+         //----------------------------Highlight Filters----------------------------DOWN
+         GameObject filtersHeaderContainer = new GameObject(nameof(filtersHeaderContainer));
+         filtersHeaderContainer.transform.SetParent(diagramPrefab.transform);
+         filtersHeaderContainer.SetActive(true);
+         layoutGrouph = filtersHeaderContainer.AddComponent<HorizontalLayoutGroup>();
+         layoutGrouph.childControlHeight = false;
+         layoutGrouph.childControlWidth = false;
+         layoutGrouph.childAlignment = TextAnchor.MiddleLeft;
+
+         GameObject filtersHeader = Util.KInstantiateUI(Prefabs.LabelPrefab, filtersHeaderContainer, true);
+         headerLabel = filtersHeader.GetComponent<LocText>();
+         headerLabel.text = Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.HEADER;
+         headerLabel.fontSize *= 1.2f;
+
+
+         diagram.filtersContainer = new GameObject(nameof(filtersContainer));
+         diagram.filtersContainer.transform.SetParent(diagramPrefab.transform);
+         diagram.filtersContainer.SetActive(true);
+         layoutGroup = diagram.filtersContainer.AddComponent<VerticalLayoutGroup>();
+         layoutGroup.childControlHeight = true;
+         layoutGroup.childControlWidth = true;
+         layoutGroup.childAlignment = TextAnchor.MiddleLeft;
+         //----------------------------Highlight Filters----------------------------UP
       }
 
       public void ConfigureDiagramExceptOptions() {
@@ -361,6 +390,14 @@ namespace HighlightOverlay {
 
             OnOptionsChangedListener();
          };
+
+
+         Main.highlightFilters = new HighlightFiltersTree();
+         Main.highlightFilters.InitializeToggles();
+
+         GameObject rootPanel = Main.highlightFilters.RootPanel;
+         rootPanel.transform.SetParent(filtersContainer.transform);
+         rootPanel.SetActive(true);
       }
 
       private void OnOptionsChangedListener() {
@@ -401,7 +438,6 @@ namespace HighlightOverlay {
          {
             noObjectSelectedContainer.SetActive(false);
             selectedObjectTypeLabel.gameObject.SetActive(true);
-            SetAllOptionsNotActive();
 
             selectedObjectTypeLabel.text = Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.SELECTEDOBJECTTYPE_PREFIX + selectedObjProperties.StringRepresentation();
 
@@ -413,6 +449,9 @@ namespace HighlightOverlay {
             var highlightLabelFields = fields.Where(f => f.GetCustomAttribute(typeof(HighlightOptionLabelAttribute)) != default);
             foreach(HighlightOptions highlightOption in Enum.GetValues(typeof(HighlightOptions)))
             {
+               if(highlightOption == HighlightOptions.NONE)
+                  continue;
+
                if((selectedObjProperties.highlightOptions & highlightOption) != 0)
                {
                   ((GameObject)highlightFields.First(f => ((HighlightOptionAttribute)f.GetCustomAttribute(typeof(HighlightOptionAttribute))).highlightOption == highlightOption)
@@ -436,10 +475,16 @@ namespace HighlightOverlay {
                      highlightLabel.AddSimpleTooltip(labelTooltip);
                   }
                }
+               else
+               {
+                  ((GameObject)highlightFields.First(f => ((HighlightOptionAttribute)f.GetCustomAttribute(typeof(HighlightOptionAttribute))).highlightOption == highlightOption)
+                     ?.GetValue(this)).SetActive(false);
+               }
             }
 
-            Main.highlightOption = !Main.preservePreviousHighlightOptions &&// preservePreviousHighlightOptions forces the highlight option to switch to none when other object is selected
+            Main.highlightOption = !Main.preservePreviousHighlightOptions &&// preservePreviousHighlightOptions forces the highlight option to switch to NONE when other object is selected
                ((selectedObjProperties.highlightOptions & Main.lastHighlightOption[objectType]) != 0) ? Main.lastHighlightOption[objectType] : HighlightOptions.NONE;
+
             UpdateOptionsTogglesState();
          }
 

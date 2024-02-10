@@ -11,23 +11,24 @@ namespace HighlightOverlay {
    public class ComputedShouldHighlightValues {
       private Dictionary<ObjectType, Dictionary<object, bool>> values = new Dictionary<ObjectType, Dictionary<object, bool>>(Enum.GetValues(typeof(ObjectType)).Length);
 
-      public void StoreValue(ObjectProperties obj, bool shouldHighlight) {
-         if(!values.ContainsKey(obj.objectType))
-            values.Add(obj.objectType, new Dictionary<object, bool>());
+      public void StoreValue(ObjectType objectType, PrimaryElement obj, int cell, bool shouldHighlight) {
+         if(!values.ContainsKey(objectType))
+            values.Add(objectType, new Dictionary<object, bool>());
 
-         if(obj.ObjectForShouldHighlight() != null)
-            values[obj.objectType].Add(obj.ObjectForShouldHighlight(), shouldHighlight);
+         object objForShouldHighlight = ObjectProperties.ObjectForShouldHighlight(objectType, obj, cell);
+         if(objForShouldHighlight != null)
+            values[objectType].Add(objForShouldHighlight, shouldHighlight);
       }
 
-      public bool TryGetValue(ObjectProperties obj, out bool shouldHighlight) {
+      public bool TryGetValue(ObjectType objectType, PrimaryElement obj, int cell, out bool shouldHighlight) {
          shouldHighlight = default;
 
-         if(values.ContainsKey(obj.objectType))
+         if(values.ContainsKey(objectType))
          {
-            object objForShouldHighlight = obj.ObjectForShouldHighlight();
-            if(objForShouldHighlight != null && values[obj.objectType].ContainsKey(objForShouldHighlight))
+            object objForShouldHighlight = ObjectProperties.ObjectForShouldHighlight(objectType, obj, cell);
+            if(objForShouldHighlight != null && values[objectType].ContainsKey(objForShouldHighlight))
             {
-               shouldHighlight = values[obj.objectType][objForShouldHighlight];
+               shouldHighlight = values[objectType][objForShouldHighlight];
                return true;
             }
          }

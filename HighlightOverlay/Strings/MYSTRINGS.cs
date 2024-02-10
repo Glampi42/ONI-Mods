@@ -99,6 +99,43 @@ namespace HighlightOverlay.Strings {
                      public static LocString COPIES_TOOLTIP = "Highlight all occurrences of this object";
                   }
                }
+               public class HIGHLIGHTFILTERS {
+                  public static LocString HEADER = "Highlight Filters:";
+
+
+                  public static LocString ITEMS = "Items";
+                  public static LocString ON_GROUND = "On the ground";
+                  public static LocString STORED_ITEMS = "Stored";
+
+                  public static LocString BUILDINGS = "Buildings";
+                  public static LocString STANDARD_BUILDINGS = "Standard";
+                  public static LocString LIQUID_PIPES = "Liquid pipes";
+                  public static LocString GAS_PIPES = "Gas pipes";
+                  public static LocString RAILS = "Conveyor rails";
+                  public static LocString WIRES = "Wires";
+                  public static LocString AUTOMATION = "Automation";
+                  public static LocString BACKWALLS = "Backwalls";
+
+                  public static LocString CONDUIT_CONTENTS = "Conduit Contents";
+                  public static LocString LIQUID_CONTENTS = "Liquid pipes";
+                  public static LocString GAS_CONTENTS = "Gas pipes";
+                  public static LocString RAILS_CONTENTS = "Conveyor rails";
+
+                  public static LocString CELLS = "Cells";
+                  public static LocString NATURAL_TILES = "Natural tiles";
+                  public static LocString LIQUIDS = "Liquids";
+                  public static LocString GASES = "Gases";
+
+                  public static LocString CREATURES = "Creatures";
+                  public static LocString PLANTS = "Plants";
+                  public static LocString CRITTERS = "Critters";
+                  public static LocString DUPLICANTS = "Duplicants";
+                  public static LocString ROBOTS = "Robots";
+
+                  public static LocString MISCELLANEOUS = "Miscellaneous";
+                  public static LocString GEYSERS = "Geysers";
+                  public static LocString OTHER = "Other";
+               }
             }
          }
          public class OBJECTTYPES {

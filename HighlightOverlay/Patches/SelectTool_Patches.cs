@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using HighlightOverlay;
+using HighlightOverlay.Enums;
 using HighlightOverlay.Structs;
 using System;
 using System.Collections.Generic;
@@ -35,11 +36,11 @@ namespace HighlightOverlay.Patches {
                Main.selectedCell = Grid.PosToCell(selected);
                Main.selectedTile = null;
             }
-            else if(Utils.IsObjectValidForHighlight(selected, out PrimaryElement primaryElement))
+            else if(Utils.IsObjectValidForHighlight(selected, out PrimaryElement primaryElement, out ObjectType objectType))
             {
                bool isTile = Utils.IsTile(selected, out _);
 
-               Main.selectedObjProperties = new ObjectProperties(primaryElement);
+               Main.selectedObjProperties = new ObjectProperties(primaryElement, objectType);
                Main.selectedObj = isTile ? null : selected;
                Main.selectedCell = -1;
                Main.selectedTile = isTile ? selected : null;

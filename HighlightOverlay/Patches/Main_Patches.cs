@@ -14,6 +14,8 @@ namespace HighlightOverlay.Patches {
          public static void Postfix() {
             ShouldHighlightCases.CasesUtils.ValidateCasesMethods();
             ShouldHighlightCases.CasesUtils.RegisterCases();
+
+            Main.GenerateHighlightFilters();
          }
       }
 

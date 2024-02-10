@@ -741,7 +741,7 @@ namespace HighlightOverlay {
             targetElements = Utils.OtherAggregateStatesIDs(element.element);
          }
 
-         return targetElements.Contains(((GeyserInfo)geyser.info).outputElement);
+         return targetElements.Contains(((GeyserInfo)geyser.info).geyser.emitter.outputElement.elementHash);
       }
 
       private static bool CASE_GEYSER_COPIES_GEYSER(ObjectProperties geyser, ObjectProperties obj) {
@@ -749,7 +749,7 @@ namespace HighlightOverlay {
       }
 
       private static bool CASE_GEYSER_EXACTCOPIES_GEYSER(ObjectProperties geyser, ObjectProperties obj) {
-         return obj.objectType == ObjectType.GEYSER && ((GeyserInfo)geyser.info).outputElement == ((GeyserInfo)obj.info).outputElement;
+         return geyser.prefabID == obj.prefabID;
       }
 
       private static bool CASE_CRITTEROREGG_CONSUMABLES_ELEMENT(ObjectProperties critter, ObjectProperties element) {

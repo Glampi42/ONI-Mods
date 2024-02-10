@@ -115,6 +115,7 @@
     <Compile Include="Enums\HighlightOptions.cs" />
     <Compile Include="Enums\HighlightOptionsExtentions.cs" />
     <Compile Include="Enums\ObjectTypeExtentions.cs" />
+    <Compile Include="HighlightFiltersTree.cs" />
     <Compile Include="HighlightMode.cs" />
     <Compile Include="HighlightOverlayDiagram.cs" />
     <Compile Include="Main.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Strings\LocalizeStrings.cs" />
     <Compile Include="Strings\MYSTRINGS.cs" />
     <Compile Include="Strings\STRINGS.cs" />
+    <Compile Include="TreeNode.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

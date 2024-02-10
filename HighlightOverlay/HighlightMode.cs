@@ -83,7 +83,7 @@ namespace HighlightOverlay {
 
                List<ScenePartitionerEntry> visibleObjects = new List<ScenePartitionerEntry>();
 
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.pickupablesLayer, visibleObjects);
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.collisionLayer, visibleObjects);// includes all pickupables(debris, duplicants, critters) & radbolts
                foreach(ScenePartitionerEntry visibleObject in visibleObjects)
                {
                   if(((Component)visibleObject.obj).gameObject.TryGetComponent(out PrimaryElement element))
@@ -102,6 +102,9 @@ namespace HighlightOverlay {
                   if(buildingComplete.gameObject.layer != 0)
                      continue;
 
+                  if(Utils.IsTile(buildingComplete.gameObject, out _))
+                     continue;// tiles are highlighted via the cells system
+
                   if(buildingComplete.gameObject.TryGetComponent(out PrimaryElement element))
                   {
                      TryAddObjectToHighlightedObjects(element, min, max);
@@ -119,7 +122,7 @@ namespace HighlightOverlay {
                   }
                }
 
-               GatherVisibleObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// including geysers, gravitas buildings
+               GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// geysers, gravitas buildings
                foreach(GameObject building in buildings)
                {
                   if(building.HasTag(GameTags.GeyserFeature))
@@ -128,10 +131,7 @@ namespace HighlightOverlay {
                         continue;
                   }
 
-                  if(Utils.IsTile(building, out _))
-                     continue;// tiles are highlighted via the cells system
-
-                  if(!building.HasTag(GameTags.UnderConstruction) && building.TryGetComponent(out PrimaryElement element))
+                  if(building.TryGetComponent(out PrimaryElement element))
                   {
                      TryAddObjectToHighlightedObjects(element, min, max);
                   }
@@ -180,7 +180,7 @@ namespace HighlightOverlay {
             }
          }
       }
-      private static void GatherVisibleObjectsOnBuildingsLayer(out HashSet<GameObject> buildings) {
+      private static void GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings) {
          buildings = new HashSet<GameObject>();
 
          for(int cell = 0; cell < Grid.CellCount; cell++)
@@ -188,7 +188,7 @@ namespace HighlightOverlay {
             if(Grid.IsVisible(cell))
             {
                GameObject building = Grid.Objects[cell, (int)ObjectLayer.Building];
-               if(building != null)
+               if(building != null && !building.TryGetComponent(out Building _))// geysers, gravitas buildings
                   buildings.Add(building);
             }
          }
@@ -407,14 +407,14 @@ namespace HighlightOverlay {
 
 
 
-      public bool ComputeShouldHighlight(PrimaryElement primaryElement, int cell = -1) {
-         if(primaryElement == null && cell == -1)
+      public bool ComputeShouldHighlight(PrimaryElement targetObject, int cell = -1) {
+         if(targetObject == null && cell == -1)
             return false;
 
          //----------------------Stored items----------------------DOWN
-         if(primaryElement != null)
+         if(targetObject != null)
          {
-            foreach(Storage storage in primaryElement.GetComponents<Storage>())
+            foreach(Storage storage in targetObject.GetComponents<Storage>())
             {
                if(storage.showInUI)
                {
@@ -431,9 +431,9 @@ namespace HighlightOverlay {
          }
          //----------------------Stored items----------------------UP
          //----------------------Equipped items(clothing, suits)----------------------DOWN
-         if(primaryElement != null)
+         if(targetObject != null)
          {
-            if(primaryElement.TryGetComponent(out MinionIdentity minionIdentity))
+            if(targetObject.TryGetComponent(out MinionIdentity minionIdentity))
             {
                foreach(AssignableSlotInstance slot in minionIdentity.GetEquipment().Slots)
                {
@@ -450,11 +450,10 @@ namespace HighlightOverlay {
 
          ObjectProperties selectedProperties = Main.selectedObjProperties;
 
-         //----------------------Checking if the case exists----------------------DOWN
          ObjectType targetType;
-         if(primaryElement != null)
+         if(targetObject != null)
          {
-            targetType = ObjectProperties.GetObjectType(primaryElement.gameObject);
+            targetType = ObjectProperties.GetObjectType(targetObject.gameObject);
          }
          else
          {
@@ -464,23 +463,22 @@ namespace HighlightOverlay {
          int dictKey = ShouldHighlightCases.CasesUtils.CalculateCaseKey(selectedProperties.objectType, Main.highlightOption, targetType);
          if(!ShouldHighlightCases.caseMethods.ContainsKey(dictKey))
             return false;
-         //----------------------Checking if the case exists----------------------UP
+
+         bool shouldHighlight;
+
+         if(WasShouldHighlightAlreadyComputed(targetType, targetObject, cell, out shouldHighlight))
+         {
+            return shouldHighlight;
+         }
 
          ObjectProperties targetProperties;
-         if(primaryElement != null)
+         if(targetObject != null)
          {
-            targetProperties = new ObjectProperties(primaryElement, targetType);
+            targetProperties = new ObjectProperties(targetObject, targetType);
          }
          else
          {
             targetProperties = new ObjectProperties(cell);
-         }
-
-         bool shouldHighlight;
-
-         if(WasShouldHighlightAlreadyComputed(targetProperties, out shouldHighlight))
-         {
-            return shouldHighlight;
          }
 
          if((selectedProperties.highlightOptions & Main.highlightOption) == 0 ||
@@ -489,20 +487,20 @@ namespace HighlightOverlay {
 
          shouldHighlight = ShouldHighlightCases.caseMethods[dictKey](selectedProperties, targetProperties);
 
-         StoreShouldHighlight(targetProperties, shouldHighlight);
+         StoreShouldHighlight(targetType, targetObject, cell, shouldHighlight);
          return shouldHighlight;
       }
 
 
 
-      private bool WasShouldHighlightAlreadyComputed(ObjectProperties objProperties, out bool shouldHighlight) {
-         if(shouldHighlightObjects.TryGetValue(objProperties, out shouldHighlight))
+      private bool WasShouldHighlightAlreadyComputed(ObjectType objectType, PrimaryElement obj, int cell, out bool shouldHighlight) {
+         if(shouldHighlightObjects.TryGetValue(objectType, obj, cell, out shouldHighlight))
             return true;
 
          return false;
       }
-      private void StoreShouldHighlight(ObjectProperties objProperties, bool shouldHighlight) {
-         shouldHighlightObjects.StoreValue(objProperties, shouldHighlight);
+      private void StoreShouldHighlight(ObjectType objectType, PrimaryElement obj, int cell, bool shouldHighlight) {
+         shouldHighlightObjects.StoreValue(objectType, obj, cell, shouldHighlight);
       }
 
 
