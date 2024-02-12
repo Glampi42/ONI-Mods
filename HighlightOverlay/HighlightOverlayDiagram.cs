@@ -392,10 +392,10 @@ namespace HighlightOverlay {
          };
 
 
-         Main.highlightFilters = new HighlightFiltersTree();
-         Main.highlightFilters.InitializeToggles();
+         var highlightFiltersTree = new HighlightFiltersTreeFilterable();
+         highlightFiltersTree.InitializeToggles();
 
-         GameObject rootPanel = Main.highlightFilters.RootPanel;
+         GameObject rootPanel = highlightFiltersTree.RootPanel;
          rootPanel.transform.SetParent(filtersContainer.transform);
          rootPanel.SetActive(true);
       }

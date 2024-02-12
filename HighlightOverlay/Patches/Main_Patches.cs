@@ -14,8 +14,6 @@ namespace HighlightOverlay.Patches {
          public static void Postfix() {
             ShouldHighlightCases.CasesUtils.ValidateCasesMethods();
             ShouldHighlightCases.CasesUtils.RegisterCases();
-
-            Main.GenerateHighlightFilters();
          }
       }
 
@@ -47,8 +45,12 @@ namespace HighlightOverlay.Patches {
          }
       }
       private static void OnGamePausedChanged(object pause) {
-         //bool isPaused = (bool)pause;
+         bool isPaused = (bool)pause;
          Utils.UpdateHighlightDiagramOptions();
+         if(!isPaused && !ModConfig.Instance.AllowNotPaused && Main.highlightMode != default && !Main.highlightMode.isEnabled && !Main.highlightMode.dataIsClear)
+         {
+            Main.highlightMode.ClearAllData(true, true);
+         }
       }
       private static void OnActiveWorldChanged(object data) {
          //Tuple<int, int> worlds = data as Tuple<int, int>;

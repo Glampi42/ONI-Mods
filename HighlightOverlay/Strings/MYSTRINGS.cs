@@ -103,8 +103,8 @@ namespace HighlightOverlay.Strings {
                   public static LocString HEADER = "Highlight Filters:";
 
 
-                  public static LocString ITEMS = "Items";
-                  public static LocString ON_GROUND = "On the ground";
+                  public static LocString ITEMS = "Items/Debris";
+                  public static LocString ON_GROUND = "On the floor";
                   public static LocString STORED_ITEMS = "Stored";
 
                   public static LocString BUILDINGS = "Buildings";
@@ -138,7 +138,7 @@ namespace HighlightOverlay.Strings {
                }
             }
          }
-         public class OBJECTTYPES {
+         public class OBJECTTYPE {
             public static LocString NOTVALID = "Invalid";
             public static LocString ELEMENT = "Element";
             public static LocString ITEM = "Item";

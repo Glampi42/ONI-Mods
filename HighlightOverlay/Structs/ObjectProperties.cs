@@ -19,12 +19,11 @@ namespace HighlightOverlay.Structs {
       public AdditionalInfo info;
 
 
-      public ObjectProperties(int cell) : this(Grid.Element[cell]) { }
-      public ObjectProperties(Element cellElement) {
+      public ObjectProperties(Element element) {
          objectType = ObjectType.ELEMENT;
 
          highlightOptions = HighlightOptions.NONE;
-         element = cellElement;
+         this.element = element;
          prefabID = Tag.Invalid;
 
          info = null;
@@ -478,11 +477,11 @@ namespace HighlightOverlay.Structs {
          return ObjectType.ELEMENT;// assuming that the object has the PrimaryElement component(which it should)
       }
 
-      public static object ObjectForShouldHighlight(ObjectType objectType, PrimaryElement obj, int cell) {
+      public static object ObjectForShouldHighlight(ObjectType objectType, PrimaryElement obj, Element element) {
          if(obj == null)
          {
-            if(cell != -1)
-               return Grid.Element[cell].id;
+            if(element != null)
+               return element.id;
 
             return null;
          }
@@ -515,7 +514,7 @@ namespace HighlightOverlay.Structs {
       }
 
       public string StringRepresentation() {
-         return Utils.GetMyString(typeof(MYSTRINGS.UI.OBJECTTYPES), objectType.ToString());
+         return Utils.GetMyString(typeof(MYSTRINGS.UI.OBJECTTYPE), objectType.ToString());
       }
 
 

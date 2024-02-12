@@ -43,48 +43,11 @@ namespace HighlightOverlay {
 
       public static Dictionary<ObjectType, HighlightOptions> lastHighlightOption = new Dictionary<ObjectType, HighlightOptions>();
 
+      public static HighlightFilters highlightFilters = HighlightFilters.NONE;
+
+
       public static Color[] cellColors;
       public static Color[] tileColors;
-
-
-      public static HighlightFiltersTree highlightFilters = null;
-      public static TreeNode highlightFiltersStructure;
-      public static void GenerateHighlightFilters() {
-         highlightFiltersStructure = new TreeNode("root");
-
-         highlightFiltersStructure.AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ITEMS), true)
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ON_GROUND))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.STORED_ITEMS));
-
-         highlightFiltersStructure.AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.BUILDINGS), true)
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.STANDARD_BUILDINGS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUID_PIPES))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GAS_PIPES))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.RAILS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.WIRES))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.AUTOMATION))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.BACKWALLS));
-
-         highlightFiltersStructure.AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CONDUIT_CONTENTS), true)
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUID_CONTENTS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GAS_CONTENTS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.RAILS_CONTENTS));
-
-         highlightFiltersStructure.AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CELLS), true)
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.NATURAL_TILES))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUIDS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GASES));
-
-         highlightFiltersStructure.AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CREATURES), true)
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.PLANTS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CRITTERS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.DUPLICANTS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ROBOTS));
-
-         highlightFiltersStructure.AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.MISCELLANEOUS), true)
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GEYSERS))
-         .AddChild(new TreeNode(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.OTHER));
-      }
 
 
 

@@ -140,7 +140,7 @@ namespace HighlightOverlay {
       }
       public static void UpdateHighlightMode(bool fullUpdate = false) {
          HighlightMode highlightMode = Main.highlightMode;
-         if(highlightMode != default)
+         if(highlightMode != default && highlightMode.isEnabled)
          {
             highlightMode.ClearAllData(fullUpdate, fullUpdate);
          }
@@ -157,6 +157,17 @@ namespace HighlightOverlay {
          if(highlightMode != default)
          {
             highlightMode.UpdateHighlightColor();
+         }
+      }
+
+      public static IEnumerable<HighlightFilters> CollectEnabledHighlightFilters() {
+         foreach(HighlightFilters filter in Enum.GetValues(typeof(HighlightFilters)))
+         {
+            if(!HasMoreThanOneBitSet((int)filter))
+            {
+               if((Main.highlightFilters & filter) != 0)
+                  yield return filter;
+            }
          }
       }
 
@@ -585,6 +596,28 @@ namespace HighlightOverlay {
                return i;
 
          return 32;
+      }
+
+      public static bool HasMoreThanOneBitSet(int bitMask) {
+         int count = 0;
+         while(bitMask > 0)
+         {
+            if((bitMask & 1) == 1)
+               count++;
+
+            bitMask >>= 1;
+         }
+         return count > 1;
+      }
+
+      public static int GetBinaryLength(int number) {
+         int length = 0;
+         while(number > 0)
+         {
+            number >>= 1;
+            length++;
+         }
+         return length;
       }
    }
 }

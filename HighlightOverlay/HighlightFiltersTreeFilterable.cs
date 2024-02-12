@@ -7,9 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 using UnityEngine;
+using HighlightOverlay.Enums;
+using HighlightOverlay.Strings;
+using static STRINGS.BUILDING.STATUSITEMS.ACCESS_CONTROL;
 
 namespace HighlightOverlay {
-   public sealed class HighlightFiltersTree {
+   public sealed class HighlightFiltersTreeFilterable {
       /// <summary>
       /// The margin around the scrollable area to avoid stomping on the scrollbar.
       /// </summary>
@@ -53,6 +56,8 @@ namespace HighlightOverlay {
                   all = false;
             PCheckBox.SetCheckState(allItems, none ? PCheckBox.STATE_UNCHECKED : (all ?
                PCheckBox.STATE_CHECKED : PCheckBox.STATE_PARTIAL));
+
+            Utils.UpdateHighlightMode();// update highlight when highlight filters change
          }
       }
 
@@ -83,40 +88,38 @@ namespace HighlightOverlay {
       /// <summary>
       /// The child categories.
       /// </summary>
-      private readonly Dictionary<string, TypeSelectCategory> children;
+      private readonly Dictionary<HighlightFilters, TypeSelectCategory> children;
 
-      public HighlightFiltersTree() {
+      public HighlightFiltersTreeFilterable() {
          // Select/deselect all types
-         var cp = new PPanel("Categories") {
+         RootPanel = new PPanel("HighlightFiltersPanel") {
             Direction = PanelDirection.Vertical,
             Alignment = TextAnchor.UpperLeft,
             Spacing = ROW_SPACING,
             Margin = ELEMENT_MARGIN,
-            FlexSize = Vector2.one
-         }.AddChild(new PCheckBox("SelectAll") {
+            FlexSize = Vector2.one,
+            DynamicSize = true
+         }
+         .AddChild(new PCheckBox("SelectAll") {
             Text = STRINGS.UI.UISIDESCREENS.TREEFILTERABLESIDESCREEN.ALLBUTTON,
             CheckSize = ROW_SIZE,
             InitialState = PCheckBox.STATE_CHECKED,
             OnChecked = OnCheck,
             TextStyle = PUITuning.Fonts.TextLightStyle
-         }.AddOnRealize((obj) => allItems = obj)).AddOnRealize((obj) => {
+         }.AddOnRealize((obj) => allItems = obj))
+         
+         .AddOnRealize((obj) => {
             childPanel = obj;
             childPanel.AddComponent<Canvas>();
             childPanel.AddComponent<GraphicRaycaster>();
-         });
-
-         RootPanel = new PRelativePanel("HighlightFiltersPanel") {
-            BackImage = PUITuning.Images.BoxBorder,
-            ImageMode = Image.Type.Sliced,
-            DynamicSize = false,
-         }.AddChild(cp).
-            SetLeftEdge(cp, fraction: 0.0f).SetRightEdge(cp, fraction: 1.0f).
-            SetBottomEdge(cp, fraction: 0.0f).SetTopEdge(cp, fraction: 1.0f).
-            Build();
+            var sizeFitter = childPanel.AddComponent<ContentSizeFitter>();
+            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.MinSize;
+            sizeFitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
+         }).Build();
 
          RootPanel.SetMinUISize(PANEL_SIZE);
 
-         children = new Dictionary<string, TypeSelectCategory>(16);
+         children = new Dictionary<HighlightFilters, TypeSelectCategory>(16);
 
          RootPanel.SetActive(false);
       }
@@ -152,12 +155,12 @@ namespace HighlightOverlay {
       /// Creates the toggles for all categories.
       /// </summary>
       public void InitializeToggles() {
-         Debug.Log("InitializeToggles");
-         if(Main.highlightFilters != default && children.Count == 0)
+         if(children.Count == 0)
          {
-            foreach(var category in Main.highlightFiltersStructure.GetAllChildren())
+            foreach(HighlightFilters category in Enum.GetValues(typeof(HighlightFilters)))
             {
-               InitializeCategory(category);
+               if(Utils.HasMoreThanOneBitSet((int)category) && category != HighlightFilters.ALL)
+                  InitializeCategory(category);
             }
          }
       }
@@ -165,10 +168,8 @@ namespace HighlightOverlay {
       /// <summary>
       /// Creates all elements in the specified category.
       /// </summary>
-      /// <param name="categoryNode">The category to search.</param>
-      private void InitializeCategory(TreeNode categoryNode) {
-         string category = categoryNode.Name;
-
+      /// <param name="category">The category to search.</param>
+      private void InitializeCategory(HighlightFilters category) {
          // Attempt to add to type select control
          if(!children.TryGetValue(category, out TypeSelectCategory current))
          {
@@ -186,8 +187,13 @@ namespace HighlightOverlay {
             panel.transform.SetSiblingIndex(index + 1);
          }
 
-         foreach(var element in categoryNode.GetAllChildren())
-            current.TryAddType(element.Name);
+         for(int filter = 1; filter <= (1 << (Utils.GetBinaryLength((int)category) - 1)); filter <<= 1)
+         {
+            if(((int)category & filter) != 0)
+            {
+               current.TryAddType((HighlightFilters)filter);
+            }
+         }
       }
 
       /// <summary>
@@ -207,9 +213,9 @@ namespace HighlightOverlay {
          private static readonly RectOffset HEADER_MARGIN = new RectOffset(5, 0, 0, 0);
 
          /// <summary>
-         /// The name of this category.
+         /// The HighlightFilters category this object controls.
          /// </summary>
-         public string CategoryName { get; }
+         public HighlightFilters Category { get; }
 
          /// <summary>
          /// The check box for selecting or deselecting children.
@@ -224,7 +230,7 @@ namespace HighlightOverlay {
          /// <summary>
          /// The parent control.
          /// </summary>
-         public HighlightFiltersTree Control { get; }
+         public HighlightFiltersTreeFilterable Control { get; }
 
          /// <summary>
          /// The header for this category.
@@ -234,13 +240,13 @@ namespace HighlightOverlay {
          /// <summary>
          /// The child elements.
          /// </summary>
-         internal readonly Dictionary<string, TypeSelectFilter> children;
+         internal readonly Dictionary<HighlightFilters, TypeSelectFilter> children;
 
-         internal TypeSelectCategory(HighlightFiltersTree parent, string categoryName) {
+         internal TypeSelectCategory(HighlightFiltersTreeFilterable parent, HighlightFilters category) {
             Control = parent ?? throw new ArgumentNullException("parent");
-            CategoryName = categoryName;
+            Category = category;
             var selectBox = new PCheckBox("SelectCategory") {
-               Text = categoryName,
+               Text = Utils.GetMyString(typeof(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS), category.ToString()),
                OnChecked = OnCheck,
                CheckSize = ROW_SIZE,
                InitialState =
@@ -259,7 +265,9 @@ namespace HighlightOverlay {
                fraction: 0.0f).SetRightEdge(selectBox, fraction: 1.0f).SetLeftEdge(
                selectBox, toRight: showHide).SetMargin(selectBox, HEADER_MARGIN).
                AnchorYAxis(showHide, anchor: 0.5f).Build();
-            children = new Dictionary<string, TypeSelectFilter>(16);
+
+            children = new Dictionary<HighlightFilters, TypeSelectFilter>(16);
+
             ChildPanel = new PPanel("Children") {
                Direction = PanelDirection.Vertical,
                Alignment = TextAnchor.UpperLeft,
@@ -275,7 +283,7 @@ namespace HighlightOverlay {
          public void CheckAll() {
             PCheckBox.SetCheckState(CheckBox, PCheckBox.STATE_CHECKED);
             foreach(var child in children)
-               PCheckBox.SetCheckState(child.Value.CheckBox, PCheckBox.STATE_CHECKED);
+               child.Value.SetSelected(true, false);
          }
 
          /// <summary>
@@ -284,17 +292,17 @@ namespace HighlightOverlay {
          public void ClearAll() {
             PCheckBox.SetCheckState(CheckBox, PCheckBox.STATE_UNCHECKED);
             foreach(var child in children)
-               PCheckBox.SetCheckState(child.Value.CheckBox, PCheckBox.STATE_UNCHECKED);
+               child.Value.SetSelected(false, false);
          }
 
          private void OnCheck(GameObject source, int state) {
-            Debug.Log("OnCheck: " + this.CategoryName);
             if(state == PCheckBox.STATE_UNCHECKED)
                // Clicked when unchecked, check all
                CheckAll();
             else
                // Clicked when checked or partial, clear all
                ClearAll();
+
             Control.UpdateFromChildren();
          }
 
@@ -314,7 +322,7 @@ namespace HighlightOverlay {
          /// </summary>
          /// <param name="filter">The type to add.</param>
          /// <returns>true if it was added, or false if it already exists.</returns>
-         public bool TryAddType(string filter) {
+         public bool TryAddType(HighlightFilters filter) {
             bool add = !children.ContainsKey(filter);
             if(add)
             {
@@ -325,7 +333,7 @@ namespace HighlightOverlay {
 
                cb.SetParent(ChildPanel);
                if(PCheckBox.GetCheckState(cb) == PCheckBox.STATE_CHECKED)
-                  PCheckBox.SetCheckState(cb, PCheckBox.STATE_CHECKED);// Set to checked
+                  child.SetSelected(true, false);
 
                cb.transform.SetSiblingIndex(children.Count - 1);
             }
@@ -351,24 +359,24 @@ namespace HighlightOverlay {
          public GameObject CheckBox { get; }
 
          /// <summary>
-         /// The name of this filter.
+         /// The HighlightFilter this object controls.
          /// </summary>
-         public string filterName { get; }
+         public HighlightFilters Filter { get; }
 
          /// <summary>
          /// The parent category.
          /// </summary>
          private readonly TypeSelectCategory parent;
 
-         internal TypeSelectFilter(TypeSelectCategory parent, string filterName) {
+         internal TypeSelectFilter(TypeSelectCategory parent, HighlightFilters filter) {
             this.parent = parent ?? throw new ArgumentNullException("parent");
             var tint = Color.white;
-            this.filterName = filterName;
+            Filter = filter;
             CheckBox = new PCheckBox("Select") {
                CheckSize = ROW_SIZE,
                SpriteSize = ROW_SIZE,
                OnChecked = OnCheck,
-               Text = this.filterName,
+               Text = Utils.GetMyString(typeof(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS), filter.ToString()),
                InitialState = PCheckBox.
                STATE_CHECKED,
                Sprite = null,
@@ -378,21 +386,32 @@ namespace HighlightOverlay {
          }
 
          private void OnCheck(GameObject source, int state) {
-            SetSelected(state == PCheckBox.STATE_UNCHECKED);
+            SetSelected(state == PCheckBox.STATE_UNCHECKED, true);
          }
 
          /// <summary>
          /// Sets the selected state of this type.
          /// </summary>
          /// <param name="selected">true to select this type, or false otherwise.</param>
-         public void SetSelected(bool selected) {
+         public void SetSelected(bool selected, bool updateParent) {
             if(selected)
                // Clicked when unchecked, check and possibly check all
                PCheckBox.SetCheckState(CheckBox, PCheckBox.STATE_CHECKED);
             else
                // Clicked when checked, clear and possibly uncheck
                PCheckBox.SetCheckState(CheckBox, PCheckBox.STATE_UNCHECKED);
-            parent.UpdateFromChildren();
+
+            if(selected)
+            {
+               Main.highlightFilters |= this.Filter;
+            }
+            else
+            {
+               Main.highlightFilters &= ~this.Filter;
+            }
+
+            if(updateParent)
+               parent.UpdateFromChildren();
          }
       }
 

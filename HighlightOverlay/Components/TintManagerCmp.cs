@@ -7,10 +7,10 @@ using UnityEngine;
 
 namespace HighlightOverlay.Components {
    public class TintManagerCmp : KMonoBehaviour {
-      private Color actualTintColor;// stores whatever tint color is set to the object externally
-      private Color shownTintColor = default;
+      public Color actualTintColor;// stores whatever tint color is set to the object externally
+      public Color shownTintColor = default;
 
-      private bool ignoreChange = true;
+      private bool preventRecursion = false;
       public KBatchedAnimController animController;
 
       public override void OnSpawn() {
@@ -27,35 +27,45 @@ namespace HighlightOverlay.Components {
             animController.OnTintChanged += ManageTintChange;
          else
             animController.OnTintChanged = ManageTintChange;
+
+         enabled = false;
       }
 
       private void ManageTintChange(Color newTint) {
-         if(ignoreChange)
-            return;
+         if(!enabled)
+         {
+            actualTintColor = newTint;
+         }
+         else
+         {
+            if(preventRecursion)
+               return;// not sure if this is a good practice, but it works so yeah
 
-         actualTintColor = newTint;
+            actualTintColor = newTint;
 
-         ignoreChange = true;
-         animController.TintColour = shownTintColor;
-         ignoreChange = false;
+            preventRecursion = true;
+            animController.TintColour = shownTintColor;
+            preventRecursion = false;
+         }
       }
 
       public void SetTintColor(Color color) {
-         ignoreChange = true;
+         enabled = true;
 
          shownTintColor = color;
-         animController.TintColour = color;
 
-         ignoreChange = false;// not sure if this is a good practice, but it works so yeah
+         preventRecursion = true;
+         animController.TintColour = shownTintColor;
+         preventRecursion = false;
       }
 
       public void ResetTintColor() {
-         ignoreChange = true;
+         preventRecursion = true;
          animController.TintColour = actualTintColor;
-         ignoreChange = false;
+         preventRecursion = false;
 
          shownTintColor = default;
-         ignoreChange = true;
+         enabled = false;
       }
    }
 }

@@ -112,15 +112,17 @@
     <Compile Include="Attributes\HighlightOptionLabelAttribute.cs" />
     <Compile Include="Components\TintManagerCmp.cs" />
     <Compile Include="ComputedShouldHighlightValues.cs" />
+    <Compile Include="Enums\HighlightFilters.cs" />
     <Compile Include="Enums\HighlightOptions.cs" />
     <Compile Include="Enums\HighlightOptionsExtentions.cs" />
     <Compile Include="Enums\ObjectTypeExtentions.cs" />
-    <Compile Include="HighlightFiltersTree.cs" />
+    <Compile Include="HighlightFiltersTreeFilterable.cs" />
     <Compile Include="HighlightMode.cs" />
     <Compile Include="HighlightOverlayDiagram.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="ModConfig.cs" />
     <Compile Include="MyUserMod2.cs" />
+    <Compile Include="Patches\DetailsScreenHide_Patches.cs" />
     <Compile Include="Patches\TintManager_Patches.cs" />
     <Compile Include="ShouldHighlightCases.cs" />
     <Compile Include="Structs\ObjectProperties.cs" />
@@ -136,7 +138,6 @@
     <Compile Include="Strings\LocalizeStrings.cs" />
     <Compile Include="Strings\MYSTRINGS.cs" />
     <Compile Include="Strings\STRINGS.cs" />
-    <Compile Include="TreeNode.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

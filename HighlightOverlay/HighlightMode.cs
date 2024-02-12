@@ -21,7 +21,7 @@ namespace HighlightOverlay {
 
       private HashSet<PrimaryElement> highlightedObjects = new HashSet<PrimaryElement>();
 
-      private bool dataIsClear = true;
+      public bool dataIsClear = true;
       private bool defaultBackgroundColor = true;
 
       private ComputedShouldHighlightValues shouldHighlightObjects = new ComputedShouldHighlightValues();
@@ -165,7 +165,7 @@ namespace HighlightOverlay {
 
                   if(!isTile || !tile.doReplaceElement)
                   {
-                     if(ComputeShouldHighlight(null, cell))
+                     if(ComputeShouldHighlight(null, Grid.Element[cell]))
                      {
                         UpdateCellHighlight(cell);
                      }
@@ -260,7 +260,7 @@ namespace HighlightOverlay {
 
          if(obj.TryGetComponent(out TintManagerCmp tintManager))
          {
-            tintManager.SetTintColor(Main.highlightInTrueColor ? Color.clear : Main.whiteHighlightColor);
+            tintManager.SetTintColor(Main.highlightInTrueColor ? tintManager.actualTintColor : Main.whiteHighlightColor);
             tintManager.animController.SetLayer(targetLayer);
          }
 
@@ -272,7 +272,7 @@ namespace HighlightOverlay {
                {
                   if(storedItem != null && storedItem.TryGetComponent(out TintManagerCmp tintManager2))
                   {
-                     tintManager2.SetTintColor(Main.highlightInTrueColor ? Color.clear : Main.whiteHighlightColor);
+                     tintManager2.SetTintColor(Main.highlightInTrueColor ? tintManager2.actualTintColor : Main.whiteHighlightColor);
                   }
                }
             }
@@ -407,46 +407,95 @@ namespace HighlightOverlay {
 
 
 
-      public bool ComputeShouldHighlight(PrimaryElement targetObject, int cell = -1) {
-         if(targetObject == null && cell == -1)
+      public bool ComputeShouldHighlight(PrimaryElement targetObject, Element element = null, HighlightFilters givenFilter = HighlightFilters.NONE) {
+         if(targetObject == null && element == null)
             return false;
 
-         //----------------------Stored items----------------------DOWN
-         if(targetObject != null)
+         if((Main.highlightFilters & HighlightFilters.STORED_ITEMS) != 0)
          {
-            foreach(Storage storage in targetObject.GetComponents<Storage>())
+            //----------------------Stored items----------------------DOWN
+            if(targetObject != null)
             {
-               if(storage.showInUI)
+               foreach(Storage storage in targetObject.GetComponents<Storage>())
                {
-                  foreach(GameObject storedItem in storage.items)
+                  if(storage.showInUI)
                   {
-                     if(storedItem != null && storedItem.TryGetComponent(out PrimaryElement elem))
+                     foreach(GameObject storedItem in storage.items)
                      {
-                        if(ComputeShouldHighlight(elem))
+                        if(storedItem != null && storedItem.TryGetComponent(out PrimaryElement elem))
+                        {
+                           if(ComputeShouldHighlight(elem, givenFilter: HighlightFilters.STORED_ITEMS))
+                              return true;
+                        }
+                     }
+                  }
+               }
+            }
+            //----------------------Stored items----------------------UP
+            //----------------------Equipped items(clothing, suits)----------------------DOWN
+            if(targetObject != null)
+            {
+               if(targetObject.TryGetComponent(out MinionIdentity minionIdentity))
+               {
+                  foreach(AssignableSlotInstance slot in minionIdentity.GetEquipment().Slots)
+                  {
+                     Equippable equippable = slot.assignable as Equippable;
+                     if(equippable != null && equippable.isEquipped && equippable.TryGetComponent(out PrimaryElement elem))
+                     {
+                        if(ComputeShouldHighlight(elem, givenFilter: HighlightFilters.STORED_ITEMS))
                            return true;
                      }
                   }
                }
             }
+            //----------------------Equipped items(clothing, suits)----------------------UP
          }
-         //----------------------Stored items----------------------UP
-         //----------------------Equipped items(clothing, suits)----------------------DOWN
-         if(targetObject != null)
+         if((Main.highlightFilters & HighlightFilters.CONDUIT_CONTENTS) != 0)
          {
-            if(targetObject.TryGetComponent(out MinionIdentity minionIdentity))
+            //----------------------Conduit Contents----------------------DOWN
+            if(targetObject != null)
             {
-               foreach(AssignableSlotInstance slot in minionIdentity.GetEquipment().Slots)
+               if(targetObject.TryGetComponent(out Conduit conduit))
                {
-                  Equippable equippable = slot.assignable as Equippable;
-                  if(equippable != null && equippable.isEquipped && equippable.TryGetComponent(out PrimaryElement elem))
+                  ConduitFlow conduitFlow = null;
+                  if(conduit.ConduitType == ConduitType.Liquid && (Main.highlightFilters & HighlightFilters.LIQUID_CONTENTS) != 0)
                   {
-                     if(ComputeShouldHighlight(elem))
-                        return true;
+                     conduitFlow = Game.Instance.liquidConduitFlow;
+                  }
+                  else if(conduit.ConduitType == ConduitType.Gas && (Main.highlightFilters & HighlightFilters.GAS_CONTENTS) != 0)
+                  {
+                     conduitFlow = Game.Instance.gasConduitFlow;
+                  }
+
+                  if(conduitFlow != null)
+                  {
+                     var contents = conduitFlow.GetContents(conduit.Cell);
+                     if(contents.element != SimHashes.Vacuum && contents.mass > 0f)
+                     {
+                        if(ComputeShouldHighlight(null, ElementLoader.FindElementByHash(contents.element), givenFilter: HighlightFilters.CONDUIT_CONTENTS))
+                           return true;
+                     }
+                  }
+               }
+               else if(targetObject.TryGetComponent(out SolidConduit solidConduit))
+               {
+                  if((Main.highlightFilters & HighlightFilters.RAILS_CONTENTS) != 0)
+                  {
+                     var contents = Game.Instance.solidConduitFlow.GetContents(Grid.PosToCell(solidConduit.Position));
+                     if(contents.pickupableHandle != null && contents.pickupableHandle.IsValid())
+                     {
+                        var pickupable = Game.Instance.solidConduitFlow.GetPickupable(contents.pickupableHandle);
+                        if(pickupable != null && pickupable.TryGetComponent(out PrimaryElement pickupableElem))
+                        {
+                           if(ComputeShouldHighlight(pickupableElem, givenFilter: HighlightFilters.CONDUIT_CONTENTS))
+                              return true;
+                        }
+                     }
                   }
                }
             }
+            //----------------------Conduit Contents----------------------UP
          }
-         //----------------------Equipped items(clothing, suits)----------------------UP
 
          ObjectProperties selectedProperties = Main.selectedObjProperties;
 
@@ -466,41 +515,179 @@ namespace HighlightOverlay {
 
          bool shouldHighlight;
 
-         if(WasShouldHighlightAlreadyComputed(targetType, targetObject, cell, out shouldHighlight))
+         bool appliesToHighlightFilters;
+         if(givenFilter == HighlightFilters.NONE)
+         {
+            appliesToHighlightFilters = ApplyHighlightFilters(targetType, targetObject?.gameObject, element, out givenFilter);
+         }
+         else
+         {
+            appliesToHighlightFilters = true;// if filter is given it means it was already checked whether the obj applies to the highlight filters
+         }
+
+         if(WasShouldHighlightAlreadyComputed(targetType, targetObject, element, givenFilter, out shouldHighlight))
          {
             return shouldHighlight;
          }
 
-         ObjectProperties targetProperties;
-         if(targetObject != null)
+         if(!appliesToHighlightFilters)
          {
-            targetProperties = new ObjectProperties(targetObject, targetType);
+            shouldHighlight = false;
          }
          else
          {
-            targetProperties = new ObjectProperties(cell);
+            ObjectProperties targetProperties;
+            if(targetObject != null)
+            {
+               targetProperties = new ObjectProperties(targetObject, targetType);
+            }
+            else
+            {
+               targetProperties = new ObjectProperties(element);
+            }
+
+            if((selectedProperties.highlightOptions & Main.highlightOption) == 0 ||
+               (Main.highlightOption.Reverse() != HighlightOptions.NONE && ((targetProperties.highlightOptions & Main.highlightOption.Reverse()) == 0)))
+               return false;
+
+            shouldHighlight = ShouldHighlightCases.caseMethods[dictKey](selectedProperties, targetProperties);
          }
 
-         if((selectedProperties.highlightOptions & Main.highlightOption) == 0 ||
-            (Main.highlightOption.Reverse() != HighlightOptions.NONE && ((targetProperties.highlightOptions & Main.highlightOption.Reverse()) == 0)))
-            return false;
-
-         shouldHighlight = ShouldHighlightCases.caseMethods[dictKey](selectedProperties, targetProperties);
-
-         StoreShouldHighlight(targetType, targetObject, cell, shouldHighlight);
+         StoreShouldHighlight(targetType, targetObject, element, givenFilter, shouldHighlight);
          return shouldHighlight;
       }
 
 
 
-      private bool WasShouldHighlightAlreadyComputed(ObjectType objectType, PrimaryElement obj, int cell, out bool shouldHighlight) {
-         if(shouldHighlightObjects.TryGetValue(objectType, obj, cell, out shouldHighlight))
+      private bool WasShouldHighlightAlreadyComputed(ObjectType objectType, PrimaryElement obj, Element element, HighlightFilters highlightFilter, out bool shouldHighlight) {
+         if(shouldHighlightObjects.TryGetValue(objectType, obj, element, highlightFilter, out shouldHighlight))
             return true;
 
          return false;
       }
-      private void StoreShouldHighlight(ObjectType objectType, PrimaryElement obj, int cell, bool shouldHighlight) {
-         shouldHighlightObjects.StoreValue(objectType, obj, cell, shouldHighlight);
+      private void StoreShouldHighlight(ObjectType objectType, PrimaryElement obj, Element element, HighlightFilters highlightFilter, bool shouldHighlight) {
+         shouldHighlightObjects.StoreValue(objectType, obj, element, highlightFilter, shouldHighlight);
+      }
+
+      /// <summary>
+      /// Filters out objects that shouldn't be highlighted because of active highlight filters.
+      /// </summary>
+      /// <returns>True if the object passes all filters; false otherwise</returns>
+      private bool ApplyHighlightFilters(ObjectType targetType, GameObject targetObject, Element element, out HighlightFilters highlightFilter) {
+         highlightFilter = HighlightFilters.NONE;
+
+         if(Main.highlightFilters == HighlightFilters.ALL)
+            return true;
+
+         if(targetObject != null)
+         {
+            KPrefabID targetID = targetObject.GetComponent<KPrefabID>();
+
+            if(targetType == ObjectType.ELEMENT || targetType == ObjectType.ITEM)
+            {
+               highlightFilter = HighlightFilters.ON_GROUND;
+            }
+            else if(targetType == ObjectType.BUILDING)
+            {
+               if(targetObject.TryGetComponent(out Building building))
+               {
+                  var objLayer = building.Def.ObjectLayer;
+
+                  if(objLayer == ObjectLayer.Building || objLayer == ObjectLayer.Gantry)
+                  {
+                     highlightFilter = HighlightFilters.STANDARD_BUILDINGS;
+                  }
+                  else if(objLayer == ObjectLayer.LiquidConduit || objLayer == ObjectLayer.LiquidConduitConnection)
+                  {
+                     highlightFilter = HighlightFilters.LIQUID_PIPES;
+                  }
+                  else if(objLayer == ObjectLayer.GasConduit || objLayer == ObjectLayer.GasConduitConnection)
+                  {
+                     highlightFilter = HighlightFilters.GAS_PIPES;
+                  }
+                  else if(objLayer == ObjectLayer.SolidConduit || objLayer == ObjectLayer.SolidConduitConnection)
+                  {
+                     highlightFilter = HighlightFilters.RAILS;
+                  }
+                  else if(objLayer == ObjectLayer.Wire || objLayer == ObjectLayer.WireConnectors)
+                  {
+                     highlightFilter = HighlightFilters.WIRES;
+                  }
+                  else if(objLayer == ObjectLayer.LogicWire || objLayer == ObjectLayer.LogicGate)
+                  {
+                     highlightFilter = HighlightFilters.AUTOMATION;
+                  }
+                  else if(objLayer == ObjectLayer.Backwall)
+                  {
+                     highlightFilter = HighlightFilters.BACKWALLS;
+                  }
+               }
+
+               if(highlightFilter == HighlightFilters.NONE)
+               {
+                  highlightFilter = HighlightFilters.STANDARD_BUILDINGS;
+               }
+            }
+            else if(targetType == ObjectType.PLANTORSEED)
+            {
+               if(targetID.HasTag(GameTags.Seed))
+               {
+                  highlightFilter = HighlightFilters.ON_GROUND;
+               }
+               else
+               {
+                  highlightFilter = HighlightFilters.PLANTS;
+               }
+            }
+            else if(targetType == ObjectType.CRITTEROREGG)
+            {
+               if(targetID.HasTag(GameTags.Egg))
+               {
+                  highlightFilter = HighlightFilters.ON_GROUND;
+               }
+               else
+               {
+                  highlightFilter = HighlightFilters.CRITTERS;
+               }
+            }
+            else if(targetType == ObjectType.DUPLICANT)
+            {
+               highlightFilter = HighlightFilters.DUPLICANTS;
+            }
+            else if(targetType == ObjectType.ROBOT)
+            {
+               highlightFilter = HighlightFilters.ROBOTS;
+            }
+            else if(targetType == ObjectType.GEYSER)
+            {
+               highlightFilter = HighlightFilters.GEYSERS;
+            }
+            else if(targetType == ObjectType.SAPTREE)
+            {
+               highlightFilter = HighlightFilters.PLANTS;
+            }
+            else
+            {
+               highlightFilter = HighlightFilters.OTHER;
+            }
+         }
+         else if(element != null)
+         {
+            if(element.IsSolid)
+            {
+               highlightFilter = HighlightFilters.NATURAL_TILES;
+            }
+            else if(element.IsLiquid)
+            {
+               highlightFilter = HighlightFilters.LIQUIDS;
+            }
+            else if(element.IsGas)
+            {
+               highlightFilter = HighlightFilters.GASES;
+            }
+         }
+
+         return highlightFilter == HighlightFilters.NONE || Utils.CollectEnabledHighlightFilters().Contains(highlightFilter);
       }
 
 
