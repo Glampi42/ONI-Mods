@@ -23,17 +23,20 @@ namespace HighlightOverlay.Patches {
          public static void Postfix() {
             Utils.SaveSpriteToAssets("ho_overlayicon");
 
+            Main.CacheHighlightFilters();
+
             Main.CacheCrittersMorphs();
 
-            Utils.CacheElementsAggregateStates();
-            Utils.CacheElementsSublimationElement();
-            Utils.CacheElementsTransitionElements();
-            Utils.CacheElementsTransitionOreElements();
-            Utils.CacheBuildingsHighlightOptions();
-            Utils.CachePlantsHighlightOptions();
-            Utils.CacheCrittersHighlightOptions();
+            Main.CacheElementsAggregateStates();
+            Main.CacheElementsSublimationElement();
+            Main.CacheElementsTransitionElements();
+            Main.CacheElementsTransitionOreElements();
 
-            Main.CacheObjectsPrefabIDs();
+            Main.CacheBuildingsHighlightOptions();
+            Main.CachePlantsHighlightOptions();
+            Main.CacheCrittersHighlightOptions();
+
+            Main.CacheObjectIDs();// cache this after everything else(it uses data cached above)
          }
       }
 

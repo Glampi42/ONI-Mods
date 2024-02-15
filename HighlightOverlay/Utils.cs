@@ -16,6 +16,7 @@ using static HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE;
 using static HighlightOverlay.Structs.ObjectProperties;
 using HighlightOverlay.Structs;
 using ProcGen.Noise;
+using static AttackProperties;
 
 namespace HighlightOverlay {
    public static class Utils {
@@ -160,17 +161,6 @@ namespace HighlightOverlay {
          }
       }
 
-      public static IEnumerable<HighlightFilters> CollectEnabledHighlightFilters() {
-         foreach(HighlightFilters filter in Enum.GetValues(typeof(HighlightFilters)))
-         {
-            if(!HasMoreThanOneBitSet((int)filter))
-            {
-               if((Main.highlightFilters & filter) != 0)
-                  yield return filter;
-            }
-         }
-      }
-
       public static bool IsTile(int cell, out SimCellOccupier cellOccupier) {
          cellOccupier = null;
          GameObject tile_go = Grid.Objects[cell, (int)ObjectLayer.Building];
@@ -188,7 +178,7 @@ namespace HighlightOverlay {
          foreach(var morph in Main.speciesMorphs[species])
          {
             if(collectCritters)
-               result.Add(morph.GetComponent<KPrefabID>().PrefabTag);
+               result.Add(morph.PrefabTag);
 
             if(collectEggs && morph.GetDef<FertilityMonitor.Def>() != null)
                result.Add(morph.GetDef<FertilityMonitor.Def>().eggPrefab);
@@ -197,7 +187,7 @@ namespace HighlightOverlay {
          {
             foreach(var baby in Main.speciesMorphsBabies[species])
             {
-               result.Add(baby.GetComponent<KPrefabID>().PrefabTag);
+               result.Add(baby.PrefabTag);
             }
          }
 
@@ -212,8 +202,8 @@ namespace HighlightOverlay {
          return selectable == null || !selectable.IsSelectable;
       }
 
-      public static bool IsObjectValidForHighlight(GameObject go, out PrimaryElement primaryElement, out ObjectType objectType) {
-         primaryElement = default;
+      public static bool IsObjectValidForHighlight(KPrefabID go, out ObjectType objectType) {
+         PrimaryElement primaryElement;
          objectType = default;
          return go != null && go.TryGetComponent(out primaryElement) && ((objectType = ObjectProperties.GetObjectType(go)) != ObjectType.ELEMENT || primaryElement.Element != null) &&
             !go.HasTag(GameTags.UnderConstruction);
@@ -221,10 +211,10 @@ namespace HighlightOverlay {
 
       //-------------------------------------Elements stuff-------------------------------------DOWN
       public static List<Element> OtherAggregateStates(Element element) {
-         if(!otherAggregateStates.ContainsKey(element.id))
-            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(otherAggregateStates)} dictionary");
+         if(!Main.otherAggregateStates.ContainsKey(element.id))
+            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(Main.otherAggregateStates)} dictionary");
 
-         return otherAggregateStates[element.id];
+         return Main.otherAggregateStates[element.id];
       }
       public static List<Element> OtherAggregateStates(SimHashes element) {
          return OtherAggregateStates(ElementLoader.GetElement(element.CreateTag()));
@@ -240,265 +230,141 @@ namespace HighlightOverlay {
       }
 
       public static SimHashes GetElementsSublimationElement(Element element) {
-         if(!sublimationElement.ContainsKey(element.id))
-            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(sublimationElement)} dictionary");
+         if(!Main.sublimationElement.ContainsKey(element.id))
+            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(Main.sublimationElement)} dictionary");
 
-         return sublimationElement[element.id];
+         return Main.sublimationElement[element.id];
       }
       public static bool ElementSublimates(Element element) {
          return GetElementsSublimationElement(element) != default;
       }
 
       public static List<SimHashes> GetElementsTransitionElements(Element element) {
-         if(!transitionElements.ContainsKey(element.id))
-            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(transitionElements)} dictionary");
+         if(!Main.transitionElements.ContainsKey(element.id))
+            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(Main.transitionElements)} dictionary");
 
-         return transitionElements[element.id];
+         return Main.transitionElements[element.id];
       }
       public static bool ElementTransitsIntoOther(Element element) {
          return GetElementsTransitionElements(element).Count > 0;
       }
       public static List<SimHashes> GetElementsTransitionOreElements(Element element) {
-         if(!transitionOreElements.ContainsKey(element.id))
-            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(transitionOreElements)} dictionary");
+         if(!Main.transitionOreElements.ContainsKey(element.id))
+            throw new Exception(Main.debugPrefix + $"Element {element.id} was not found in {nameof(Main.transitionOreElements)} dictionary");
 
-         return transitionOreElements[element.id];
-      }
-
-
-      private static Dictionary<SimHashes, List<Element>> otherAggregateStates;
-      public static void CacheElementsAggregateStates() {
-         otherAggregateStates = new Dictionary<SimHashes, List<Element>>(ElementLoader.elements.Count);
-
-         foreach(Element element in ElementLoader.elements)
-         {
-            if(element == null)
-               continue;
-
-            List<Element> otherStates = new List<Element>(3);
-            otherStates.Add(element);
-
-            if(element.id == SimHashes.Vacuum)
-            {
-               otherAggregateStates.Add(element.id, otherStates);
-               continue;
-            }
-
-            if(element.IsSolid)
-            {
-               Element highTrans = element.highTempTransition;
-               if(highTrans != null && highTrans.lowTempTransitionTarget == element.id)
-               {
-                  otherStates.Add(highTrans);
-
-                  if(highTrans.highTempTransition != null && highTrans.highTempTransition.lowTempTransitionTarget == highTrans.id)
-                  {
-                     otherStates.Add(highTrans.highTempTransition);
-                  }
-               }
-            }
-            else if(element.IsLiquid)
-            {
-               if(element.lowTempTransition != null && element.lowTempTransition.highTempTransitionTarget == element.id)
-               {
-                  otherStates.Add(element.lowTempTransition);
-               }
-               if(element.highTempTransition != null && element.highTempTransition.lowTempTransitionTarget == element.id)
-               {
-                  otherStates.Add(element.highTempTransition);
-               }
-            }
-            else if(element.IsGas)
-            {
-               Element lowTrans = element.lowTempTransition;
-               if(lowTrans != null && lowTrans.highTempTransitionTarget == element.id)
-               {
-                  otherStates.Add(lowTrans);
-
-                  if( lowTrans.lowTempTransition != null && lowTrans.lowTempTransition.highTempTransitionTarget == lowTrans.id)
-                  {
-                     otherStates.Add(lowTrans.lowTempTransition);
-                  }
-               }
-            }
-
-            otherAggregateStates.Add(element.id, otherStates);
-         }
-      }
-
-      private static Dictionary<SimHashes, SimHashes> sublimationElement;
-      public static void CacheElementsSublimationElement() {
-         sublimationElement = new Dictionary<SimHashes, SimHashes>(ElementLoader.elements.Count);
-
-         foreach(Element element in ElementLoader.elements)
-         {
-            if(element == null)
-               continue;
-
-            if(element.id == SimHashes.Vacuum || element.id == SimHashes.Void)
-            {
-               sublimationElement.Add(element.id, default);
-               continue;
-            }
-
-            if(element.sublimateId != default)
-            {
-               sublimationElement.Add(element.id, element.sublimateId);
-               continue;
-            }
-
-            Sublimates sublimates = Assets.GetPrefab(element.id.CreateTag())?.GetComponent<Sublimates>();
-            if(sublimates != null)
-            {
-               sublimationElement.Add(element.id, sublimates.info.sublimatedElement);
-               continue;
-            }
-
-            sublimationElement.Add(element.id, default);
-         }
-      }
-
-      private static Dictionary<SimHashes, List<SimHashes>> transitionElements;
-      public static void CacheElementsTransitionElements() {
-         transitionElements = new Dictionary<SimHashes, List<SimHashes>>(ElementLoader.elements.Count);
-
-         foreach(Element element in ElementLoader.elements)
-         {
-            if(element == null)
-               continue;
-
-            List<SimHashes> elements = new List<SimHashes>(2);
-
-            if(element.id == SimHashes.Vacuum)
-            {
-               transitionElements.Add(element.id, elements);
-               continue;
-            }
-
-            if(element.highTempTransition != null && element.highTempTransitionTarget != element.id && element.highTempTransition.lowTempTransitionTarget != element.id)
-               elements.Add(element.highTempTransitionTarget);
-
-            if(element.lowTempTransition != null && element.lowTempTransitionTarget != element.id && element.lowTempTransition.highTempTransitionTarget != element.id)
-               elements.Add(element.lowTempTransitionTarget);
-
-            transitionElements.Add(element.id, elements);
-         }
-      }
-
-      private static Dictionary<SimHashes, List<SimHashes>> transitionOreElements;
-      public static void CacheElementsTransitionOreElements() {
-         transitionOreElements = new Dictionary<SimHashes, List<SimHashes>>(ElementLoader.elements.Count);
-
-         foreach(Element element in ElementLoader.elements)
-         {
-            if(element == null)
-               continue;
-
-            List<SimHashes> elements = new List<SimHashes>(2);
-
-            if(element.id == SimHashes.Vacuum)
-            {
-               transitionOreElements.Add(element.id, elements);
-               continue;
-            }
-
-            if(element.highTempTransitionOreID != default && element.highTempTransitionOreID != SimHashes.Vacuum && element.highTempTransitionOreID != element.id)
-               elements.Add(element.highTempTransitionOreID);
-
-            if(element.lowTempTransitionOreID != default && element.lowTempTransitionOreID != SimHashes.Vacuum && element.lowTempTransitionOreID != element.id)
-               elements.Add(element.lowTempTransitionOreID);
-
-            transitionOreElements.Add(element.id, elements);
-         }
+         return Main.transitionOreElements[element.id];
       }
       //-------------------------------------Elements stuff-------------------------------------UP
 
-      public static Dictionary<Tag, HighlightOptions> buildingsCachedOptions;
-      public static void CacheBuildingsHighlightOptions() {
-         buildingsCachedOptions = new Dictionary<Tag, HighlightOptions>(Assets.BuildingDefs.Count);
-
-         foreach(var buildingID in Assets.Prefabs)
+      public static HighlightFilters GetCorrespondingHighlightFilter(KPrefabID objID) {
+         ObjectType objectType = ObjectProperties.GetObjectType(objID);
+         if(objectType == ObjectType.ELEMENT || objectType == ObjectType.ITEM)
          {
-            if(buildingID == null || buildingID.gameObject == null)
-               continue;
+            return HighlightFilters.ON_GROUND;
+         }
+         else if(objectType == ObjectType.BUILDING)
+         {
+            if(objID.TryGetComponent(out Building building))
+            {
+               var objLayer = building.Def.ObjectLayer;
 
-            if(ObjectProperties.GetObjectType(buildingID.gameObject) != ObjectType.BUILDING)
-               continue;
+               if(objLayer == ObjectLayer.Building || objLayer == ObjectLayer.Gantry)
+               {
+                  if(Utils.IsTile(objID.gameObject, out _))
+                  {
+                     return HighlightFilters.TILES;
+                  }
+                  else
+                  {
+                     return HighlightFilters.STANDARD_BUILDINGS;
+                  }
+               }
+               else if(objLayer == ObjectLayer.LiquidConduit || objLayer == ObjectLayer.LiquidConduitConnection)
+               {
+                  return HighlightFilters.LIQUID_PIPES;
+               }
+               else if(objLayer == ObjectLayer.GasConduit || objLayer == ObjectLayer.GasConduitConnection)
+               {
+                  return HighlightFilters.GAS_PIPES;
+               }
+               else if(objLayer == ObjectLayer.SolidConduit || objLayer == ObjectLayer.SolidConduitConnection)
+               {
+                  return HighlightFilters.RAILS;
+               }
+               else if(objLayer == ObjectLayer.Wire || objLayer == ObjectLayer.WireConnectors)
+               {
+                  return HighlightFilters.WIRES;
+               }
+               else if(objLayer == ObjectLayer.LogicWire || objLayer == ObjectLayer.LogicGate)
+               {
+                  return HighlightFilters.AUTOMATION;
+               }
+               else if(objLayer == ObjectLayer.Backwall)
+               {
+                  return HighlightFilters.BACKWALLS;
+               }
+            }
 
-            HighlightOptions options = HighlightOptions.NONE;
-
-            if(ObjectProperties.BuildingHasConsumables(buildingID.gameObject))
-               options |= HighlightOptions.CONSUMABLES;
-
-            if(ObjectProperties.BuildingHasProduce(buildingID.gameObject))
-               options |= HighlightOptions.PRODUCE;
-
-            if(ObjectProperties.BuildingHasBuildingMaterial(buildingID.gameObject))
-               options |= HighlightOptions.BUILDINGMATERIAL;
-
-            buildingsCachedOptions.Add(buildingID.PrefabTag, options);
+            return HighlightFilters.STANDARD_BUILDINGS;
+         }
+         else if(objectType == ObjectType.PLANTORSEED)
+         {
+            if(objID.HasTag(GameTags.Seed))
+            {
+               return HighlightFilters.ON_GROUND;
+            }
+            else
+            {
+               return HighlightFilters.PLANTS;
+            }
+         }
+         else if(objectType == ObjectType.CRITTEROREGG)
+         {
+            if(objID.HasTag(GameTags.Egg))
+            {
+               return HighlightFilters.ON_GROUND;
+            }
+            else
+            {
+               return HighlightFilters.CRITTERS;
+            }
+         }
+         else if(objectType == ObjectType.DUPLICANT)
+         {
+            return HighlightFilters.DUPLICANTS;
+         }
+         else if(objectType == ObjectType.ROBOT)
+         {
+            return HighlightFilters.ROBOTS;
+         }
+         else if(objectType == ObjectType.GEYSER)
+         {
+            return HighlightFilters.GEYSERS;
+         }
+         else if(objectType == ObjectType.SAPTREE)
+         {
+            return HighlightFilters.PLANTS;
+         }
+         else
+         {
+            return HighlightFilters.OTHER;
          }
       }
-
-      public static Dictionary<Tag, HighlightOptions> plantsCachedOptions;
-      public static void CachePlantsHighlightOptions() {
-         plantsCachedOptions = new Dictionary<Tag, HighlightOptions>();
-
-         foreach(var plantID in Assets.Prefabs)
+      public static HighlightFilters GetCorrespondingHighlightFilterCell(Element element) {
+         if(element.IsSolid)
          {
-            if(plantID == null || plantID.gameObject == null)
-               continue;
-
-            if((!(plantID.HasTag(GameTags.Plant) || plantID.TryGetComponent(out Uprootable _)/*Wheezewort's prefab doesn't have the GameTags.Plant tag*/)) ||
-               ObjectProperties.GetObjectType(plantID.gameObject) != ObjectType.PLANTORSEED)
-               continue;
-
-            HighlightOptions options = HighlightOptions.NONE;
-
-            if(ObjectProperties.PlantHasConsumables(plantID.gameObject))
-               options |= HighlightOptions.CONSUMABLES;
-
-            if(ObjectProperties.PlantHasProduce(plantID.gameObject))
-               options |= HighlightOptions.PRODUCE;
-
-            if(ObjectProperties.PlantHasExactCopies(plantID.gameObject))
-               options |= HighlightOptions.EXACTCOPIES;
-
-            plantsCachedOptions.Add(plantID.PrefabTag, options);
+            return HighlightFilters.NATURAL_TILES;
          }
-      }
-
-      public static Dictionary<Tag, HighlightOptions> crittersCachedOptions;
-      public static void CacheCrittersHighlightOptions() {
-         crittersCachedOptions = new Dictionary<Tag, HighlightOptions>();
-
-         foreach(var critterID in Assets.Prefabs)
+         else if(element.IsLiquid)
          {
-            if(critterID == null || critterID.gameObject == null)
-               continue;
-
-            if(!critterID.HasTag(GameTags.Creature) || ObjectProperties.GetObjectType(critterID.gameObject) != ObjectType.CRITTEROREGG)
-               continue;
-
-            HighlightOptions options = HighlightOptions.NONE;
-
-            if(ObjectProperties.CritterHasConsiderOption1(critterID.gameObject))
-            {
-               options |= HighlightOptions.CONSIDEROPTION1;
-            }
-
-            if(ObjectProperties.CritterHasConsumables(critterID.gameObject))
-            {
-               options |= HighlightOptions.CONSUMABLES;
-            }
-
-            if(ObjectProperties.CritterHasProduce(critterID.gameObject))
-            {
-               options |= HighlightOptions.PRODUCE;
-            }
-
-            crittersCachedOptions.Add(critterID.PrefabTag, options);
+            return HighlightFilters.LIQUIDS;
          }
+         else if(element.IsGas)
+         {
+            return HighlightFilters.GASES;
+         }
+
+         return HighlightFilters.NONE;
       }
 
       public static void ClampExtentsToActiveWorldBounds(ref Extents extents) {
@@ -539,6 +405,9 @@ namespace HighlightOverlay {
          cmps = go.GetComponents<T>();
 
          return cmps.Length > 0;
+      }
+      public static bool TryGetComponents<T>(this KPrefabID go, out T[] cmps) where T : Component {
+         return TryGetComponents(go.gameObject, out cmps);
       }
 
       public static T GetOrDefault<K, T>(this Dictionary<K, T> dict, K key) {

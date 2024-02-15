@@ -29,6 +29,7 @@ namespace HighlightOverlay.Patches {
          GameObject selected = SelectTool.Instance.selected?.gameObject;
          if(selected != null)
          {
+            KPrefabID selectedID;
             if(selected.TryGetComponent(out CellSelectionObject cell))
             {
                Main.selectedObjProperties = new ObjectProperties(cell.element);
@@ -36,11 +37,11 @@ namespace HighlightOverlay.Patches {
                Main.selectedCell = Grid.PosToCell(selected);
                Main.selectedTile = null;
             }
-            else if(Utils.IsObjectValidForHighlight(selected, out PrimaryElement primaryElement, out ObjectType objectType))
+            else if(Utils.IsObjectValidForHighlight(selectedID = selected.GetComponent<KPrefabID>(), out ObjectType objectType))
             {
                bool isTile = Utils.IsTile(selected, out _);
 
-               Main.selectedObjProperties = new ObjectProperties(primaryElement, objectType);
+               Main.selectedObjProperties = new ObjectProperties(selectedID, objectType);
                Main.selectedObj = isTile ? null : selected;
                Main.selectedCell = -1;
                Main.selectedTile = isTile ? selected : null;

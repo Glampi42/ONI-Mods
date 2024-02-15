@@ -56,11 +56,11 @@ namespace HighlightOverlay.Strings {
                      public static LocString COPIES_TOOLTIP = "Highlight copies of this item";
                   }
                   public class BUILDING {
-                     public static LocString CONSIDEROPTION1 = "Consider Building's Settings";
+                     public static LocString CONSIDEROPTION1 = "Consider Buildings' Settings";
                      public static LocString CONSIDEROPTION1_TOOLTIP = "Consider buildings' settings(storage filters, production queue) when highlighting their consumables, produce & building material";
                      public static LocString CONSUMABLES_TOOLTIP = "Highlight objects that can be consumed/stored/used by this building";
                      public static LocString PRODUCE_TOOLTIP = "Highlight objects that can be produced by this building";
-                     public static LocString BUILDINGMATERIAL_TOOLTIP = "If \"Consider Building's Settings\" option is on:\nHighlight materials this specific building was built with\n\n" +
+                     public static LocString BUILDINGMATERIAL_TOOLTIP = "If \"Consider Buildings' Settings\" option is on:\nHighlight materials this specific building was built with\n\n" +
                         "If off:\nHighlight materials this building can be built with";
                      public static LocString COPIES_TOOLTIP = "Highlight copies of this building";
                      public static LocString EXACTCOPIES_TOOLTIP = "Highlight copies of this building that consist of the same element";
@@ -73,7 +73,7 @@ namespace HighlightOverlay.Strings {
                      public static LocString EXACTCOPIES_TOOLTIP = "Highlight plants and seeds of this species with the same mutation";
                   }
                   public class CRITTEROREGG {
-                     public static LocString CONSIDEROPTION1 = "Consider Critter's Morph";
+                     public static LocString CONSIDEROPTION1 = "Consider Critters' Morph";
                      public static LocString CONSIDEROPTION1_TOOLTIP = "Consider critters' morph when highlighting their consumers, consumables, produce & copies";
                      public static LocString CONSUMERS_TOOLTIP = "Highlight objects that can consume/store this critter's egg or trap/release/interact with this critter";
                      public static LocString CONSUMABLES_TOOLTIP = "Highlight objects that can be consumed by this critter";
@@ -109,6 +109,7 @@ namespace HighlightOverlay.Strings {
 
                   public static LocString BUILDINGS = "Buildings";
                   public static LocString STANDARD_BUILDINGS = "Standard";
+                  public static LocString TILES = "Tiles";
                   public static LocString LIQUID_PIPES = "Liquid pipes";
                   public static LocString GAS_PIPES = "Gas pipes";
                   public static LocString RAILS = "Conveyor rails";

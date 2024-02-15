@@ -177,12 +177,12 @@ namespace HighlightOverlay {
                      switch(consumable.objectType)
                      {
                         case ObjectType.ELEMENT:
-                           if(CASE_PLANTORSEED_CONSUMABLES_ELEMENT(new ObjectProperties(plot.plant.GetComponent<PrimaryElement>()), consumable))
+                           if(CASE_PLANTORSEED_CONSUMABLES_ELEMENT(new ObjectProperties(plot.plant), consumable))
                               return true;
                            break;
 
                         case ObjectType.ITEM:
-                           if(CASE_PLANTORSEED_CONSUMABLES_ITEM(new ObjectProperties(plot.plant.GetComponent<PrimaryElement>()), consumable))
+                           if(CASE_PLANTORSEED_CONSUMABLES_ITEM(new ObjectProperties(plot.plant), consumable))
                               return true;
                            break;
                      }
@@ -198,7 +198,7 @@ namespace HighlightOverlay {
             {
                if(considerBuildingSettings)
                {
-                  if(targetTags.Contains(receptacle.requestedEntityTag) || (receptacle.occupyingObject != null && targetTags.Contains(receptacle.occupyingObject.GetComponent<KPrefabID>().PrefabTag)))
+                  if(targetTags.Contains(receptacle.requestedEntityTag) || (receptacle.occupyingObject != null && targetTags.Contains(receptacle.occupyingObject.PrefabID())))
                      return true;
                }
                else
@@ -274,7 +274,7 @@ namespace HighlightOverlay {
             }
             else
             {
-               if(ranchStation.def.IsCritterEligibleToBeRanchedCb(((CritterInfo)consumable.info).adultPrefab, ranchStation))
+               if(ranchStation.def.IsCritterEligibleToBeRanchedCb(((CritterInfo)consumable.info).adultPrefab.gameObject, ranchStation))
                   return true;// this method is not 100% accurate, but better than nothing
             }
          }
@@ -480,7 +480,7 @@ namespace HighlightOverlay {
             if(tag == Utils.Vacuum || tag == default)
                continue;
 
-            var prefabID = Assets.GetPrefab(tag)?.GetComponent<KPrefabID>();
+            var prefabID = Assets.PrefabsByTag.GetOrDefault(tag);
             if(prefabID != null)
             {
                targetTags.AddAll(prefabID.Tags);
@@ -774,7 +774,7 @@ namespace HighlightOverlay {
          }
          else
          {
-            foreach(GameObject morph in Main.speciesMorphs[critterInfo.species])
+            foreach(KPrefabID morph in Main.speciesMorphs[critterInfo.species])
             {
                if(CheckOneMorph(morph))
                   return true;
@@ -784,7 +784,7 @@ namespace HighlightOverlay {
          return false;
 
 
-         bool CheckOneMorph(GameObject morph) {
+         bool CheckOneMorph(KPrefabID morph) {
             Diet diet = morph.GetDef<CreatureCalorieMonitor.Def>()?.diet;
             if(diet != null)
             {
@@ -814,7 +814,7 @@ namespace HighlightOverlay {
          }
          else
          {
-            foreach(GameObject morph in Main.speciesMorphs[critterInfo.species])
+            foreach(KPrefabID morph in Main.speciesMorphs[critterInfo.species])
             {
                if(CheckOneMorph(morph))
                   return true;
@@ -824,7 +824,7 @@ namespace HighlightOverlay {
          return false;
 
 
-         bool CheckOneMorph(GameObject morph) {
+         bool CheckOneMorph(KPrefabID morph) {
             Diet diet = morph.GetDef<CreatureCalorieMonitor.Def>()?.diet;
             if(diet != null)
             {
@@ -848,7 +848,7 @@ namespace HighlightOverlay {
          }
          else
          {
-            foreach(GameObject morph in Main.speciesMorphs[critterInfo.species])
+            foreach(KPrefabID morph in Main.speciesMorphs[critterInfo.species])
             {
                if(CheckOneMorph(morph))
                   return true;
@@ -858,7 +858,7 @@ namespace HighlightOverlay {
          return false;
 
 
-         bool CheckOneMorph(GameObject morph) {
+         bool CheckOneMorph(KPrefabID morph) {
             Diet diet = morph.GetDef<CreatureCalorieMonitor.Def>()?.diet;
             if(diet != null)
             {
@@ -892,7 +892,7 @@ namespace HighlightOverlay {
          }
          else
          {
-            foreach(GameObject morph in Main.speciesMorphs[critterInfo.species])
+            foreach(KPrefabID morph in Main.speciesMorphs[critterInfo.species])
             {
                if(CheckOneMorph(morph))
                   return true;
@@ -902,7 +902,7 @@ namespace HighlightOverlay {
          return false;
 
 
-         bool CheckOneMorph(GameObject morph) {
+         bool CheckOneMorph(KPrefabID morph) {
             Diet diet = morph.GetDef<CreatureCalorieMonitor.Def>()?.diet;
             if(diet != null)
             {
@@ -926,7 +926,7 @@ namespace HighlightOverlay {
          }
          else
          {
-            foreach(GameObject morph in Main.speciesMorphs[critterInfo.species])
+            foreach(KPrefabID morph in Main.speciesMorphs[critterInfo.species])
             {
                if(CheckOneMorph(morph))
                   return true;
@@ -936,7 +936,7 @@ namespace HighlightOverlay {
          return false;
 
 
-         bool CheckOneMorph(GameObject morph) {
+         bool CheckOneMorph(KPrefabID morph) {
             ScaleGrowthMonitor.Def scaleMonitor = morph.GetDef<ScaleGrowthMonitor.Def>();
             if(scaleMonitor != null)
             {
@@ -1038,11 +1038,11 @@ namespace HighlightOverlay {
       }
 
       private static bool CASE_OILWELL_CONSUMABLES_ELEMENT(ObjectProperties well, ObjectProperties element) {
-         return CASE_BUILDING_CONSUMABLES_ELEMENT_ITEM_PLANTORSEED_CRITTEROREGG(new ObjectProperties(Assets.GetPrefab(OilWellCapConfig.ID).GetComponent<PrimaryElement>()), element);
+         return CASE_BUILDING_CONSUMABLES_ELEMENT_ITEM_PLANTORSEED_CRITTEROREGG(new ObjectProperties(Assets.PrefabsByTag.GetOrDefault(OilWellCapConfig.ID)), element);
       }
 
       private static bool CASE_OILWELL_PRODUCE_ELEMENT(ObjectProperties well, ObjectProperties element) {
-         return CASE_BUILDING_PRODUCE_ELEMENT_ITEM(new ObjectProperties(Assets.GetPrefab(OilWellCapConfig.ID).GetComponent<PrimaryElement>()), element);
+         return CASE_BUILDING_PRODUCE_ELEMENT_ITEM(new ObjectProperties(Assets.PrefabsByTag.GetOrDefault(OilWellCapConfig.ID)), element);
       }
 
       private static bool CASE_OILWELL_COPIES_OILWELL(ObjectProperties well, ObjectProperties obj) {
