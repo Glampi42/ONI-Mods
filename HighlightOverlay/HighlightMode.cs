@@ -135,7 +135,7 @@ namespace HighlightOverlay {
                   TryAddObjectToHighlightedObjects(building);
                }
 
-               TryAddObjectToHighlightedObjects(Main.selectedObj);// it is not guaranteed that the selected obj will get checked in the methods above
+               TryAddObjectToHighlightedObjects(Main.selectedObj);// it is not guaranteed that the selected obj will get checked in the methods above 
 
                //----------------------Updating cells color----------------------DOWN
                for(int cell = 0; cell < Main.cellColors.Length; cell++)
