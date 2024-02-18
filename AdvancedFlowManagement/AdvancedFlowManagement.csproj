@@ -43,7 +43,6 @@
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\lib\0Harmony.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass_U51_public">
       <HintPath>..\lib\Assembly-CSharp-firstpass_U51_public.dll</HintPath>
