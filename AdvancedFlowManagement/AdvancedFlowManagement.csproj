@@ -46,11 +46,9 @@
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass_U51_public">
       <HintPath>..\lib\Assembly-CSharp-firstpass_U51_public.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp_U51_public">
       <HintPath>..\lib\Assembly-CSharp_U51_public.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -149,7 +147,7 @@
   </Target>
   <Target Name="Publicise" AfterTargets="Clean">
     <ItemGroup>
-      <PubliciseInputAssemblies Include="..\lib\Assembly-CSharp.dll; ..\lib\Assembly-CSharp-firstpass.dll; ..\lib\Assembly-CSharp_U51.dll; ..\lib\Assembly-CSharp-firstpass_U51.dll" />
+      <PubliciseInputAssemblies Include="..\lib\Assembly-CSharp.dll; ..\lib\Assembly-CSharp-firstpass.dll" />
     </ItemGroup>
     <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="..\lib\" PubliciseCompilerGenerated="true" />
   </Target>
