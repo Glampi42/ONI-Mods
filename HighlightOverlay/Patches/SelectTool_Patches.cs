@@ -16,7 +16,7 @@ namespace HighlightOverlay.Patches {
          public static void Postfix(KSelectable new_selected, bool skipSound) {
             GameObject oldSelected = Main.selectedObj;
             int oldSelectedCell = Main.selectedCell;
-            GameObject oldSelectedTile = Main.selectedTile;
+            var oldSelectedTile = Main.selectedTile;
             SaveSelectedObject();
 
             Utils.UpdateHighlightDiagramOptions();
@@ -35,7 +35,7 @@ namespace HighlightOverlay.Patches {
                Main.selectedObjProperties = new ObjectProperties(cell.element);
                Main.selectedObj = null;
                Main.selectedCell = Grid.PosToCell(selected);
-               Main.selectedTile = null;
+               Main.selectedTile = default;
             }
             else if(Utils.IsObjectValidForHighlight(selectedID = selected.GetComponent<KPrefabID>(), out ObjectType objectType))
             {
@@ -44,7 +44,7 @@ namespace HighlightOverlay.Patches {
                Main.selectedObjProperties = new ObjectProperties(selectedID, objectType);
                Main.selectedObj = isTile ? null : selected;
                Main.selectedCell = -1;
-               Main.selectedTile = isTile ? selected : null;
+               Main.selectedTile = isTile ? (selected, Utils.PosToCell(selected)) : default;
             }
          }
          else
@@ -52,7 +52,7 @@ namespace HighlightOverlay.Patches {
             Main.selectedObjProperties = default;
             Main.selectedObj = null;
             Main.selectedCell = -1;
-            Main.selectedTile = null;
+            Main.selectedTile = default;
          }
       }
    }

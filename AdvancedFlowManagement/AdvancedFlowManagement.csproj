@@ -45,12 +45,12 @@
       <HintPath>..\lib\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass_public">
-      <HintPath>..\lib\Assembly-CSharp-firstpass_public.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass_U51_public">
+      <HintPath>..\lib\Assembly-CSharp-firstpass_U51_public.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp_public">
-      <HintPath>..\lib\Assembly-CSharp_public.dll</HintPath>
+    <Reference Include="Assembly-CSharp_U51_public">
+      <HintPath>..\lib\Assembly-CSharp_U51_public.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
@@ -150,7 +150,7 @@
   </Target>
   <Target Name="Publicise" AfterTargets="Clean">
     <ItemGroup>
-      <PubliciseInputAssemblies Include="..\lib\Assembly-CSharp.dll; ..\lib\Assembly-CSharp-firstpass.dll" />
+      <PubliciseInputAssemblies Include="..\lib\Assembly-CSharp.dll; ..\lib\Assembly-CSharp-firstpass.dll; ..\lib\Assembly-CSharp_U51.dll; ..\lib\Assembly-CSharp-firstpass_U51.dll" />
     </ItemGroup>
     <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="..\lib\" PubliciseCompilerGenerated="true" />
   </Target>

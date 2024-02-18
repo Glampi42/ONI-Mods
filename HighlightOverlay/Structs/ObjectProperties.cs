@@ -196,8 +196,8 @@ namespace HighlightOverlay.Structs {
 
             IsRadboltConsumer(building);
       }
-      public static bool IsStorageBuilding(KPrefabID building) {
-         return building.TryGetComponent(out TreeFilterable _) || building.TryGetComponent(out StorageLocker _);
+      public static bool IsStorageBuilding(KPrefabID building) {// all buildings that have the TreeFilterable component(their prefab may not have it however)
+         return building.TryGetComponent(out TreeFilterable _) || building.TryGetComponent(out StorageLocker _) || building.GetComponent<TinkerStation>() != null;
       }
       public static bool IsRadboltConsumer(KPrefabID building) {
          return building.TryGetComponent(out HighEnergyParticlePort port) && port.particleInputEnabled && !building.TryGetComponent(out HighEnergyParticleRedirector _);

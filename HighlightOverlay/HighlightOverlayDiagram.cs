@@ -393,7 +393,6 @@ namespace HighlightOverlay {
 
 
          var highlightFiltersTree = new HighlightFiltersTreeFilterable();
-         highlightFiltersTree.InitializeToggles();
 
          GameObject rootPanel = highlightFiltersTree.RootPanel;
          rootPanel.transform.SetParent(filtersContainer.transform);

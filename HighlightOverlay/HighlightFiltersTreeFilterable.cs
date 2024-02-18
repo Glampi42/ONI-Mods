@@ -13,9 +13,6 @@ using static STRINGS.BUILDING.STATUSITEMS.ACCESS_CONTROL;
 
 namespace HighlightOverlay {
    public sealed class HighlightFiltersTreeFilterable {
-      /// <summary>
-      /// The margin around the scrollable area to avoid stomping on the scrollbar.
-      /// </summary>
       private static readonly RectOffset ELEMENT_MARGIN = new RectOffset(2, 2, 2, 2);
 
       /// <summary>
@@ -56,8 +53,6 @@ namespace HighlightOverlay {
                   all = false;
             PCheckBox.SetCheckState(allItems, none ? PCheckBox.STATE_UNCHECKED : (all ?
                PCheckBox.STATE_CHECKED : PCheckBox.STATE_PARTIAL));
-
-            Utils.UpdateHighlightMode();// update highlight when highlight filters change
          }
       }
 
@@ -122,6 +117,9 @@ namespace HighlightOverlay {
          children = new Dictionary<HighlightFilters, TypeSelectCategory>(16);
 
          RootPanel.SetActive(false);
+
+
+         InitializeToggles();
       }
 
       /// <summary>
@@ -149,12 +147,14 @@ namespace HighlightOverlay {
          else
             // Clicked when checked or partial, clear all
             ClearAll();
+
+         Utils.UpdateHighlightMode();// update highlight when highlight filters change
       }
 
       /// <summary>
       /// Creates the toggles for all categories.
       /// </summary>
-      public void InitializeToggles() {
+      private void InitializeToggles() {
          if(children.Count == 0)
          {
             foreach(HighlightFilters category in Enum.GetValues(typeof(HighlightFilters)))
@@ -162,6 +162,8 @@ namespace HighlightOverlay {
                if(Utils.HasMoreThanOneBitSet((int)category) && category != HighlightFilters.ALL)
                   InitializeCategory(category);
             }
+
+            UpdateAllItems(allItems, children.Values);
          }
       }
 
@@ -194,6 +196,8 @@ namespace HighlightOverlay {
                current.TryAddType((HighlightFilters)filter);
             }
          }
+
+         UpdateAllItems(current.CheckBox, current.children.Values);
       }
 
       /// <summary>
@@ -201,6 +205,8 @@ namespace HighlightOverlay {
       /// </summary>
       internal void UpdateFromChildren() {
          UpdateAllItems(allItems, children.Values);
+
+         Utils.UpdateHighlightMode();// update highlight when highlight filters change
       }
 
       /// <summary>
@@ -332,8 +338,6 @@ namespace HighlightOverlay {
                children.Add(filter, child);
 
                cb.SetParent(ChildPanel);
-               if(PCheckBox.GetCheckState(cb) == PCheckBox.STATE_CHECKED)
-                  child.SetSelected(true, false);
 
                cb.transform.SetSiblingIndex(children.Count - 1);
             }
@@ -377,8 +381,7 @@ namespace HighlightOverlay {
                SpriteSize = ROW_SIZE,
                OnChecked = OnCheck,
                Text = Utils.GetMyString(typeof(MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS), filter.ToString()),
-               InitialState = PCheckBox.
-               STATE_CHECKED,
+               InitialState = (Main.highlightFilters & filter) != 0 ? PCheckBox.STATE_CHECKED : PCheckBox.STATE_UNCHECKED,
                Sprite = null,
                SpriteTint = tint,
                TextStyle = PUITuning.Fonts.TextLightStyle

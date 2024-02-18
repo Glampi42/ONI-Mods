@@ -47,7 +47,7 @@ namespace HighlightOverlay {
 
       public static GameObject selectedObj = null;
       public static int selectedCell = -1;
-      public static GameObject selectedTile = null;
+      public static (GameObject, int)/*(tile_go, cell)*/ selectedTile = default;
       public static ObjectProperties selectedObjProperties = default;
       public static Color selectedCellHighlightColor = Color.clear;
 
@@ -56,7 +56,7 @@ namespace HighlightOverlay {
 
       public static Dictionary<ObjectType, HighlightOptions> lastHighlightOption = new Dictionary<ObjectType, HighlightOptions>();
 
-      public static HighlightFilters highlightFilters = HighlightFilters.NONE;
+      public static HighlightFilters highlightFilters = HighlightFilters.ALL;
 
 
       public static Color[] cellColors;

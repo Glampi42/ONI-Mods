@@ -57,7 +57,7 @@ namespace HighlightOverlay.Strings {
                   }
                   public class BUILDING {
                      public static LocString CONSIDEROPTION1 = "Consider Buildings' Settings";
-                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider buildings' settings(storage filters, production queue) when highlighting their consumables, produce & building material";
+                     public static LocString CONSIDEROPTION1_TOOLTIP = "Consider buildings' settings(storage filters, production queue, required dupe skills) when highlighting their consumables, produce & building material";
                      public static LocString CONSUMABLES_TOOLTIP = "Highlight objects that can be consumed/stored/used by this building";
                      public static LocString PRODUCE_TOOLTIP = "Highlight objects that can be produced by this building";
                      public static LocString BUILDINGMATERIAL_TOOLTIP = "If \"Consider Buildings' Settings\" option is on:\nHighlight materials this specific building was built with\n\n" +

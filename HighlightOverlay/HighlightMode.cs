@@ -126,12 +126,6 @@ namespace HighlightOverlay {
                GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// geysers, gravitas buildings
                foreach(GameObject building in buildings)
                {
-                  if(building.HasTag(GameTags.GeyserFeature))
-                  {
-                     if(!ModConfig.Instance.HighlightBurriedGeysers && Utils.IsGeyserBurried(building))
-                        continue;
-                  }
-
                   TryAddObjectToHighlightedObjects(building);
                }
 
@@ -145,13 +139,13 @@ namespace HighlightOverlay {
                   {
                      if((Main.highlightFilters & HighlightFilters.TILES) != 0 && ComputeShouldHighlight(prefabID))
                      {
-                        UpdateTileHighlight(tile.gameObject);
+                        UpdateTileHighlight((tile.gameObject, cell));
                         continue;// don't have to calculate whether the cell should be highlighted because the tile is
                      }
                      else
                      {
                         if(!Main.preservePreviousHighlightOptions)
-                           RemoveTileHighlight(tile.gameObject);
+                           RemoveTileHighlight((tile.gameObject, cell));
                      }
                   }
 
@@ -195,6 +189,12 @@ namespace HighlightOverlay {
          if(!targetObject.TryGetComponent(out KPrefabID targetID))
             return;
 
+         if(targetID.HasTag(GameTags.GeyserFeature))
+         {
+            if(!ModConfig.Instance.HighlightBurriedGeysers && Utils.IsGeyserBurried(targetObject))
+               return;
+         }
+
          Vector2 min = targetID.PosMin();
          Vector2 max = targetID.PosMax();
          for(int x = (int)min.x; x <= max.x; x++)
@@ -226,7 +226,7 @@ namespace HighlightOverlay {
             if(Main.tileColors[cell] != Main.blackBackgroundColor)
             {
                if(Utils.IsTile(cell, out SimCellOccupier tile))
-                  UpdateTileHighlight(tile.gameObject);
+                  UpdateTileHighlight((tile.gameObject, cell));
             }
             else if(Main.cellColors[cell] != Main.blackBackgroundColor)
             {
@@ -239,7 +239,7 @@ namespace HighlightOverlay {
          UpdateTileHighlight(Main.selectedTile, true);
       }
 
-      public void UpdateSelectedObjHighlight(GameObject oldSelected, int oldSelectedCell, GameObject oldSelectedTile) {
+      public void UpdateSelectedObjHighlight(GameObject oldSelected, int oldSelectedCell, (GameObject, int) oldSelectedTile) {
          if(!isEnabled)
             return;
 
@@ -345,22 +345,22 @@ namespace HighlightOverlay {
          }
       }
 
-      private void UpdateTileHighlight(GameObject tile, bool updateSelectedHighlight = false) {
-         if(tile == null)
+      private void UpdateTileHighlight((GameObject, int) tile, bool updateSelectedHighlight = false) {
+         if(tile == default)
             return;
 
-         Color highlightColor = Main.highlightInTrueColor ? (Color)tile.GetComponent<PrimaryElement>().Element.substance.uiColour : Main.whiteBackgroundColor;
+         Color highlightColor = Main.highlightInTrueColor ? (Color)tile.Item1.GetComponent<PrimaryElement>().Element.substance.uiColour : Main.whiteBackgroundColor;
          if(updateSelectedHighlight || tile == Main.selectedTile)
          {
             Main.selectedCellHighlightColor = highlightColor;
          }
          if(!updateSelectedHighlight)
          {
-            Main.tileColors[Utils.PosToCell(tile)] = highlightColor;
+            Main.tileColors[tile.Item2] = highlightColor;
          }
       }
-      private void RemoveTileHighlight(GameObject tile, bool removeSelectedHighlight = false) {
-         if(tile == null)
+      private void RemoveTileHighlight((GameObject, int) tile, bool removeSelectedHighlight = false) {
+         if(tile == default)
             return;
 
          Color highlightColor = Main.blackBackgroundColor;
@@ -371,7 +371,7 @@ namespace HighlightOverlay {
          }
          else
          {
-            Main.tileColors[Utils.PosToCell(tile)] = highlightColor;
+            Main.tileColors[tile.Item2] = highlightColor;
          }
       }
 

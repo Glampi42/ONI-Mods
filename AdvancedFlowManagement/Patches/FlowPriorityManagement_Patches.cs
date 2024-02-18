@@ -489,7 +489,7 @@ namespace AdvancedFlowManagement.Patches {
             // already loaded arguments on the evaluation stack:
             // conduitFlow
             // grid_node
-            // sinks
+            // sink
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloc_S, customFlow));
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloc_S, customOutPriorities));
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloca_S, conduitMass));
@@ -534,25 +534,12 @@ namespace AdvancedFlowManagement.Patches {
             codes.InsertRange(firstLoopBodyIndex, codesCluster);
             //----------------Inserting ManageZeroFlowDirection----------------UP
             //-------------Finding the ComputeNextFlowDirection-------------DOWN
-            // the loop inside of else block from if(movableMass <= 0.0):
-            int secondLoopIndex = -1;
-            for(int i = firstLoopBodyIndex + codesCluster.Count; i < codes.Count - 1; i++)
-            {
-               if(codes[i].opcode == OpCodes.Ldc_I4_0 && codes[i + 1].opcode == OpCodes.Stloc_S && ((LocalBuilder)codes[i + 1].operand).LocalIndex == 10)
-               {
-                  secondLoopIndex = i;
-                  break;
-               }
-            }
-            if(secondLoopIndex == -1)
-               throw new Exception(Main.debugPrefix + "Second loop could not be found");
-
             int computeNextFlowDirIndex = -1;
-            for(int i = secondLoopIndex + 1; i < codes.Count; i++)
+            for(int i = firstLoopBodyIndex + codesCluster.Count; i < codes.Count; i++)
             {
                if(codes[i].Calls(SymbolExtensions.GetMethodInfo(() => ConduitFlow.ComputeNextFlowDirection(default))))
                {
-                  computeNextFlowDirIndex = i;
+                  computeNextFlowDirIndex = i;// this one is inside of the second for loop
                   break;
                }
             }
@@ -679,7 +666,7 @@ namespace AdvancedFlowManagement.Patches {
             codes.InsertRange(flag1Index, codesCluster);
             loopEndIndex += codesCluster.Count;
             // the if statement then looks like this:
-            // if(srcFlowDirection != 0 && !flag2 && !customInPrioritiesContainDirection())
+            // if(srcFlowDirection != 0 && !flag2 && !CustomInPrioritiesContainDirection())
             //----------------flag1 accessing fix----------------UP
 
             //-------------Finding labels that branch to the end of the loop-------------DOWN
@@ -740,8 +727,8 @@ namespace AdvancedFlowManagement.Patches {
 
             // redirecting the labels that branch to the end of the method to this instruction:
             int methodEndIndex = codes.Count - 2;// last two instructions are ldloc.0 and ret; I need ldloc.0
-            if(codes[codes.Count - 1].opcode != OpCodes.Ret || codes[codes.Count - 2].opcode != OpCodes.Ldloc_0)
-               throw new Exception(Main.debugPrefix + "Method end index could not be found");// just for safety
+            if(codes[codes.Count - 1].opcode != OpCodes.Ret || (codes[codes.Count - 2].opcode != OpCodes.Ldloc_0 && codes[codes.Count - 2].opcode != OpCodes.Ldloc_S))
+               throw new Exception(Main.debugPrefix + "Method end index could not be found");
 
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloc_S, fakeCrossingCmp).WithLabels(codes[methodEndIndex].ExtractLabels()));// extracting labels also removes them from that instruction
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloc_S, bufferStorageCmp));
@@ -803,17 +790,17 @@ namespace AdvancedFlowManagement.Patches {
             }
          }
 
-         private static float CustomComputeMovableMass(ConduitFlow conduitFlow, GridNode grid_node, Dictionary<int, ConduitFlow.Sink> sinks, bool customFlow,
+         private static float CustomComputeMovableMass(ConduitFlow conduitFlow, GridNode grid_node, float sink, bool customFlow,
             bool customOutPriorities, ref float conduitMass) {
             if(customFlow)
             {
-               float movableMass = GetMovableMass(grid_node, customOutPriorities, conduitFlow, sinks);
+               float movableMass = GetMovableMass(grid_node, customOutPriorities, conduitFlow, sink);
                conduitMass = movableMass;
                return movableMass;
             }
             else
             {
-               return conduitFlow.ComputeMovableMass(grid_node, sinks);
+               return conduitFlow.ComputeMovableMass(grid_node, sink);
             }
          }
 
@@ -1464,9 +1451,9 @@ namespace AdvancedFlowManagement.Patches {
          return conduitFlow.grid[cell].contents;
       }
 
-      private static float GetMovableMass(GridNode grid_node, bool customOutPriorities, ConduitFlow conduitFlow, Dictionary<int, Sink> sinks) {
+      private static float GetMovableMass(GridNode grid_node, bool customOutPriorities, ConduitFlow conduitFlow, float sink) {
          if(!customOutPriorities)
-            return conduitFlow.ComputeMovableMass(grid_node, sinks);
+            return conduitFlow.ComputeMovableMass(grid_node, sink);
 
          ConduitContents contents = grid_node.contents;
          if(contents.element == SimHashes.Vacuum)

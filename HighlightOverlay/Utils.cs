@@ -146,7 +146,7 @@ namespace HighlightOverlay {
             highlightMode.ClearAllData(fullUpdate, fullUpdate);
          }
       }
-      public static void UpdateHighlightOfSelectedObject(GameObject oldSelected, int oldSelectedCell, GameObject oldSelectedTile) {
+      public static void UpdateHighlightOfSelectedObject(GameObject oldSelected, int oldSelectedCell, (GameObject, int) oldSelectedTile) {
          HighlightMode highlightMode = Main.highlightMode;
          if(highlightMode != default)
          {
