@@ -459,7 +459,7 @@ namespace AdvancedFlowManagement.Patches {
             int computeMovableMassIndex = -1;
             for(int i = 0; i < codes.Count; i++)
             {
-               if(codes[i].Calls(SymbolExtensions.GetMethodInfo(() => ((ConduitFlow)default).ComputeMovableMass(default, default))))
+               if(codes[i].Calls(SymbolExtensions.GetMethodInfo(() => ((ConduitFlow)default).ComputeMovableMass(default))))
                {
                   computeMovableMassIndex = i;
                   break;
@@ -489,12 +489,10 @@ namespace AdvancedFlowManagement.Patches {
             // already loaded arguments on the evaluation stack:
             // conduitFlow
             // grid_node
-            // sink
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloc_S, customFlow));
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloc_S, customOutPriorities));
             codesCluster.Add(new CodeInstruction(OpCodes.Ldloca_S, conduitMass));
-            codesCluster.Add(new CodeInstruction(OpCodes.Call, SymbolExtensions.GetMethodInfo(() => CustomComputeMovableMass(default, default, default, default, default,
-               ref InstancesLibrary.Float))));
+            codesCluster.Add(new CodeInstruction(OpCodes.Call, SymbolExtensions.GetMethodInfo(() => CustomComputeMovableMass(default, default, default, default, ref InstancesLibrary.Float))));
             codes.InsertRange(computeMovableMassIndex, codesCluster);
             //---------------Inserting CustomComputeMovableMass---------------UP
             //-------------Finding the beginning of the first loop's body-------------DOWN
@@ -790,17 +788,17 @@ namespace AdvancedFlowManagement.Patches {
             }
          }
 
-         private static float CustomComputeMovableMass(ConduitFlow conduitFlow, GridNode grid_node, float sink, bool customFlow,
+         private static float CustomComputeMovableMass(ConduitFlow conduitFlow, GridNode grid_node, bool customFlow,
             bool customOutPriorities, ref float conduitMass) {
             if(customFlow)
             {
-               float movableMass = GetMovableMass(grid_node, customOutPriorities, conduitFlow, sink);
+               float movableMass = GetMovableMass(grid_node, customOutPriorities, conduitFlow);
                conduitMass = movableMass;
                return movableMass;
             }
             else
             {
-               return conduitFlow.ComputeMovableMass(grid_node, sink);
+               return conduitFlow.ComputeMovableMass(grid_node);
             }
          }
 
@@ -1451,9 +1449,9 @@ namespace AdvancedFlowManagement.Patches {
          return conduitFlow.grid[cell].contents;
       }
 
-      private static float GetMovableMass(GridNode grid_node, bool customOutPriorities, ConduitFlow conduitFlow, float sink) {
+      private static float GetMovableMass(GridNode grid_node, bool customOutPriorities, ConduitFlow conduitFlow) {
          if(!customOutPriorities)
-            return conduitFlow.ComputeMovableMass(grid_node, sink);
+            return conduitFlow.ComputeMovableMass(grid_node);
 
          ConduitContents contents = grid_node.contents;
          if(contents.element == SimHashes.Vacuum)
