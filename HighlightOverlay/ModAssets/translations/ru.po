@@ -427,3 +427,22 @@ msgstr "Эксперимент 52B"
 msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.RADBOLT"
 msgid "Radbolt"
 msgstr "Радболт"
+
+
+
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS"
+msgid "Highlight Buried Geysers"
+msgstr "Подсвечивать Закопанные Гейзеры"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS_TOOLTIP"
+msgid "If turned on, fully buried geysers will be highlighted"
+msgstr "Если включено, полностью закопанные гейзеры будут подсвечиваться"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED"
+msgid "Allow Highlighting While Not Paused"
+msgstr "Разрешить Подсвечивание Не Приостанавливаясь"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED_TOOLTIP"
+msgid "If turned on, lets you use the Highlight Overlay while the game is not paused.\n\nBecause the highlighting doesn't update when the world changes(an ice tile melts, duplicant delivers something to a storage bin etc.),\nit will get incorrect over time as the simulation is running if this option is turned on."
+msgstr "Если включено, разрешает использовать Схему Подсвечивания пока игра не приостановлена.\n\nИз-за того, что подсвечивание не обновляется при изменении мира(ледяная клетка тает, дупликант доставляет что-либо в хранилище и т.д.),\nоно со временем теряет правдивость пока симуляция работает, если эта опция включена."

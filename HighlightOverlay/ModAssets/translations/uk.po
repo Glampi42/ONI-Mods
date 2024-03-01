@@ -428,3 +428,22 @@ msgstr "Експеримент 52B"
 msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.RADBOLT"
 msgid "Radbolt"
 msgstr "Радболт"
+
+
+
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS"
+msgid "Highlight Buried Geysers"
+msgstr "Підсвічувати Закопані Гейзери"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS_TOOLTIP"
+msgid "If turned on, fully buried geysers will be highlighted"
+msgstr "Якщо включено, повністю закопані гейзери будуть підсвічуватися"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED"
+msgid "Allow Highlighting While Not Paused"
+msgstr "Дозволити Підсвічення Поки Гра Не Зупинена"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED_TOOLTIP"
+msgid "If turned on, lets you use the Highlight Overlay while the game is not paused.\n\nBecause the highlighting doesn't update when the world changes(an ice tile melts, duplicant delivers something to a storage bin etc.),\nit will get incorrect over time as the simulation is running if this option is turned on."
+msgstr "Якщо включено, дозволяє використовувати Мапу Підсвічування поки гра не зупинена.\n\nЗ тої причини, що підсвічування не оновлюється при змінах світу(крижана клітина тане, копіянт доставляє що-небудь в сховище і т.д.),\nвоно з часом втрачає правдивість поки симуляція працює, якщо ця опція включена."

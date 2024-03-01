@@ -194,7 +194,7 @@ namespace HighlightOverlay {
          return result;
       }
 
-      public static bool IsGeyserBurried(GameObject geyser) {
+      public static bool IsGeyserBuried(GameObject geyser) {
          if(geyser == null)
             return default;
 

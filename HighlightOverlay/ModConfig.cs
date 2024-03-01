@@ -12,16 +12,16 @@ namespace HighlightOverlay {
    [ConfigFile(SharedConfigLocation: true)]
    public class ModConfig : SingletonOptions<ModConfig> {
 
-      [Option("STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURRIEDGEYSERS", "STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURRIEDGEYSERS_TOOLTIP")]
+      [Option("STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS", "STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS_TOOLTIP")]
       [JsonProperty]
-      public bool HighlightBurriedGeysers { get; set; }
+      public bool HighlightBuriedGeysers { get; set; }
 
       [Option("STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED", "STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED_TOOLTIP")]
       [JsonProperty]
       public bool AllowNotPaused { get; set; }
 
       public ModConfig() {
-         HighlightBurriedGeysers = false;
+         HighlightBuriedGeysers = false;
          AllowNotPaused = false;
       }
    }

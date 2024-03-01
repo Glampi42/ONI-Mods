@@ -207,7 +207,7 @@ namespace HighlightOverlay {
 
          if(targetID.HasTag(GameTags.GeyserFeature))
          {
-            if(!ModConfig.Instance.HighlightBurriedGeysers && Utils.IsGeyserBurried(targetObject))
+            if(!ModConfig.Instance.HighlightBuriedGeysers && Utils.IsGeyserBuried(targetObject))
                return;
          }
 
