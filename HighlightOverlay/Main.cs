@@ -15,7 +15,7 @@ namespace HighlightOverlay {
    public static class Main {
       public const string debugPrefix = "[HighlightOverlay] > ";
 
-      public static readonly Color whiteHighlightColor = new Color(0.87f, 0.87f, 0.87f, 0f);
+      public static readonly Color whiteHighlightColor = new Color(0.90f, 0.90f, 0.90f, 0f);
       public static readonly Color whiteBackgroundColor = new Color(0.95f, 0.95f, 0.95f, 1f);
       public static readonly Color blackBackgroundColor = new Color(0.15114269f, 0.15114269f, 0.15114269f, 1f);// should be unique because of technical reasons
 

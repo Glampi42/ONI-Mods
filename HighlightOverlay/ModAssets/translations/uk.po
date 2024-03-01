@@ -1,0 +1,430 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: uk\n"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.TOOLTIPS.HIGHLIGHTOVERLAYSTRING"
+msgid "Displays various things related to the selected object {Hotkey}"
+msgstr "Показує різні речі, пов'язані з вибраним об'єктом"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.NAME"
+msgid "HIGHLIGHT OVERLAY"
+msgstr "МАПА ПІДСВІЧУВАННЯ"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.BUTTON"
+msgid "Highlight Overlay"
+msgstr "Мапа Підсвічування"
+
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.HEADER"
+msgid "Highlight Options:"
+msgstr "Опції Підсвічування:"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.TRUECOLOR_LABEL"
+msgid "True Color:"
+msgstr "Справжній Колір:"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.TRUECOLOR_TOOLTIP"
+msgid "Highlight objects in their actual color instead of white"
+msgstr "Підсвічувати об'єкти їхнім фактичним кольором, а не білим"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.PRESERVEPREVIOUSOPTIONS_LABEL"
+msgid "Keep Highlighting:"
+msgstr "Продовжувати Підсвічування:"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.PRESERVEPREVIOUSOPTIONS_TOOLTIP"
+msgid "Keep highlighting objects that match the options chosen previously"
+msgstr "Зберігати підсвічені об'єкти, котрі відповідають раніше вибраним опціям"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOTPAUSED"
+msgid "\n!--Game Not Paused--!\n"
+msgstr "\n!--Гра Не Зупинена--!\n"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOTPAUSED_TOOLTIP"
+msgid "Pause the game in order to enable the Highlight Overlay"
+msgstr "Поставте гру на паузу, щоб активувати Мапу Підсвічення"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOOBJECTSELECTED"
+msgid "\n-No Object Selected-\n"
+msgstr "\n-Нема Вибраного Об'єкта-\n"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOOBJECTSELECTED_TOOLTIP"
+msgid "Select an object in order to highlight various things related to it"
+msgstr "Виберіть об'єкт, щоб підсвічувати різні речі, пов'язані з ним"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.SELECTEDOBJECTTYPE_PREFIX"
+msgid "Selected: "
+msgstr "Вибрано: "
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CONSUMERS"
+msgid "Consumers"
+msgstr "Споживачі"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PRODUCERS"
+msgid "Producers"
+msgstr "Виробники"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CONSUMABLES"
+msgid "Consumables"
+msgstr "Споживні Матеріали"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PRODUCE"
+msgid "Produce"
+msgstr "Продукція"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDINGMATERIAL"
+msgid "Building Material"
+msgstr "Будівельний Матеріал"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.COPIES"
+msgid "Copies"
+msgstr "Копії"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXACTCOPIES"
+msgid "Exact Copies"
+msgstr "Точні Копії"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.CONSIDEROPTION1"
+msgid "Consider Aggregate State"
+msgstr "Враховувати Агрегатний Стан"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.CONSIDEROPTION1_TOOLTIP"
+msgid "Consider elements' aggregate state when highlighting their consumers, producers, produce & copies"
+msgstr "Враховувати агрегатний стан елементів при підсвічуванні їх споживачів, виробників, продукції та копій"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this element"
+msgstr "Підсвітити об'єкти, які можуть споживати/зберігати цей елемент"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.PRODUCERS_TOOLTIP"
+msgid "Highlight objects that can produce this element"
+msgstr "Підсвітити об'єкти, які можуть виробляти цей елемент"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.PRODUCE_TOOLTIP"
+msgid "Highlight elements that can be emitted by this element or be achieved via thermal transition from this element\n(f.e. Petroleum from Crude Oil)"
+msgstr "Підсвітити елементи, які можуть бути випущені цим елементом або досягнуті через термічний перехід від цього елемента\n(наприклад, нафта з сирої нафти)"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.COPIES_TOOLTIP"
+msgid "Highlight objects consisting of this element/objects that contain this element in their storage room"
+msgstr "Підсвітити об'єкти, що складаються з цього елемента/об'єкти, які містять цей елемент в своєму просторі для зберігання"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ITEM.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this item"
+msgstr "Підсвітити об'єкти, які можуть споживати/зберігати цей предмет"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ITEM.PRODUCERS_TOOLTIP"
+msgid "Highlight objects that can produce this item"
+msgstr "Підсвітити об'єкти, які можуть виробляти цей предмет"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ITEM.COPIES_TOOLTIP"
+msgid "Highlight copies of this item"
+msgstr "Підсвітити копії цього предмета"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.CONSIDEROPTION1"
+msgid "Consider Buildings' Settings"
+msgstr "Враховувати Налаштування Споруд"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.CONSIDEROPTION1_TOOLTIP"
+msgid "Consider buildings' settings(storage filters, production queue, required dupe skills) when highlighting their consumables, produce & building material"
+msgstr "Враховувати налаштування споруд (фільтри зберігання, черга виробництва, необхідні навички дуплікантів) при підсвічуванні їхніх споживних матеріалів, продукції та будівельних матеріалів"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed/stored/used by this building"
+msgstr "Підсвітити об'єкти, які можуть бути споживані/збережені/використані цією спорудою"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this building"
+msgstr "Підсвітити об'єкти, які можуть бути вироблені цією спорудою"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.BUILDINGMATERIAL_TOOLTIP"
+msgid "If \"Consider Buildings' Settings\" option is on:\nHighlight materials this specific building was built with\n\nIf off:\nHighlight materials this building can be built with"
+msgstr "Якщо включено параметр \"Враховувати Налаштування Споруд\":\nПідсвітити матеріали, з яких була побудована ця конкретня споруда\n\nЯкщо вимкнено:\nПідсвітити матеріали, з яких можна побудувати цю споруду"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.COPIES_TOOLTIP"
+msgid "Highlight copies of this building"
+msgstr "Підсвітити копії цієї споруди"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.EXACTCOPIES_TOOLTIP"
+msgid "Highlight copies of this building that consist of the same element"
+msgstr "Підсвітити копії цієї споруди, котрі збудовані з того ж елемента"
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this plant's seed or consume this plant"
+msgstr "Підсвітити об'єкти, котрі можуть споживати/зберігати насіння цієї рослини або споживати цю рослину"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this plant"
+msgstr "Підсвітити об'єкти, котрі можуть бути споживані цією рослиною"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this plant"
+msgstr "Підсвітити об'єкти, котрі можуть бути вироблені цією рослиною"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.COPIES_TOOLTIP"
+msgid "Highlight plants and seeds of this species"
+msgstr "Підсвітити рослини і насіння цього виду"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.EXACTCOPIES_TOOLTIP"
+msgid "Highlight plants and seeds of this species with the same mutation"
+msgstr "Підсвітити рослини і насіння цього виду з тою ж мутацією"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSIDEROPTION1"
+msgid "Consider Critters' Morph"
+msgstr "Враховувати Морф Тварин"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSIDEROPTION1_TOOLTIP"
+msgid "Consider critters' morph when highlighting their consumers, consumables, produce & copies"
+msgstr "Враховувати морф тварин при підсвіченні їхніх споживачів, споживних матеріалів, продукції та копій"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this critter's egg or trap/release/interact with this critter"
+msgstr "Підсвітити об'єкти, котрі можуть споживати/зберігати яйця цієї тварини або ловити/відпускати/взаємодіяти з цією твариною"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this critter"
+msgstr "Підсвітити об'єкти, котрі можуть бути споживані цією твариною"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this critter"
+msgstr "Підсвітити об'єкти, котрі можуть бути вироблені цією твариною"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.COPIES_TOOLTIP"
+msgid "Highlight critters and eggs of this species"
+msgstr "Підсвітити тварин і яйця цього виду"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.CONSUMERS_TOOLTIP"
+msgid "Highlight buildings that this duplicant can work on/that are assigned to this duplicant"
+msgstr "Підсвітити споруди, на котрих може працювати цей копіянт/які призначені цьому копіянту"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this duplicant(considering their permitted food)"
+msgstr "Підсвітити об'єкти, які може споживати цей копіянт (з урахуванням дозволеної їжі)"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this duplicant(considering traits such as Flatulent)"
+msgstr "Підсвітити об'єкти, які може виробляти цей копіянт (з урахуванням рис, таких як Метеоризм)"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.COPIES_TOOLTIP"
+msgid "Highlight all duplicants"
+msgstr "Підсвітити всіх копіянтів"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.GEYSER.PRODUCE_TOOLTIP"
+msgid "Highlight elements that can be emitted by this geyser"
+msgstr "Підсвітити елементи, які може виділяти цей гейзер"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.GEYSER.COPIES_TOOLTIP"
+msgid "Highlight all geysers"
+msgstr "Підсвітити всі гейзери"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.GEYSER.EXACTCOPIES_TOOLTIP"
+msgid "Highlight all geysers of this type"
+msgstr "Підсвітити всі гейзери цього типу"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume this object"
+msgstr "Підсвітити об'єкти, які можуть споживати цей об'єкт"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.PRODUCERS_TOOLTIP"
+msgid "Highlight objects that can produce this object"
+msgstr "Підсвітити об'єкти, які можуть виробляти цей об'єкт"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this object"
+msgstr "Підсвітити об'єкти, які можуть бути споживані цим об'єктом"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this object"
+msgstr "Підсвітити об'єкти, які можуть бути вироблені цим об'єктом"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.COPIES_TOOLTIP"
+msgid "Highlight all occurrences of this object"
+msgstr "Підсвітити всі місцезнаходження цього об'єкта"
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.HEADER"
+msgid "Highlight Filters:"
+msgstr "Фільтри Підсвічування:"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ITEMS"
+msgid "Items/Debris"
+msgstr "Предмети/Обломки"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ON_GROUND"
+msgid "On the floor"
+msgstr "На підлозі"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.STORED_ITEMS"
+msgid "Stored"
+msgstr "Збережені"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.BUILDINGS"
+msgid "Buildings"
+msgstr "Споруди"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.STANDARD_BUILDINGS"
+msgid "Standard"
+msgstr "Стандартні"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.TILES"
+msgid "Tiles"
+msgstr "Блоки"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUID_PIPES"
+msgid "Liquid pipes"
+msgstr "Рідинні труби"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GAS_PIPES"
+msgid "Gas pipes"
+msgstr "Газові труби"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.RAILS"
+msgid "Conveyor rails"
+msgstr "Конвеєрні рейки"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.WIRES"
+msgid "Wires"
+msgstr "Дроти"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.AUTOMATION"
+msgid "Automation"
+msgstr "Автоматизація"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.BACKWALLS"
+msgid "Backwalls"
+msgstr "Фонові споруди"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CONDUIT_CONTENTS"
+msgid "Conduit Contents"
+msgstr "Вміст Труб"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUID_CONTENTS"
+msgid "Liquid pipes"
+msgstr "Рідинні труби"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GAS_CONTENTS"
+msgid "Gas pipes"
+msgstr "Газові труби"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.RAILS_CONTENTS"
+msgid "Conveyor rails"
+msgstr "Конвеєрні рейки"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CELLS"
+msgid "Cells"
+msgstr "Клітини"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.NATURAL_TILES"
+msgid "Natural tiles"
+msgstr "Природні блоки"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUIDS"
+msgid "Liquids"
+msgstr "Рідини"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GASES"
+msgid "Gases"
+msgstr "Гази"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CREATURES"
+msgid "Creatures"
+msgstr "Створіння"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.PLANTS"
+msgid "Plants"
+msgstr "Рослини"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CRITTERS"
+msgid "Critters"
+msgstr "Тварини"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.DUPLICANTS"
+msgid "Duplicants"
+msgstr "Копіянти"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ROBOTS"
+msgid "Robots"
+msgstr "Роботи"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.MISCELLANEOUS"
+msgid "Miscellaneous"
+msgstr "Різне"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GEYSERS"
+msgid "Geysers"
+msgstr "Гейзери"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.OTHER"
+msgid "Other"
+msgstr "Інше"
+
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.NOTVALID"
+msgid "Invalid"
+msgstr "Неправильний"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.ELEMENT"
+msgid "Element"
+msgstr "Елемент"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.ITEM"
+msgid "Item"
+msgstr "Предмет"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.BUILDING"
+msgid "Building"
+msgstr "Споруда"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.PLANTORSEED"
+msgid "Plant/Seed"
+msgstr "Рослина/Насіння"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.CRITTEROREGG"
+msgid "Critter/Egg"
+msgstr "Тварина/Яйце"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.DUPLICANT"
+msgid "Duplicant"
+msgstr "Копіянт"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.GEYSER"
+msgid "Geyser"
+msgstr "Гейзер"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.ROBOT"
+msgid "Robot"
+msgstr "Робот"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.OILWELL"
+msgid "Oil Reservoir"
+msgstr "Нафтовий Басейн"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.SAPTREE"
+msgid "Experiment 52B"
+msgstr "Експеримент 52B"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.RADBOLT"
+msgid "Radbolt"
+msgstr "Радболт"

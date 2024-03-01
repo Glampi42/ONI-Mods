@@ -84,7 +84,7 @@ namespace HighlightOverlay {
 
                List<ScenePartitionerEntry> visibleObjects = new List<ScenePartitionerEntry>();
 
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.collisionLayer, visibleObjects);// includes all pickupables(debris, duplicants, critters) & radbolts
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.pickupablesLayer, visibleObjects);// debris, duplicants, critters
                foreach(ScenePartitionerEntry visibleObject in visibleObjects)
                {
                   if(((Component)visibleObject.obj).TryGetComponent(out PrimaryElement _))
@@ -121,12 +121,28 @@ namespace HighlightOverlay {
                   {
                      TryAddObjectToHighlightedObjects(((Component)visibleObject.obj).gameObject);
                   }
+
+                  visibleObjects.Clear();
                }
 
                GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// geysers, gravitas buildings
                foreach(GameObject building in buildings)
                {
                   TryAddObjectToHighlightedObjects(building);
+               }
+
+               // checking leftover things (radbolts)
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.collisionLayer, visibleObjects);
+               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
+               {
+                  KPrefabID prefabID = ((Component)visibleObject.obj).GetComponent<KPrefabID>();
+                  if(prefabID == null)
+                     continue;
+
+                  if(prefabID.HasTag(GameTags.HighEnergyParticle))
+                  {
+                     TryAddObjectToHighlightedObjects(prefabID.gameObject);
+                  }
                }
 
                TryAddObjectToHighlightedObjects(Main.selectedObj);// it is not guaranteed that the selected obj will get checked in the methods above
