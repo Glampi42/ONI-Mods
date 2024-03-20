@@ -232,12 +232,13 @@ namespace HighlightOverlay.Structs {
             }
             else
             {
-               seedID = obj.GetComponent<SeedProducer>().seedInfo.seedId;
+               seedID = obj.GetComponent<SeedProducer>()?.seedInfo.seedId ?? "";
             }
 
-            seed = Assets.GetPrefab(seedID).GetComponent<PlantableSeed>();
+            if(seedID != "")
+               seed = Assets.GetPrefab(seedID).GetComponent<PlantableSeed>();
          }
-         plantInfo.plantID = seed.PlantID;
+         plantInfo.plantID = seed != default ? seed.PlantID : obj.PrefabTag;
          plantInfo.plantPrefab = Assets.PrefabsByTag.GetOrDefault(plantInfo.plantID);
          plantInfo.seedID = seedID;
 

@@ -829,7 +829,7 @@ namespace HighlightOverlay {
             if(diet != null)
             {
                IEnumerable<Tag> consumables = diet.consumedTags.Select(pair => pair.Key);
-               if((diet.eatsPlantsDirectly && consumables.Contains(plantInfo.plantID)) || consumables.Contains(plantInfo.seedID))
+               if((diet.eatsPlantsDirectly && consumables.Contains(plantInfo.plantID)) || (plantInfo.seedID != Tag.Invalid && consumables.Contains(plantInfo.seedID)))
                   return true;
             }
 
