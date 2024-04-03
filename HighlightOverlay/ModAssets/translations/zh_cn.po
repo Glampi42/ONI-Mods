@@ -1,0 +1,449 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Project-Id-Version: 0.0.1\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: Xiaohulizi\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_cn\n"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.TOOLTIPS.HIGHLIGHTOVERLAYSTRING"
+msgid "Displays various things related to the selected object {Hotkey}"
+msgstr "显示与所选对象相关的各种信息 {Hotkey}"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.NAME"
+msgid "HIGHLIGHT OVERLAY"
+msgstr "高亮显示"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.BUTTON"
+msgid "Highlight Overlay"
+msgstr "高亮显示"
+
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.HEADER"
+msgid "Highlight Options:"
+msgstr "高亮选项："
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.TRUECOLOR_LABEL"
+msgid "True Color:"
+msgstr "真实颜色:"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.TRUECOLOR_TOOLTIP"
+msgid "Highlight objects in their actual color instead of white"
+msgstr "以实际颜色而非白色突出显示对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.PRESERVEPREVIOUSOPTIONS_LABEL"
+msgid "Keep Highlighting:"
+msgstr "始终保持突出显示:"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.PRESERVEPREVIOUSOPTIONS_TOOLTIP"
+msgid "Keep highlighting objects that match the options chosen previously"
+msgstr "始终保持突出显示匹配选择的对象"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOTPAUSED"
+msgid "\n!--Game Not Paused--!\n"
+msgstr "\n!--游戏未暂停--!\n"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOTPAUSED_TOOLTIP"
+msgid "Pause the game in order to enable the Highlight Overlay"
+msgstr "暂停游戏以启用高亮显示"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOOBJECTSELECTED"
+msgid "\n-No Object Selected-\n"
+msgstr "\n-未选择对象-\n"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.NOOBJECTSELECTED_TOOLTIP"
+msgid "Select an object in order to highlight various things related to it"
+msgstr "选择对象以突出显示与之相关的各种信息"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.SELECTEDOBJECTTYPE_PREFIX"
+msgid "Selected: "
+msgstr "所选目标： "
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CONSUMERS"
+msgid "Consumers"
+msgstr "可消耗的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PRODUCERS"
+msgid "Producers"
+msgstr "可生产的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CONSUMABLES"
+msgid "Consumables"
+msgstr "消耗的元素"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PRODUCE"
+msgid "Produce"
+msgstr "生产的元素"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDINGMATERIAL"
+msgid "Building Material"
+msgstr "建筑材料"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.COPIES"
+msgid "Copies"
+msgstr "同类物品"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXACTCOPIES"
+msgid "Exact Copies"
+msgstr "完全一致的同类物品"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.CONSIDEROPTION1"
+msgid "Consider Aggregate State"
+msgstr "考虑具体情况"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.CONSIDEROPTION1_TOOLTIP"
+msgid "Consider elements' aggregate state when highlighting their consumers, producers, produce & copies"
+msgstr "在突出显示时考虑元素的具体情况"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this element"
+msgstr "突出显示可以消耗/存储此元素的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.PRODUCERS_TOOLTIP"
+msgid "Highlight objects that can produce this element"
+msgstr "突出显示可以生产此元素的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.PRODUCE_TOOLTIP"
+msgid "Highlight elements that can be emitted by this element or be achieved via thermal transition from this element\n(f.e. Petroleum from Crude Oil)"
+msgstr "突出显示可由此元素排放或通过热转移获得的元素\n（例如从原油中获得的石油）"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ELEMENT.COPIES_TOOLTIP"
+msgid "Highlight objects consisting of this element/objects that contain this element in their storage room"
+msgstr "突出显示由该元素组成的对象/存储箱中包含该元素的对象"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ITEM.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this item"
+msgstr "突出显示可以消耗/存储此物品的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ITEM.PRODUCERS_TOOLTIP"
+msgid "Highlight objects that can produce this item"
+msgstr "突出显示可以生产此物品的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.ITEM.COPIES_TOOLTIP"
+msgid "Highlight copies of this item"
+msgstr "突出显示此物品的同类物品"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.CONSIDEROPTION1"
+msgid "Consider Buildings' Settings"
+msgstr "考虑对象设置"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.CONSIDEROPTION1_TOOLTIP"
+msgid "Consider buildings' settings(storage filters, production queue, required dupe skills) when highlighting their consumables, produce & building material"
+msgstr "在突出显示时考虑对象设置（存储过滤器、生产队列）"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed/stored/used by this building"
+msgstr "突出显示可供该建筑消耗/存储/使用的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this building"
+msgstr "突出显示可以由该建筑生产的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.BUILDINGMATERIAL_TOOLTIP"
+msgid "If \"Consider Buildings' Settings\" option is on:\nHighlight materials this specific building was built with\n\nIf off:\nHighlight materials this building can be built with"
+msgstr "如果选中“考虑对象设置”选项：\n突出显示用于构建此特定建筑的材料\n\n如果未选中：\n突出显示使用此建筑可建造的材料"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.COPIES_TOOLTIP"
+msgid "Highlight copies of this building"
+msgstr "突出显示此建筑的同类物品"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.BUILDING.EXACTCOPIES_TOOLTIP"
+msgid "Highlight copies of this building that consist of the same element"
+msgstr "突出显示该建筑的同类物品中包含相同元素的情况"
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this plant's seed or consume this plant"
+msgstr "突出显示可消耗/存储此植物种子的对象或可消耗此植物的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this plant"
+msgstr "突出显示此植物可消耗的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this plant"
+msgstr "突出显示此植物可产生的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.COPIES_TOOLTIP"
+msgid "Highlight plants and seeds of this species"
+msgstr "突出显示该种植物和种子"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.PLANTORSEED.EXACTCOPIES_TOOLTIP"
+msgid "Highlight plants and seeds of this species with the same mutation"
+msgstr "突出显示该品种及具有相同变异的种植物和种子"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSIDEROPTION1"
+msgid "Consider Critters' Morph"
+msgstr "考虑生物变化"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSIDEROPTION1_TOOLTIP"
+msgid "Consider critters' morph when highlighting their consumers, consumables, produce & copies"
+msgstr "在突出显示时考虑生物变化"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume/store this critter's egg or trap/release/interact with this critter"
+msgstr "突出显示可以消耗/存储此生物蛋或捕捉/放生/与该生物互动的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this critter"
+msgstr "突出显示此生物可消耗的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this critter"
+msgstr "突出显示此生物可产生的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.CRITTEROREGG.COPIES_TOOLTIP"
+msgid "Highlight critters and eggs of this species"
+msgstr "突出显示此物种的生物和蛋"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.CONSUMERS_TOOLTIP"
+msgid "Highlight buildings that this duplicant can work on/that are assigned to this duplicant"
+msgstr "突出显示此复制人可以工作或分配给此复制人的建筑"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this duplicant(considering their permitted food)"
+msgstr "突出显示可由此复制人消耗（考虑其允许的食物）的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this duplicant(considering traits such as Flatulent)"
+msgstr "突出显示可由此复制人生产（考虑如 胃肠胀气 等特质）的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DUPLICANT.COPIES_TOOLTIP"
+msgid "Highlight all duplicants"
+msgstr "突出显示所有复制人"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.GEYSER.PRODUCE_TOOLTIP"
+msgid "Highlight elements that can be emitted by this geyser"
+msgstr "突出显示此间歇泉喷出的元素"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.GEYSER.COPIES_TOOLTIP"
+msgid "Highlight all geysers"
+msgstr "突出显示所有间歇泉"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.GEYSER.EXACTCOPIES_TOOLTIP"
+msgid "Highlight all geysers of this type"
+msgstr "突出显示所有此类型的间歇泉"
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.CONSUMERS_TOOLTIP"
+msgid "Highlight objects that can consume this object"
+msgstr "突出显示可以消耗此对象的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.PRODUCERS_TOOLTIP"
+msgid "Highlight objects that can produce this object"
+msgstr "突出显示可以生产此对象的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.CONSUMABLES_TOOLTIP"
+msgid "Highlight objects that can be consumed by this object"
+msgstr "突出显示可由此对象消耗的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.PRODUCE_TOOLTIP"
+msgid "Highlight objects that can be produced by this object"
+msgstr "突出显示可由此对象生产的对象"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.DEFAULTSTRINGS.COPIES_TOOLTIP"
+msgid "Highlight all occurrences of this object"
+msgstr "突出显示此对象的所有引用"
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.HEADER"
+msgid "Highlight Filters:"
+msgstr "高亮过滤器："
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ITEMS"
+msgid "Items/Debris"
+msgstr "物品/碎片"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ON_GROUND"
+msgid "On the floor"
+msgstr "在地板上"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.STORED_ITEMS"
+msgid "Stored"
+msgstr "已存储"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.BUILDINGS"
+msgid "Buildings"
+msgstr "建筑"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.STANDARD_BUILDINGS"
+msgid "Standard"
+msgstr "标准"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.TILES"
+msgid "Tiles"
+msgstr "砖块"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUID_PIPES"
+msgid "Liquid pipes"
+msgstr "液体管道"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GAS_PIPES"
+msgid "Gas pipes"
+msgstr "气体管道"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.RAILS"
+msgid "Conveyor rails"
+msgstr "自动化轨道"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.WIRES"
+msgid "Wires"
+msgstr "电线"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.AUTOMATION"
+msgid "Automation"
+msgstr "自动化"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.BACKWALLS"
+msgid "Backwalls"
+msgstr "背墙墙"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CONDUIT_CONTENTS"
+msgid "Conduit Contents"
+msgstr "管道"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUID_CONTENTS"
+msgid "Liquid pipes"
+msgstr "液体管道"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GAS_CONTENTS"
+msgid "Gas pipes"
+msgstr "气体管道"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.RAILS_CONTENTS"
+msgid "Conveyor rails"
+msgstr "自动化轨道"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CELLS"
+msgid "Cells"
+msgstr "单格"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.NATURAL_TILES"
+msgid "Natural tiles"
+msgstr "自然方块"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.LIQUIDS"
+msgid "Liquids"
+msgstr "液体"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GASES"
+msgid "Gases"
+msgstr "气体"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CREATURES"
+msgid "Creatures"
+msgstr "生物"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.PLANTS"
+msgid "Plants"
+msgstr "植物"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.CRITTERS"
+msgid "Critters"
+msgstr "小动物"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.DUPLICANTS"
+msgid "Duplicants"
+msgstr "复制人"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.ROBOTS"
+msgid "Robots"
+msgstr "机器人"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.MISCELLANEOUS"
+msgid "Miscellaneous"
+msgstr "杂项"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.GEYSERS"
+msgid "Geysers"
+msgstr "间歇泉"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTFILTERS.OTHER"
+msgid "Other"
+msgstr "其他"
+
+
+
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.NOTVALID"
+msgid "Invalid"
+msgstr "无效"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.ELEMENT"
+msgid "Element"
+msgstr "元素"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.ITEM"
+msgid "Item"
+msgstr "物品"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.BUILDING"
+msgid "Building"
+msgstr "建筑"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.PLANTORSEED"
+msgid "Plant/Seed"
+msgstr "植物/种子"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.CRITTEROREGG"
+msgid "Critter/Egg"
+msgstr "小动物/蛋"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.DUPLICANT"
+msgid "复制人"
+msgstr "Копіянт"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.GEYSER"
+msgid "Geyser"
+msgstr "间歇泉"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.ROBOT"
+msgid "Robot"
+msgstr "机器人"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.OILWELL"
+msgid "Oil Reservoir"
+msgstr "储油石"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.SAPTREE"
+msgid "Experiment 52B"
+msgstr "试验体52B"
+
+msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.RADBOLT"
+msgid "Radbolt"
+msgstr "辐射粒子"
+
+
+
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS"
+msgid "Highlight Buried Geysers"
+msgstr "突出显示掩埋的间歇泉
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.HIGHLIGHTBURIEDGEYSERS_TOOLTIP"
+msgid "If turned on, fully buried geysers will be highlighted"
+msgstr "如果启用，则完全埋藏的间歇泉将被突出显示。"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED"
+msgid "Allow Highlighting While Not Paused"
+msgstr "允许突出显示而不暂停"
+
+msgctxt "HighlightOverlay.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.ALLOWNOTPAUSED_TOOLTIP"
+msgid "If turned on, lets you use the Highlight Overlay while the game is not paused.\n\nBecause the highlighting doesn't update when the world changes(an ice tile melts, duplicant delivers something to a storage bin etc.),\nit will get incorrect over time as the simulation is running if this option is turned on."
+msgstr "如果打开此选项，可以在游戏未暂停时使用高亮显示。\n\n由于高亮显示在世界改变时不会更新（例如：冰块融化，复制人将某物品送到存储箱等），如果启用此选项，随着模拟的运行，高亮显示将随时间变得不正确。"
