@@ -11,7 +11,7 @@ msgstr ""
 
 msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.TOOLTIPS.HIGHLIGHTOVERLAYSTRING"
 msgid "Displays various things related to the selected object {Hotkey}"
-msgstr "Отображает различные вещи связанные с выбраным объектом"
+msgstr "Отображает различные вещи связанные с выбраным объектом {Hotkey}"
 
 msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.NAME"
 msgid "HIGHLIGHT OVERLAY"
