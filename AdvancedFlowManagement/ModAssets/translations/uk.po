@@ -9,19 +9,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 
-msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
 msgid "Show Junctions"
 msgstr "Показати Перехрестя"
 
-msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
 msgid "Hide Junctions"
 msgstr "Сховати Перехрестя"
 
-msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
 msgid "Buffer Contents: {Contents}"
 msgstr "Вміст Буферу: {Contents}"
 
-msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
 msgid "This pipe's buffer contains: {Contents}"
 msgstr "Буфер цієї труби містить: {Contents}"
 

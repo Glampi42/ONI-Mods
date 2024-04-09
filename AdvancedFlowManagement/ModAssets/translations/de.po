@@ -9,19 +9,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 
-msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
 msgid "Show Junctions"
 msgstr "Kreuzungen Zeigen"
 
-msgctxt "AdvancedFlowManagement.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
 msgid "Hide Junctions"
 msgstr "Kreuzungen Verstecken"
 
-msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
 msgid "Buffer Contents: {Contents}"
 msgstr "Pufferinhalt: {Contents}"
 
-msgctxt "AdvancedFlowManagement.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
 msgid "This pipe's buffer contains: {Contents}"
 msgstr "Der Puffer dieser Rohrleitung enthält: {Contents}"
 
