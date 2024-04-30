@@ -1,0 +1,5 @@
+This folder contains the introduction page of "Workshop" (located in "readme")
+
+Include uploaded image files.
+
+Please note that the translation of the introduction will not be updated in a timely manner. Please exclude the last update log. All translations of "Last version" can be displayed at the top and in the original author's language.
