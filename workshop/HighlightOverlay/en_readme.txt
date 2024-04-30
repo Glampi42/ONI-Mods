@@ -1,3 +1,5 @@
+A QoL mod for visualizing things that in some way relate to the selected object.
+
 How To Use
 
 1. Select an object(any object on the map)
