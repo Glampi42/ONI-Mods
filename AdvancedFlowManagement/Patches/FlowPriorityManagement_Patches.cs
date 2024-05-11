@@ -1270,18 +1270,18 @@ namespace AdvancedFlowManagement.Patches {
          //}
       }
 
-      [HarmonyPatch(typeof(GeneratedBuildings), "LoadGeneratedBuildings")]
-      public static class IgnoreFullPipe_Patch {
-         public static void Postfix(List<System.Type> types) {
-            foreach(BuildingDef buildingDef in Assets.BuildingDefs)
-            {
-               if(buildingDef.BuildingComplete.TryGetComponent(out RequireOutputs component))
-               {
-                  component.ignoreFullPipe = true;// needed to change outputs' flow behaviour
-               }
-            }
-         }
-      }
+      //[HarmonyPatch(typeof(GeneratedBuildings), "LoadGeneratedBuildings")]
+      //public static class IgnoreFullPipe_Patch {
+      //   public static void Postfix(List<System.Type> types) {
+      //      foreach(BuildingDef buildingDef in Assets.BuildingDefs)
+      //      {
+      //         if(buildingDef.BuildingComplete.TryGetComponent(out RequireOutputs component))
+      //         {
+      //            component.ignoreFullPipe = true;// needed to change outputs' flow behavior
+      //         }
+      //      }
+      //   }
+      //}
 
       [HarmonyPatch(typeof(UpdateNetworkTask), "Finish")]
       public static class OnNetworkUpdateFinish_Patch {
