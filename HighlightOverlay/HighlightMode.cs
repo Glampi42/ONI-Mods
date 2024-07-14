@@ -37,6 +37,7 @@ namespace HighlightOverlay {
 
       public override void Enable() {
          base.Enable();
+
          Camera.main.cullingMask |= cameraLayerMask;
          int mask = LayerMask.GetMask("MaskedOverlay");
          SelectTool.Instance.SetLayerMask(SelectTool.Instance.GetDefaultLayerMask() | mask);
@@ -131,8 +132,7 @@ namespace HighlightOverlay {
                   TryAddObjectToHighlightedObjects(building);
                }
 
-               // checking leftover things (radbolts)
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.collisionLayer, visibleObjects);
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.collisionLayer, visibleObjects);// checking leftover things (radbolts)
                foreach(ScenePartitionerEntry visibleObject in visibleObjects)
                {
                   KPrefabID prefabID = ((Component)visibleObject.obj).GetComponent<KPrefabID>();

@@ -2,16 +2,15 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.props" Condition="Exists('..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.props')" />
   <Import Project="..\packages\ILMerge.3.0.29\build\ILMerge.props" Condition="Exists('..\packages\ILMerge.3.0.29\build\ILMerge.props')" />
-  <Import Project="..\packages\Aze.Publicise.MSBuild.Task.1.1.0\build\Aze.Publicise.MSBuild.Task.props" Condition="Exists('..\packages\Aze.Publicise.MSBuild.Task.1.1.0\build\Aze.Publicise.MSBuild.Task.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C0D8B707-EE14-4D27-BD33-6DDAB0D3D3E3}</ProjectGuid>
+    <ProjectGuid>{E9CD0776-3FDF-4261-A5F1-E59C9A502B06}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HighlightOverlay</RootNamespace>
-    <AssemblyName>HighlightOverlay</AssemblyName>
+    <RootNamespace>ChainErrand</RootNamespace>
+    <AssemblyName>ChainErrand</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -20,8 +19,8 @@
     </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>false</DebugSymbols>
-    <DebugType>none</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -45,16 +44,14 @@
       <HintPath>..\lib\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass_U52_test_public">
-      <HintPath>..\lib\Assembly-CSharp-firstpass_U52_test_public.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass_public">
+      <HintPath>..\lib\Assembly-CSharp-firstpass_public.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp_U52_test_public">
-      <HintPath>..\lib\Assembly-CSharp_U52_test_public.dll</HintPath>
+    <Reference Include="Assembly-CSharp_public">
+      <HintPath>..\lib\Assembly-CSharp_public.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
@@ -93,10 +90,6 @@
       <HintPath>..\lib\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.SharedInternalsModule">
-      <HintPath>..\lib\UnityEngine.SharedInternalsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
       <HintPath>..\lib\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
@@ -115,35 +108,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\HighlightOptionAttribute.cs" />
-    <Compile Include="Attributes\HighlightOptionLabelAttribute.cs" />
-    <Compile Include="Components\TintManagerCmp.cs" />
-    <Compile Include="ComputedShouldHighlightValues.cs" />
-    <Compile Include="Enums\HighlightFilters.cs" />
-    <Compile Include="Enums\HighlightOptions.cs" />
-    <Compile Include="Enums\HighlightOptionsExtentions.cs" />
-    <Compile Include="Enums\ObjectTypeExtentions.cs" />
-    <Compile Include="HighlightFiltersTreeFilterable.cs" />
-    <Compile Include="HighlightMode.cs" />
-    <Compile Include="HighlightOverlayDiagram.cs" />
-    <Compile Include="Main.cs" />
-    <Compile Include="ModConfig.cs" />
+    <Compile Include="Enums\ChainToolMode.cs" />
+    <Compile Include="Structs\ChainNumber.cs" />
+    <Compile Include="ChainNumberPrefab.cs" />
+    <Compile Include="ChainTool.cs" />
+    <Compile Include="ChainToolFilters.cs" />
+    <Compile Include="ChainToolHover.cs" />
+    <Compile Include="ChainToolMenu.cs" />
+    <Compile Include="MYSPRITES.cs" />
     <Compile Include="MyUserMod2.cs" />
-    <Compile Include="Patches\DetailsScreenHide_Patches.cs" />
-    <Compile Include="Patches\TintManager_Patches.cs" />
-    <Compile Include="ShouldHighlightCases.cs" />
-    <Compile Include="Structs\ObjectProperties.cs" />
-    <Compile Include="Patches\BuildingSettingsChangeListeners_Patches.cs" />
+    <Compile Include="ChainOverlay.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Patches\CreatePrefabs_Patches.cs" />
     <Compile Include="Patches\Main_Patches.cs" />
     <Compile Include="Patches\Overlay_Patches.cs" />
-    <Compile Include="Patches\SelectTool_Patches.cs" />
     <Compile Include="Prefabs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Enums\ObjectType.cs" />
-    <Compile Include="Strings\RegisterLocalizeStrings.cs" />
     <Compile Include="Strings\LocalizeStrings.cs" />
     <Compile Include="Strings\MYSTRINGS.cs" />
+    <Compile Include="Strings\RegisterLocalizeStrings.cs" />
     <Compile Include="Strings\STRINGS.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
@@ -158,26 +141,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ILMergeOrder.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="ModAssets\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ILMergeOrder.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Aze.Publicise.MSBuild.Task.1.1.0\build\Aze.Publicise.MSBuild.Task.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Aze.Publicise.MSBuild.Task.1.1.0\build\Aze.Publicise.MSBuild.Task.props'))" />
-    <Error Condition="!Exists('..\packages\ILMerge.3.0.29\build\ILMerge.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILMerge.3.0.29\build\ILMerge.props'))" />
-    <Error Condition="!Exists('..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.props'))" />
-    <Error Condition="!Exists('..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.targets'))" />
-  </Target>
-  <Target Name="Publicise" AfterTargets="Clean">
-    <ItemGroup>
-      <PubliciseInputAssemblies Include="..\lib\Assembly-CSharp_U52_test.dll; ..\lib\Assembly-CSharp-firstpass_U52_test.dll" />
-    </ItemGroup>
-    <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="..\lib\" PubliciseCompilerGenerated="false" />
-  </Target>
   <Import Project="..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.targets" Condition="Exists('..\packages\MSBuild.ILMerge.Task.1.1.3\build\MSBuild.ILMerge.Task.targets')" />
 </Project>

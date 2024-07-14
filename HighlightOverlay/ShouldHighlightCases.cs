@@ -828,8 +828,8 @@ namespace HighlightOverlay {
             Diet diet = morph.GetDef<CreatureCalorieMonitor.Def>()?.diet;
             if(diet != null)
             {
-               IEnumerable<Tag> consumables = diet.consumedTags.Select(pair => pair.Key);
-               if((diet.eatsPlantsDirectly && consumables.Contains(plantInfo.plantID)) || (plantInfo.seedID != Tag.Invalid && consumables.Contains(plantInfo.seedID)))
+               if((diet.CanEatAnyPlantDirectly && diet.directlyEatenPlantInfos.Select(pair => pair.consumedTags).SelectMany(c => c).Contains(plantInfo.plantID))
+                  || (plantInfo.seedID != Tag.Invalid && diet.consumedTags.Select(pair => pair.Key).Contains(plantInfo.seedID)))
                   return true;
             }
 
