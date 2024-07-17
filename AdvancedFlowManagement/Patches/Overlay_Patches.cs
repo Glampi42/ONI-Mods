@@ -109,11 +109,11 @@ namespace AdvancedFlowManagement {
       }
       //-------------------Adding&managing crossings filter in overlay legend-------------------UP
       //-------------------Adapting buildings' endpoints to crossings-------------------DOWN
-      [HarmonyPatch(typeof(BuildingCellVisualizer), "DrawUtilityIcon")]
-      [HarmonyPatch(new Type[] { typeof(int), typeof(Sprite), typeof(GameObject), typeof(Color), typeof(Color), typeof(float), typeof(bool) },
-          new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref, ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Normal })]
+      [HarmonyPatch(typeof(EntityCellVisualizer), "DrawUtilityIcon")]
+      [HarmonyPatch(new Type[] { typeof(int), typeof(Sprite), typeof(GameObject), typeof(Color), typeof(float), typeof(bool) },
+          new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Ref, ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Normal })]
       public static class AdaptBuildingEndpointToCrossing_Patch {
-         public static void Postfix(int cell, Sprite icon_img, ref GameObject visualizerObj, Color tint, Color connectorColor, float scaleMultiplier, bool hideBG, BuildingCellVisualizer __instance) {
+         public static void Postfix(int cell, Sprite icon_img, ref GameObject visualizerObj, Color tint, float scaleMultiplier, bool hideBG, BuildingCellVisualizer __instance) {
             ConduitType conduit_type = Utils.ConduitTypeFromOverlayModeID(OverlayScreen.Instance.GetMode());
             if(conduit_type == ConduitType.None)
                return;

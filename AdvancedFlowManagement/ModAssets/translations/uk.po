@@ -9,13 +9,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
 
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.NAME"
 msgid "Show Junctions"
 msgstr "Показати Перехрестя"
 
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS"
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.TOOLTIP"
+msgid "Make junctions visible"
+msgstr "Зробити перехрестя видимими"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.NAME"
 msgid "Hide Junctions"
 msgstr "Сховати Перехрестя"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.TOOLTIP"
+msgid "Make junctions invisible"
+msgstr "Зробити перехрестя невидимими"
 
 msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
 msgid "Buffer Contents: {Contents}"

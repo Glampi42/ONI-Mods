@@ -11,8 +11,14 @@ namespace AdvancedFlowManagement.Strings {
       public class UI {
          public class TOOLS {
             public class FILTERLAYERS {
-               public static LocString SHOWCROSSINGS = "Show Junctions";
-               public static LocString HIDECROSSINGS = "Hide Junctions";
+               public class SHOWCROSSINGS {
+                  public static LocString NAME = "Show Junctions";
+                  public static LocString TOOLTIP = "Make junctions visible";
+               }
+               public class HIDECROSSINGS {
+                  public static LocString NAME = "Hide Junctions";
+                  public static LocString TOOLTIP = "Make junctions invisible";
+               }
             }
          }
       }
