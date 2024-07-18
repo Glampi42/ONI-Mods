@@ -3,7 +3,7 @@
 	<!-- General Package Properties -->
 	<PropertyGroup>
 		<PackageId>AdvancedFlowManagement</PackageId>
-		<Version>2.0.2</Version>
+		<Version>2.0.3.0</Version>
 		<Authors>Glampi</Authors>
 		<Copyright>$(AssemblyCopyright)</Copyright>
 		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>
