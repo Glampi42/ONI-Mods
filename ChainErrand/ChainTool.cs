@@ -16,6 +16,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using ChainErrand.ChainHierarchy;
 using ChainErrand.Enums;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.UI;
@@ -36,6 +37,10 @@ namespace ChainErrand {
       private static GameObject DELETE_AREA_GO;
       private static Texture2D DELETE_CURSOR;
 
+
+      private int selectedChain;
+      private int selectedLink;
+      private bool insertNewLink;
 
       private SpriteRenderer visualizerRenderer;
       private ChainToolMode currentMode;
@@ -79,6 +84,9 @@ namespace ChainErrand {
          }
       }
 
+      public ChainToolMode GetToolMode() {
+         return currentMode;
+      }
       public void SetToolMode(ChainToolMode mode) {
          if(mode == currentMode)
             return;
@@ -106,11 +114,86 @@ namespace ChainErrand {
                IsStyleDelete = true;
                break;
          }
+
+         if(Main.chainOverlay != default)
+         {
+            Main.chainOverlay.UpdateAllChainNumbers();
+         }
+      }
+
+      public int GetSelectedChain() {
+         return selectedChain;
+      }
+      /// <summary>
+      /// Changes the selected chain according to the targetNum argument. The selectedLink will also be updated to be the last link of the newly selected chain.
+      /// </summary>
+      /// <param name="targetNum">The argument that tells which chain should be selected</param>
+      public void SetSelectedChain(int targetNum) {
+         if(ChainsContainer.Instance.ChainsCount > 0)
+         {
+            if(targetNum < 0)
+            {
+               selectedChain = ChainsContainer.Instance.ChainsCount - 1;// for looping around
+            }
+            else if(targetNum >= ChainsContainer.Instance.ChainsCount)
+            {
+               selectedChain = 0;// for looping around
+            }
+            else
+            {
+               selectedChain = targetNum;
+            }
+         }
+         else
+         {
+            selectedChain = 0;
+         }
+
+         // updating selected link:
+         if(ChainsContainer.Instance.TryGetChain(selectedChain, out Chain chain))
+         {
+            SetSelectedLink(chain.LastLinkNumber() + 1, true);
+         }
+
+         if(Main.chainOverlay != default)
+         {
+            Main.chainOverlay.UpdateAllChainNumbers();
+         }
+      }
+
+      public int GetSelectedLink() {
+         return selectedLink;
+      }
+      public bool GetInsertNewLink() {
+         return insertNewLink;
+      }
+      /// <summary>
+      /// Changes the selected link according to the targetNum argument.
+      /// </summary>
+      /// <param name="targetNum">The argument that tells which link should be selected</param>
+      /// <param name="insertNewLink">Whether the link should be inserted or extended</param>
+      public void SetSelectedLink(int targetNum, bool insertNewLink) {
+         if(ChainsContainer.Instance.TryGetChain(selectedChain, out Chain chain))
+         {
+            if(targetNum < 0)
+               targetNum = int.MaxValue;// -1 == last link, for the ease of use
+
+            selectedLink = Mathf.Clamp(targetNum, 0, chain.LastLinkNumber() + 1);
+            this.insertNewLink = selectedLink > chain.LastLinkNumber() || insertNewLink;
+         }
+         else
+         {
+            selectedLink = 0;
+            this.insertNewLink = false;
+         }
       }
 
 
 
       public ChainTool() {
+         selectedChain = 0;
+         selectedLink = 0;
+         insertNewLink = false;
       }
 
       public override string GetConfirmSound() {
@@ -155,6 +238,16 @@ namespace ChainErrand {
          ChainToolMenu.Instance.HideMenu();
          ToolMenu.Instance.PriorityScreen.Show(false);
          OverlayScreen.Instance.ToggleOverlay(OverlayModes.None.ID);
+         
+         if(!ModConfig.Instance.DisableUIHelp)
+         {
+            SetToolMode(ChainToolMode.CREATE_CHAIN);
+
+            if(ChainToolMenu.Instance != default)
+            {
+               ChainToolMenu.Instance.UpdateToolModeSelectionDisplay();
+            }
+         }
       }
 
       public override void OnPrefabInit() {
@@ -162,8 +255,10 @@ namespace ChainErrand {
 
          // store prefabs:
          CREATE_AREA_GO = Util.KInstantiate(DigTool.Instance.areaVisualizer, gameObject, "ChainToolCreateAreaVisualizer");
+         CREATE_AREA_GO.SetLayerRecursively(LayerMask.NameToLayer("UI"));// same layer as DigTool's visualizer
          CREATE_AREA_GO.SetActive(false);
          DELETE_AREA_GO = Util.KInstantiate(CancelTool.Instance.areaVisualizer, gameObject, "ChainToolDeleteAreaVisualizer");
+         DELETE_AREA_GO.SetLayerRecursively(LayerMask.NameToLayer("UI"));// same layer as DigTool's visualizer
          DELETE_AREA_GO.SetActive(false);
 
          CREATE_CURSOR = DigTool.Instance.cursor;
@@ -185,7 +280,7 @@ namespace ChainErrand {
          visualizer = new GameObject("ChainToolVisualizer");
          visualizer.SetActive(false);
 
-         GameObject offsetObject = new GameObject();
+         GameObject offsetObject = new GameObject("IconOffset");
          offsetObject.SetActive(true);
          visualizerRenderer = offsetObject.AddComponent<SpriteRenderer>();
          visualizerRenderer.color = CREATE_VISUALIZER_COLOR;
@@ -200,15 +295,67 @@ namespace ChainErrand {
              Grid.CellSizeInMeters / (sprite.texture.height / sprite.pixelsPerUnit)
          );
 
-         offsetObject.SetLayerRecursively(LayerMask.NameToLayer("Overlay"));
-         visualizer.transform.SetParent(transform);
+         visualizer.SetLayerRecursively(LayerMask.NameToLayer("UI"));// same layer as DigTool's visualizer
       }
 
 
       public override void OnDragComplete(Vector3 cursorDown, Vector3 cursorUp) {
          base.OnDragComplete(cursorDown, cursorUp);
 
+         Vector2I dragMin = new Vector2I((int)Math.Floor(Math.Min(cursorDown.x, cursorUp.x)), (int)Math.Floor(Math.Min(cursorDown.y, cursorUp.y)));
+         Vector2I dragMax = new Vector2I((int)Math.Ceiling(Math.Max(cursorDown.x, cursorUp.x)), (int)Math.Ceiling(Math.Max(cursorDown.y, cursorUp.y)));
+         Extents extents = new Extents(dragMin.x, dragMin.y, dragMax.x - dragMin.x, dragMax.y - dragMin.y);
 
+         Dictionary<GameObject, HashSet<Workable>> collectedErrands = new();
+
+         var collectedGOs = Utils.CollectPrioritizableObjects(extents);
+
+         ErrandsSearchMode searchMode;
+         if(currentMode == ChainToolMode.CREATE_CHAIN || currentMode == ChainToolMode.CREATE_LINK)
+         {
+            searchMode = ErrandsSearchMode.ERRANDS_OUTSIDE_CHAIN;// only searching errands that can be added to a new chain
+         }
+         else
+         {
+            searchMode = ErrandsSearchMode.ERRANDS_INSIDE_CHAIN;// only searching errands that are already in a chain
+         }
+
+         foreach(var go in collectedGOs)
+         {
+            HashSet<Workable> errands = go.CollectFilteredErrands(out _, searchMode: searchMode);
+            if(errands != null && errands.Count > 0)
+            {
+               collectedErrands.Add(go, errands);
+            }
+         }
+
+         Debug.Log("ChainTool collectedErrands Count: " + collectedErrands.Count);
+         if(collectedErrands.Count > 0)
+         {
+            switch(currentMode)
+            {
+               case ChainToolMode.CREATE_CHAIN:
+                  ChainToolUtils.CreateNewChain(collectedErrands);
+                  break;
+
+                  case ChainToolMode.CREATE_LINK:
+                  ChainToolUtils.CreateOrExpandLink(collectedErrands);
+                  break;
+
+               case ChainToolMode.DELETE_CHAIN:
+                  ChainToolUtils.DeleteChains(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
+                  break;
+
+               case ChainToolMode.DELETE_LINK:
+                  ChainToolUtils.DeleteErrands(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
+                  break;
+            }
+
+            if(ChainToolMenu.Instance != default)
+            {
+               ChainToolMenu.Instance.UpdateNumberSelectionDisplay();
+            }
+         }
       }
 
       public override void OnDragTool(int cell, int distFromOrigin) {
@@ -223,12 +370,6 @@ namespace ChainErrand {
             var xy = Grid.CellToXY(cell);
             PUtil.LogDebug("{0} at cell ({1:D},{2:D})".F(ToolMenu.Instance.toolParameterMenu.GetLastEnabledFilter(), xy.X, xy.Y));
 #endif
-
-            GameObject building = Grid.Objects[cell, (int)ObjectLayer.Building];
-            if(building != null && !Main.chainOverlay.chainNumbers.ContainsKey(building))
-            {
-               Main.chainOverlay.CreateChainNumber(building);
-            }
          }
       }
    }

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using PeterHan.PLib.Core;
+using PeterHan.PLib.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ChainErrand {
    public static class Prefabs {
@@ -59,6 +62,114 @@ namespace ChainErrand {
 
          TryRunCode(nameof(FilterTogglePrefab));
          TryRunCode(nameof(FilterToggleReversedPrefab));
+      }
+
+      public static GameObject ArrowRightButtonPrefab = null;
+      public static GameObject ArrowLeftButtonPrefab = null;
+      public static void CreateArrowButtonsPrefab() {
+         if(ArrowRightButtonPrefab != null)
+            return;
+
+         ArrowRightButtonPrefab = new GameObject("Button");
+         var bgImage = ArrowRightButtonPrefab.AddComponent<Image>();
+         bgImage.sprite = Assets.GetSprite("web_button");
+         bgImage.type = Image.Type.Tiled;
+
+         GameObject arrow = new GameObject("Arrow");
+         arrow.SetParent(ArrowRightButtonPrefab);
+         var arrowIcon = arrow.AddComponent<Image>();
+         arrowIcon.sprite = PUITuning.Images.Arrow;
+         arrowIcon.type = Image.Type.Simple;
+         arrowIcon.preserveAspect = true;
+         arrowIcon.SetNativeSize();
+
+         StatePresentationSetting sps = new StatePresentationSetting() {
+            sprite = PUITuning.Images.Arrow,
+            color = PUITuning.Colors.ButtonPinkStyle.hoverColor,
+            color_on_hover = PUITuning.Colors.ButtonPinkStyle.activeColor,
+            use_color_on_hover = true,
+            image_target = arrowIcon,
+            name = "Arrow"
+         };
+
+         var mToggle = ArrowRightButtonPrefab.AddComponent<MultiToggle>();
+         mToggle.toggle_image = bgImage;
+         mToggle.play_sound_on_click = true;
+         mToggle.states = [
+            new ToggleState {
+               sprite = Assets.GetSprite("web_button"),
+               color = Main.whiteToggleSetting.inactiveColor,
+               color_on_hover = Main.whiteToggleSetting.hoverColor,
+               use_color_on_hover = true,
+               additional_display_settings = [sps]
+            }
+         ];
+         PCheckBox.SetCheckState(ArrowRightButtonPrefab, 0);
+
+         GameObject disabled = new GameObject("DisabledIcon");
+         disabled.SetParent(ArrowRightButtonPrefab);
+         disabled.SetActive(true);
+
+         Color disabledColor = new Color(0f, 0f, 0f, 0.4f);
+         var disabledImage = disabled.AddComponent<Image>();
+         disabledImage.color = disabledColor;
+
+         var disabledToggle = disabled.AddComponent<MultiToggle>();
+         disabledToggle.toggle_image = disabledImage;
+         disabledToggle.play_sound_on_click = true;
+         disabledToggle.states = [
+            new ToggleState {
+               color = disabledColor,
+               use_color_on_hover = false,
+               on_click_override_sound_path = "Negative",
+               additional_display_settings = [
+                  new StatePresentationSetting {// default value (to avoid crashes)
+                     image_target = null,
+                     color = Color.clear,
+                     use_color_on_hover = false,
+                  }
+               ]
+            }
+         ];
+
+         var layoutElem = ArrowRightButtonPrefab.AddOrGet<LayoutElement>();
+         layoutElem.minHeight = 24f;
+         layoutElem.minWidth = 24f;
+         layoutElem.preferredHeight = 24f;
+         layoutElem.preferredWidth = 24f;
+
+         layoutElem = arrow.AddOrGet<LayoutElement>();// arrow icon's LayoutElement
+         layoutElem.minHeight = 0f;
+         layoutElem.minWidth = 0f;
+         layoutElem.preferredHeight = 48f;
+         layoutElem.preferredWidth = 48f;
+
+         var rectTransform = arrow.rectTransform();
+         if(rectTransform != null)
+         {
+            rectTransform.anchorMin = new Vector2(0.15f, 0.15f);
+            rectTransform.anchorMax = new Vector2(0.85f, 0.85f);
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+         }
+
+         rectTransform = disabled.rectTransform();
+         if(rectTransform != null)
+         {
+            rectTransform.anchorMin = new Vector2(0f, 0f);
+            rectTransform.anchorMax = new Vector2(1f, 1f);
+            rectTransform.offsetMin = Vector2.zero;
+            rectTransform.offsetMax = Vector2.zero;
+         }
+
+
+         ArrowLeftButtonPrefab = Util.KInstantiateUI(ArrowRightButtonPrefab);
+         var scale = ArrowLeftButtonPrefab.transform.GetChild(0).localScale;
+         scale.x = -1f;// flip the arrow on y-Axis
+         ArrowLeftButtonPrefab.transform.GetChild(0).localScale = scale;
+
+         TryRunCode(nameof(ArrowRightButtonPrefab));
+         TryRunCode(nameof(ArrowLeftButtonPrefab));
       }
 
       private static void TryRunCode(string createdPrefabName) {

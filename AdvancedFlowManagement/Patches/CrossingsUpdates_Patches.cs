@@ -188,7 +188,7 @@ namespace AdvancedFlowManagement.Patches {
                         }
                      }
                   }
-                  //----------------Trying to fix illegal configurations----------------DOWN
+                  //----------------Trying to fix illegal configurations----------------UP
                }
                //----------------Switching flow directions back----------------DOWN
                foreach(int crossing_cell in crossingsCluster.Keys)

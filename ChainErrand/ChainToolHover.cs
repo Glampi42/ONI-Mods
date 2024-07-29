@@ -16,6 +16,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using ChainErrand.Strings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +28,35 @@ namespace ChainErrand {
       public override void UpdateHoverElements(List<KSelectable> selected) {
          var hoverInstance = HoverTextScreen.Instance;
          var drawer = hoverInstance.BeginDrawing();
-         //TODO change hover text appropriately
+
+         string textToDraw = "TOOL NOT FOUND";
+         if(Main.chainTool != default)
+         {
+            switch(Main.chainTool.GetToolMode())
+            {
+               case Enums.ChainToolMode.CREATE_CHAIN:
+                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN.text.ToUpper();
+                  break;
+
+               case Enums.ChainToolMode.CREATE_LINK:
+                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK.text.ToUpper();
+                  break;
+
+               case Enums.ChainToolMode.DELETE_CHAIN:
+                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN.text.ToUpper();
+                  break;
+
+               case Enums.ChainToolMode.DELETE_LINK:
+                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK.text.ToUpper();
+                  break;
+            }
+         }
 
          // Draw the tool title
          drawer.BeginShadowBar(false);
-         drawer.DrawText("Debug Hover Text", ToolTitleTextStyle);
+         drawer.DrawText(textToDraw, ToolTitleTextStyle);
          // Draw the instructions
-         ActionName = "Do Stuff";
+         ActionName = global::Strings.Get("STRINGS.UI.TOOLS.DIG.TOOLACTION");
          DrawInstructions(hoverInstance, drawer);
 
          drawer.EndShadowBar();

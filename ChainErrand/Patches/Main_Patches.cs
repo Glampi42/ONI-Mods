@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
+using static STRINGS.MISC.STATUSITEMS;
 
 namespace ChainErrand.Patches {
    public class Main_Patches {
@@ -87,6 +89,18 @@ namespace ChainErrand.Patches {
             PUtil.LogDebug(Main.debugPrefix + "Destroying ChainToolMenu");
             ChainToolMenu.DestroyInstance();
             Prefabs.DestroyPrefabs();
+         }
+      }
+
+      [HarmonyPatch(typeof(Movable), "MarkForMove")]
+      public static class Debug_Patch {
+         public static void Postfix(Movable __instance) {
+            Debug.Log("$$$Move state machine:");
+            if(__instance.TryGetComponent(out StateMachineController controller))
+            {
+               foreach(var smth in controller.stateMachines)
+                  Debug.Log(smth.GetType().ToString());
+            }
          }
       }
    }

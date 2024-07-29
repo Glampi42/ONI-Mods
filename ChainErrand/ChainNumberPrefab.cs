@@ -16,13 +16,15 @@ namespace ChainErrand {
          LocText chainNumberPrefab = UnityEngine.Object.Instantiate(OverlayScreen.Instance.powerLabelPrefab);
          chainNumberPrefab.name = "ChainNumber";
          chainNumberPrefab.raycastTarget = false;
-         UnityEngine.Object.Destroy(chainNumberPrefab.GetComponent<ContentSizeFitter>());
+         //UnityEngine.Object.Destroy(chainNumberPrefab.GetComponent<ContentSizeFitter>());
          UnityEngine.Object.Destroy(chainNumberPrefab.GetComponent<ToolTip>());
          UnityEngine.Object.Destroy(chainNumberPrefab.transform.GetChildSafe(0)?.gameObject);
-         chainNumberPrefab.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.0f);
-         chainNumberPrefab.font = Localization.GetFont("GRAYSTROKE REGULAR SDF");
+         chainNumberPrefab.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
+         chainNumberPrefab.font = Localization.GetFont("GRAYSTROKE OUTLINE SDF");
          chainNumberPrefab.alignment = TextAlignmentOptions.Center;
          chainNumberPrefab.fontSize = Main.maxChainNumberFontSize;
+         chainNumberPrefab.outlineColor = Color.white;
+         chainNumberPrefab.outlineWidth = Main.outlineWidthMultiplier * chainNumberPrefab.fontSize;
          chainNumberPrefab.characterSpacing = -1f;
          chainNumberPrefab.lineSpacing = -10f;
          chainNumberPrefab.enableKerning = true;

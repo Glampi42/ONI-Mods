@@ -15,8 +15,11 @@ namespace ChainErrand {
    public class MyUserMod2 : UserMod2 {
       public override void OnLoad(Harmony harmony) {
          base.OnLoad(harmony);
+
          PUtil.InitLibrary();
+
          Main.chainTool_binding = new PActionManager().CreateAction("glampi.ChainTool", (LocString)"ChainTool", new PKeyBinding());
+         new POptions().RegisterOptions(this, typeof(ModConfig));
       }
    }
 }
