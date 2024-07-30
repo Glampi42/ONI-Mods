@@ -27,7 +27,10 @@ namespace ChainErrand.Patches {
                   foreach(var errand in errands)
                   {
                      Debug.Log($"Adding ChainedErrand for go {prefab.gameObject.name}, errand {errand.GetType()}");
-                     var chainedErrand = prefab.gameObject.AddComponent<ChainedErrand>();
+                     var chainedErrand = prefab.gameObject.AddComponent(Utils.ChainedErrandTypeFromErrand(errand)) as ChainedErrand;
+                     if(chainedErrand == null)
+                        throw new Exception(Main.debugPrefix + $"Failed to add ChainedErrand component for errand of type {errand.GetType()}");
+
                      chainedErrand.enabled = false;
                   }
                }
@@ -39,7 +42,7 @@ namespace ChainErrand.Patches {
       /// </summary>
       /// <param name="gameObject">The GameObject</param>
       /// <returns>The errands.</returns>
-      public static HashSet<Workable> RequiredChainedErrands(GameObject gameObject) {
+      private static HashSet<Workable> RequiredChainedErrands(GameObject gameObject) {
          HashSet<Workable> errands = new();
 
          TryAdd(gameObject.GetComponent<Constructable>());

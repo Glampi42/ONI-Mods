@@ -14,7 +14,7 @@ namespace ChainErrand.ChainHierarchy {
 
       public static int ChainsCount => chains.Count;
 
-      public static void StoreChain(Chain chain) {
+      public static void StoreChain(Chain chain, int atIndex = -1) {
          chains.Add(chain);
          UpdateAllChainIDs();
 
@@ -32,15 +32,14 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       public static bool TryGetChain(int chainID, out Chain chain) {
-         chain = default;
+         chain = null;
 
          if(chainID > -1 && chainID < chains.Count)
          {
             chain = chains[chainID];
-            return true;
          }
 
-         return false;
+         return chain != null;
       }
 
       private static void UpdateAllChainIDs() {

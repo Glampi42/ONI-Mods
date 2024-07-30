@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace ChainErrand.ChainHierarchy {
    [SerializationConfig(MemberSerialization.OptIn)]
-   public class ChainedErrand : KMonoBehaviour {
+   public abstract class ChainedErrand : KMonoBehaviour {
       public Link parentLink;
 
       [Serialize]
@@ -20,6 +20,13 @@ namespace ChainErrand.ChainHierarchy {
       public Chore chore;
       [Serialize]
       public Ref<KPrefabID> chainNumberBearer;// the GameObject that the chain number will be displayed on (isn't always the GameObject that has the errand component: f.e. MoveTo errand)
+
+      [Serialize]
+      private int serializedChainID;
+      [Serialize]
+      private int serializedLinkNumber;
+      [Serialize]
+      private Color serializedChainColor;
 
       public void ConfigureChorePrecondition(Chore chore = null) {
          if(chore == null)
@@ -68,19 +75,14 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       private bool TrySetOwnerErrand() {
-         Debug.Log("TrySetOwnerErrand for " + this.gameObject.name);
-         var potentialOwners = ChainManager_Patches.RequiredChainedErrands(this.gameObject);
-         if(potentialOwners != null && potentialOwners.Count > 0)
+         Type errandType = Utils.ChainedErrandToErrandType(this);
+         if(!errandType.IsSubclassOf(typeof(Workable)))
+            throw new Exception(Main.debugPrefix + $"Failed to get the owner errand type for ChainedErrand {this.GetType()}");
+
+         Workable ownerErrand = (Workable)this.gameObject.GetComponent(errandType);
+         if(ownerErrand != null)
          {
-            foreach(var owner in potentialOwners)
-            {
-               if(!owner.TryGetCorrespondingChainedErrand(out _, true))// the errand doesn't already have a ChainedErrand component
-               {
-                  Debug.Log("Found owner: " + owner.GetType().ToString());
-                  errand = new Ref<Workable>(owner);
-                  break;
-               }
-            }
+            errand = new Ref<Workable>(ownerErrand);
          }
 
          return errand?.Get() != null;
@@ -127,4 +129,12 @@ namespace ChainErrand.ChainHierarchy {
          }
       }
    }
+
+
+   public class ChainedErrand_Constructable : ChainedErrand { }
+   public class ChainedErrand_Deconstructable : ChainedErrand { }
+   public class ChainedErrand_Diggable : ChainedErrand { }
+   public class ChainedErrand_Moppable : ChainedErrand { }
+   public class ChainedErrand_EmptyConduitWorkable : ChainedErrand { }
+   public class ChainedErrand_Movable : ChainedErrand { }
 }
