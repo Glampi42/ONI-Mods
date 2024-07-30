@@ -1,5 +1,6 @@
 ﻿using ChainErrand.ChainHierarchy;
 using HarmonyLib;
+using KSerialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,6 @@ namespace ChainErrand.Patches {
                {
                   foreach(var errand in errands)
                   {
-                     Debug.Log($"Adding ChainedErrand for go {prefab.gameObject.name}, errand {errand.GetType()}");
                      var chainedErrand = prefab.gameObject.AddComponent(Utils.ChainedErrandTypeFromErrand(errand)) as ChainedErrand;
                      if(chainedErrand == null)
                         throw new Exception(Main.debugPrefix + $"Failed to add ChainedErrand component for errand of type {errand.GetType()}");
@@ -57,6 +57,13 @@ namespace ChainErrand.Patches {
          void TryAdd(Workable errand) {
             if(errand != null)
                errands.Add(errand);
+         }
+      }
+
+      [HarmonyPatch(typeof(Game), "Load")]
+      public static class ClearEmptyChains_Patch {
+         public static void Postfix(Deserializer deserializer) {
+            SerializationUtils.CleanupEmptyDeserializedChains();
          }
       }
    }

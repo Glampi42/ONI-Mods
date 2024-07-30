@@ -24,60 +24,96 @@ namespace ChainErrand.ChainHierarchy {
       /// <param name="linkNumber">The number of the specified link</param>
       /// <param name="insertNewLink">Whether a new link should be inserted at the specified index, or the specified link should be expanded</param>
       /// <param name="linkErrands">The errands to be added to the link</param>
-      public void CreateOrExpandLink(int linkNumber, bool insertNewLink, Dictionary<GameObject, HashSet<Workable>> linkErrands) {
+      /// <param name="forceInsertAtLinkNumber">If true, a link will be inserted(not expanded) at the desired index even if it surpasses the current links count</param>
+      /// <returns>The newly created/expanded link.</returns>
+      public Link CreateOrExpandLink(int linkNumber, bool insertNewLink, Dictionary<GameObject, HashSet<Workable>> linkErrands, bool forceInsertAtLinkNumber = false) {
+         Debug.Log($"CreateOrExpandLink, chain {this.chainID}");
          Link link;
-         if(links.Count == 0 || insertNewLink || linkNumber >= links.Count)
+         if(!forceInsertAtLinkNumber)
          {
-            int insertNumber = Math.Min(linkNumber, links.Count);
-            link = new Link(this, insertNumber);
-            links.Insert(insertNumber, link);
+            if(links.Count == 0 || insertNewLink || linkNumber >= links.Count)
+            {
+               int insertNumber = Math.Min(linkNumber, links.Count);
+               link = new Link(this, insertNumber);
+               links.Insert(insertNumber, link);
+            }
+            else
+            {
+               link = links[linkNumber];
+            }
          }
          else
          {
-            link = links[linkNumber];
+            Debug.Log("start count: " + links.Count);
+            Debug.Log("linkNumber: " + linkNumber);
+            if(linkNumber > links.Count)
+            {
+               int repeat = linkNumber - links.Count;
+               for(int i = 0; i < repeat; i++)
+                  links.Add(null);// add temporary null entries to enable inserting the link at the desired index
+            }
+
+            if(linkNumber < links.Count && links[linkNumber] == null)
+            {
+               links.RemoveAt(linkNumber);// replacing the null entry with this chain
+            }
+            link = new Link(this, linkNumber);
+            Debug.Log("count: " + links.Count);
+            Debug.Log("linkNumber: " + linkNumber);
+            links.Insert(linkNumber, link);
          }
          UpdateAllLinkNumbers();
 
-         HashSet<ChainedErrand> newErrands = new();
-         foreach(var pair in linkErrands)
+         if(linkErrands != null)
          {
-            foreach(var errand in pair.Value)
+            HashSet<ChainedErrand> newErrands = new();
+            foreach(var pair in linkErrands)
             {
-               if(errand.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand, true))
+               foreach(var errand in pair.Value)
                {
-                  chainedErrand.enabled = true;
-                  chainedErrand.parentLink = link;
-                  chainedErrand.chainNumberBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
+                  if(errand.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand, true))
+                  {
+                     chainedErrand.enabled = true;
+                     chainedErrand.parentLink = link;
+                     chainedErrand.chainNumberBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
 
-                  chainedErrand.ConfigureChorePrecondition();
-                  chainedErrand.UpdateChainNumber();
+                     chainedErrand.ConfigureChorePrecondition();
+                     chainedErrand.UpdateChainNumber();
 
-                  newErrands.Add(chainedErrand);
-               }
-               else
-               {
-                  Debug.LogWarning(Main.debugPrefix + $"Tried to add errand of type {errand.GetType()} of the GameObject {pair.Key.name} to a chain, but it didn't have a related ChainedErrand component");
+                     newErrands.Add(chainedErrand);
+                  }
+                  else
+                  {
+                     Debug.LogWarning(Main.debugPrefix + $"Tried to add errand of type {errand.GetType()} of the GameObject {pair.Key.name} to a chain, but it didn't have a related ChainedErrand component");
+                  }
                }
             }
+
+            link.errands.AddRange(newErrands);
          }
 
-         link.errands.AddRange(newErrands);
+         return link;
       }
 
       public bool TryGetLink(int linkNum, out Link link) {
-         link = default;
-
+         link = GetLink(linkNum);
+         return link != null;
+      }
+      public Link GetLink(int linkNum) {
          if(linkNum > -1 && linkNum < links.Count)
          {
-            link = links[linkNum];
-            return true;
+            return links[linkNum];
          }
-
-         return false;
+         return null;
       }
 
       public void RemoveLink(Link link) {
          links.Remove(link);
+         UpdateAllLinkNumbers();
+      }
+
+      public void RemoveNullLinks() {
+         links = links.Where(x => x != null).ToList();
          UpdateAllLinkNumbers();
       }
 
@@ -88,6 +124,9 @@ namespace ChainErrand.ChainHierarchy {
       private void UpdateAllLinkNumbers() {
          for(int index = 0; index < links.Count; index++)
          {
+            if(links[index] == null)
+               continue;
+
             bool changed = links[index].linkNumber != index;
 
             links[index].linkNumber = index;
@@ -100,6 +139,9 @@ namespace ChainErrand.ChainHierarchy {
       public void Remove(bool removeFromChainsContainer) {
          foreach(var link in links)
          {
+            if(link == null)
+               continue;
+
             link.Remove(false);
          }
          links.Clear();

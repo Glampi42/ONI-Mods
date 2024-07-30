@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ChainErrand.Strings.MYSTRINGS.UI.TOOLS;
 
 namespace ChainErrand.ChainHierarchy {
    /// <summary>
@@ -15,10 +16,28 @@ namespace ChainErrand.ChainHierarchy {
       public static int ChainsCount => chains.Count;
 
       public static void StoreChain(Chain chain, int atIndex = -1) {
-         chains.Add(chain);
+         if(atIndex == -1)
+         {
+            chains.Add(chain);
+         }
+         else
+         {
+            if(atIndex > chains.Count)
+            {
+               int repeat = atIndex - chains.Count;
+               for(int i = 0; i < repeat; i++)
+                  chains.Add(null);// add temporary null entries to enable inserting the chain at the desired index
+            }
+
+            if(atIndex < chains.Count && chains[atIndex] == null)
+            {
+               chains.RemoveAt(atIndex);// replacing the null entry with this chain
+            }
+            chains.Insert(atIndex, chain);
+         }
          UpdateAllChainIDs();
 
-         ChainToolMenu.Instance.UpdateNumberSelectionDisplay();
+         ChainToolMenu.Instance?.UpdateNumberSelectionDisplay();
       }
 
       public static void RemoveChain(Chain chain) {
@@ -31,21 +50,30 @@ namespace ChainErrand.ChainHierarchy {
          UpdateAllChainIDs();
       }
 
-      public static bool TryGetChain(int chainID, out Chain chain) {
-         chain = null;
+      public static void RemoveNullChains() {
+         chains = chains.Where(x => x != null).ToList();
+         UpdateAllChainIDs();
+      }
 
+      public static bool TryGetChain(int chainID, out Chain chain) {
+         chain = GetChain(chainID);
+         return chain != null;
+      }
+      public static Chain GetChain(int chainID) {
          if(chainID > -1 && chainID < chains.Count)
          {
-            chain = chains[chainID];
+            return chains[chainID];
          }
-
-         return chain != null;
+         return null;
       }
 
       private static void UpdateAllChainIDs() {
          for(int index = 0; index < chains.Count; index++)
          {
-            chains[index].chainID = index;
+            if(chains[index] != null)
+            {
+               chains[index].chainID = index;
+            }
          }
       }
    }

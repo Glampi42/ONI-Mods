@@ -68,10 +68,18 @@ namespace ChainErrand.ChainHierarchy {
                UnityEngine.Object.Destroy(this);
             }
          }
-         else// this ChainedErrand component was already there when the save file was created and got properly deserialized; have to recreate its chain
+         else// this ChainedErrand component was already there when the save file was created; have to recreate its chain
          {
-            Debug.Log("It has this: " + errand.Get().GetType().ToString());
+            SerializationUtils.ReconstructChain(serializedChainID, serializedLinkNumber, this, serializedChainColor);
          }
+      }
+
+      [OnSerializing]
+      public void OnSerializing() {
+         Debug.Log("ChainedErrand.OnSerializing");
+         serializedChainID = parentLink?.parentChain?.chainID ?? -1;
+         serializedLinkNumber = parentLink?.linkNumber ?? -1;
+         serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
       }
 
       private bool TrySetOwnerErrand() {
