@@ -129,13 +129,13 @@ namespace ChainErrand {
       /// </summary>
       /// <param name="targetNum">The argument that tells which chain should be selected</param>
       public void SetSelectedChain(int targetNum) {
-         if(ChainsContainer.Instance.ChainsCount > 0)
+         if(ChainsContainer.ChainsCount > 0)
          {
             if(targetNum < 0)
             {
-               selectedChain = ChainsContainer.Instance.ChainsCount - 1;// for looping around
+               selectedChain = ChainsContainer.ChainsCount - 1;// for looping around
             }
-            else if(targetNum >= ChainsContainer.Instance.ChainsCount)
+            else if(targetNum >= ChainsContainer.ChainsCount)
             {
                selectedChain = 0;// for looping around
             }
@@ -150,7 +150,7 @@ namespace ChainErrand {
          }
 
          // updating selected link:
-         if(ChainsContainer.Instance.TryGetChain(selectedChain, out Chain chain))
+         if(ChainsContainer.TryGetChain(selectedChain, out Chain chain))
          {
             SetSelectedLink(chain.LastLinkNumber() + 1, true);
          }
@@ -173,7 +173,7 @@ namespace ChainErrand {
       /// <param name="targetNum">The argument that tells which link should be selected</param>
       /// <param name="insertNewLink">Whether the link should be inserted or extended</param>
       public void SetSelectedLink(int targetNum, bool insertNewLink) {
-         if(ChainsContainer.Instance.TryGetChain(selectedChain, out Chain chain))
+         if(ChainsContainer.TryGetChain(selectedChain, out Chain chain))
          {
             if(targetNum < 0)
                targetNum = int.MaxValue;// -1 == last link, for the ease of use

@@ -23,10 +23,9 @@ namespace ChainErrand.Structs {
          this.parent = parent;
          this.relatedErrand = relatedErrand;
          CachePositionOffset();
+         kAnimControllerBase = parent.GetComponent<KAnimControllerBase>();
          UpdatePosition();
          displayedLocText.transform.SetAsLastSibling();
-
-         kAnimControllerBase = parent.GetComponent<KAnimControllerBase>();
 
          displayedLocText.color = color;
 

@@ -182,12 +182,12 @@ namespace ChainErrand {
       }
 
       public static void CreateNewChain(Dictionary<GameObject, HashSet<Workable>> firstLinkErrands) {
-         Chain chain = new Chain(ChainsContainer.Instance.ChainsCount, UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 0.9f, 0.6f, 0.9f));
-         ChainsContainer.Instance.StoreChain(chain);
+         Chain chain = new Chain(ChainsContainer.ChainsCount, UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 0.9f, 0.6f, 0.9f));
+         ChainsContainer.StoreChain(chain);
 
          chain.CreateOrExpandLink(0, false, firstLinkErrands);
 
-         Main.chainTool.SetSelectedChain(ChainsContainer.Instance.ChainsCount - 1);
+         Main.chainTool.SetSelectedChain(ChainsContainer.ChainsCount - 1);
 
          if(!ModConfig.Instance.DisableUIHelp && ChainToolMenu.Instance != default)
          {
@@ -200,7 +200,7 @@ namespace ChainErrand {
       /// </summary>
       /// <param name="linkErrands">The errands to be added to the link</param>
       public static void CreateOrExpandLink(Dictionary<GameObject, HashSet<Workable>> linkErrands) {
-         if(ChainsContainer.Instance.TryGetChain(Main.chainTool.GetSelectedChain(), out Chain chain))
+         if(ChainsContainer.TryGetChain(Main.chainTool.GetSelectedChain(), out Chain chain))
          {
             bool createdLastLink = Main.chainTool.GetSelectedLink() > chain.LastLinkNumber();
             chain.CreateOrExpandLink(Main.chainTool.GetSelectedLink(), Main.chainTool.GetInsertNewLink(), linkErrands);
@@ -226,7 +226,7 @@ namespace ChainErrand {
          foreach(var chain in chainsToDelete)
          {
             Debug.Log("Removing chain " + chain.chainID);
-            ChainsContainer.Instance.RemoveChain(chain);
+            ChainsContainer.RemoveChain(chain);
          }
       }
 

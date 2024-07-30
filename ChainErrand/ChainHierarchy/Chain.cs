@@ -43,15 +43,21 @@ namespace ChainErrand.ChainHierarchy {
          {
             foreach(var errand in pair.Value)
             {
-               ChainedErrand chainedErrand = errand.gameObject.AddComponent<ChainedErrand>();
-               chainedErrand.parentLink = link;
-               chainedErrand.errand = errand;
-               chainedErrand.chainNumberBearer = pair.Key;
+               if(errand.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand, true))
+               {
+                  chainedErrand.enabled = true;
+                  chainedErrand.parentLink = link;
+                  chainedErrand.chainNumberBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
 
-               chainedErrand.ConfigureChorePrecondition();
-               chainedErrand.UpdateChainNumber();
+                  chainedErrand.ConfigureChorePrecondition();
+                  chainedErrand.UpdateChainNumber();
 
-               newErrands.Add(chainedErrand);
+                  newErrands.Add(chainedErrand);
+               }
+               else
+               {
+                  Debug.LogWarning(Main.debugPrefix + $"Tried to add errand of type {errand.GetType()} of the GameObject {pair.Key.name} to a chain, but it didn't have a related ChainedErrand component");
+               }
             }
          }
 
@@ -100,7 +106,7 @@ namespace ChainErrand.ChainHierarchy {
 
          if(removeFromChainsContainer)
          {
-            ChainsContainer.Instance.RemoveChain(this);
+            ChainsContainer.RemoveChain(this);
 
             if(chainID < Main.chainTool.GetSelectedChain())
             {

@@ -345,6 +345,9 @@ namespace ChainErrand {
       }
 
       public void UpdateChainNumber(GameObject parentGO, Workable relatedErrand, Link link) {
+         if(parentGO == null || relatedErrand == null)
+            return;
+
          if(chainNumbers.TryGetChainNumber(parentGO, relatedErrand, out ChainNumber chainNumber))
          {
             UpdateChainNumber(chainNumber, link);

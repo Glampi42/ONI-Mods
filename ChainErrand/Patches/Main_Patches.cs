@@ -1,5 +1,7 @@
-﻿using ChainErrand.Strings;
+﻿using ChainErrand.ChainHierarchy;
+using ChainErrand.Strings;
 using HarmonyLib;
+using KSerialization;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.PatchManager;
 using PeterHan.PLib.UI;
@@ -92,15 +94,17 @@ namespace ChainErrand.Patches {
          }
       }
 
-      [HarmonyPatch(typeof(Movable), "MarkForMove")]
-      public static class Debug_Patch {
-         public static void Postfix(Movable __instance) {
-            Debug.Log("$$$Move state machine:");
-            if(__instance.TryGetComponent(out StateMachineController controller))
-            {
-               foreach(var smth in controller.stateMachines)
-                  Debug.Log(smth.GetType().ToString());
-            }
+      [HarmonyPatch(typeof(Game), "Load")]
+      public static class OnGameLoad_Patch {
+         public static void Postfix(Deserializer deserializer, Game __instance) {
+            Debug.Log("$$$Game.Loaded");
+            Main.IsGameLoaded = true;
+         }
+      }
+      [HarmonyPatch(typeof(Game), "OnDestroy")]
+      public static class OnGameDestroy_Patch {
+         public static void Postfix() {
+            Main.IsGameLoaded = false;
          }
       }
    }

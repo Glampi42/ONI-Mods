@@ -84,6 +84,9 @@ namespace ChainErrand {
       }
 
       public static Chore GetChoreFromErrand(Workable errand) {
+         if(errand == null)
+            return null;
+
          if(errand is Constructable constructable)
          {
             return constructable.buildChore;
@@ -159,13 +162,14 @@ namespace ChainErrand {
       /// </summary>
       /// <param name="errand">The errand</param>
       /// <param name="chainedErrand">The retrieved ChainedErrand</param>
+      /// <param name="allowDisabled">If true, the ChainedErrand component may be disabled</param>
       /// <returns>True if such ChainedErrand was found; false otherwise.</returns>
-      public static bool TryGetCorrespondingChainedErrand(this Workable errand, out ChainedErrand chainedErrand) {
+      public static bool TryGetCorrespondingChainedErrand(this Workable errand, out ChainedErrand chainedErrand, bool allowDisabled = false) {
          chainedErrand = null;
 
          if(errand.TryGetComponents(out ChainedErrand[] cEs))
          {
-            chainedErrand = cEs.FirstOrDefault(ce => ce.errand == errand);
+            chainedErrand = cEs.FirstOrDefault(ce => (allowDisabled || ce.enabled) && ce.errand?.Get() == errand);
          }
 
          return chainedErrand != null;
@@ -182,7 +186,7 @@ namespace ChainErrand {
 
          if(go.TryGetComponents(out ChainedErrand[] cEs))
          {
-            chainedErrand = cEs.FirstOrDefault(ce => ce.chore == chore);
+            chainedErrand = cEs.FirstOrDefault(ce => ce.enabled && ce.chore == chore);
          }
 
          return chainedErrand != null;

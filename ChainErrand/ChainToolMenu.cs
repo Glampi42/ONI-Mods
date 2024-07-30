@@ -177,7 +177,7 @@ namespace ChainErrand {
          if(this.content == null)
             return;
 
-         if(ChainsContainer.Instance.ChainsCount > 1)
+         if(ChainsContainer.ChainsCount > 1)
          {
             SetArrowButtonEnabled(chainNumDecrease, true);
             SetArrowButtonEnabled(chainNumIncrease, true);
@@ -187,7 +187,7 @@ namespace ChainErrand {
             SetArrowButtonEnabled(chainNumDecrease, false);
             SetArrowButtonEnabled(chainNumIncrease, false);
          }
-         if(ChainsContainer.Instance.ChainsCount > 0)
+         if(ChainsContainer.ChainsCount > 0)
          {
             SetTextFieldText(chainNumberField, Main.chainTool.GetSelectedChain().ToString());
          }
@@ -196,7 +196,7 @@ namespace ChainErrand {
             SetTextFieldText(chainNumberField, MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND);
          }
 
-         if(ChainsContainer.Instance.TryGetChain(Main.chainTool.GetSelectedChain(), out Chain chain))
+         if(ChainsContainer.TryGetChain(Main.chainTool.GetSelectedChain(), out Chain chain))
          {
             SetArrowButtonEnabled(linkNumDecrease, Main.chainTool.GetSelectedLink() > 0 || !Main.chainTool.GetInsertNewLink());// true if previous link(s) exist
             SetArrowButtonEnabled(linkNumIncrease, Main.chainTool.GetSelectedLink() <= chain.LastLinkNumber());// true if next link(s) exist

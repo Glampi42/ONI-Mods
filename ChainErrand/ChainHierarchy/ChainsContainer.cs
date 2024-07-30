@@ -9,21 +9,19 @@ namespace ChainErrand.ChainHierarchy {
    /// <summary>
    /// Stores all existing chains.
    /// </summary>
-   [SerializationConfig(MemberSerialization.OptIn)]
-   public class ChainsContainer : KMonoBehaviour {
-      //[Serialize]
-      private List<Chain> chains = new();
+   public static class ChainsContainer {
+      private static List<Chain> chains = new();
 
-      public int ChainsCount => chains.Count;
+      public static int ChainsCount => chains.Count;
 
-      public void StoreChain(Chain chain) {
+      public static void StoreChain(Chain chain) {
          chains.Add(chain);
          UpdateAllChainIDs();
 
          ChainToolMenu.Instance.UpdateNumberSelectionDisplay();
       }
 
-      public void RemoveChain(Chain chain) {
+      public static void RemoveChain(Chain chain) {
          if(chain == null)
             return;
 
@@ -33,7 +31,7 @@ namespace ChainErrand.ChainHierarchy {
          UpdateAllChainIDs();
       }
 
-      public bool TryGetChain(int chainID, out Chain chain) {
+      public static bool TryGetChain(int chainID, out Chain chain) {
          chain = default;
 
          if(chainID > -1 && chainID < chains.Count)
@@ -45,12 +43,7 @@ namespace ChainErrand.ChainHierarchy {
          return false;
       }
 
-      public static ChainsContainer Instance { get; private set; }
-      public ChainsContainer() {
-         Instance = this;
-      }
-
-      private void UpdateAllChainIDs() {
+      private static void UpdateAllChainIDs() {
          for(int index = 0; index < chains.Count; index++)
          {
             chains[index].chainID = index;

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChainErrand;
+using ChainErrand.ChainHierarchy;
 using ChainErrand.Enums;
+using ChainErrand.Strings;
 using PeterHan.PLib.Actions;
 using PeterHan.PLib.UI;
 using UnityEngine;
@@ -24,10 +26,25 @@ namespace ChainErrand {
 
       public static readonly Color DefaultChainNumberColor = PUITuning.Colors.ButtonPinkStyle.activeColor;
 
+      public static readonly Chore.Precondition ChainedErrandPrecondition = new() {
+         id = nameof(ChainedErrandPrecondition),
+         description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK,
+         fn = (ref Chore.Precondition.Context context, object _) => {
+            if(context.chore.TryGetCorrespondingChainedErrand(context.chore.prioritizable.gameObject, out ChainedErrand chainedErrand))
+            {
+               return chainedErrand.parentLink == null || chainedErrand.parentLink.linkNumber == 0;
+            }
+
+            return false;
+         }
+      };
+
       public static PAction chainTool_binding;
 
       public static ChainOverlay chainOverlay;
       public static ChainTool chainTool;
+
+      public static bool IsGameLoaded = false;
 
       static Main() {
          Color gray = new Color(0.784f, 0.784f, 0.784f, 1f);
