@@ -10,8 +10,7 @@ using static STRINGS.MISC.STATUSITEMS;
 
 namespace ChainErrand.Patches {
    /// <summary>
-   /// This class contains patches that update errands' display in the ChainOverlay as well as their existance in the chain
-   /// if that errand was finished/deleted/just began (pipe was emptied, deconstruct was canceled etc.).
+   /// This class contains patches that update errands' display in the ChainOverlay.
    /// </summary>
    public class UpdateErrands_Patches {
       //------------------------Create------------------------DOWN
