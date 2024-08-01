@@ -16,8 +16,7 @@ namespace ChainErrand.ChainHierarchy {
    public abstract class ChainedErrand : KMonoBehaviour {
       public Link parentLink;
 
-      [Serialize]
-      public Ref<Workable> errand;
+      public abstract Workable Errand { get; protected set; }
       public Chore chore;
       [Serialize]
       public Ref<KPrefabID> chainNumberBearer;// the GameObject that the chain number will be displayed on (isn't always the GameObject that has the errand component: f.e. MoveTo errand)
@@ -30,10 +29,10 @@ namespace ChainErrand.ChainHierarchy {
       private Color serializedChainColor;
 
       public void ConfigureChorePrecondition(Chore chore = null) {
-         Debug.Log("ConfigureChorePrecondition errand: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
+         Debug.Log("ConfigureChorePrecondition errand: " + (Errand?.GetType().ToString() ?? "NULL"));
          Debug.Log("This is " + this.GetType());
          if(chore == null)
-            chore = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetChoreFromErrand(errand?.Get());
+            chore = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetChoreFromErrand(Errand);
          
          this.chore = chore;
 
@@ -63,8 +62,8 @@ namespace ChainErrand.ChainHierarchy {
       [OnDeserialized]
       public void OnDeserialized() {
          Debug.Log("ChainedErrand.OnDeserialized");
-         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
-         if(errand?.Get() == null)// this ChainedErrand component was added to its GameObject's prefab for the first time; have to set owner errand
+         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
+         if(Errand == null)// this ChainedErrand component was added to its GameObject's prefab for the first time; have to set owner errand
          {
             if(!TrySetOwnerErrand())
             {
@@ -81,7 +80,7 @@ namespace ChainErrand.ChainHierarchy {
       [OnSerializing]
       public void OnSerializing() {
          Debug.Log("ChainedErrand.OnSerializing");
-         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
+         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
          serializedChainID = parentLink?.parentChain?.chainID ?? -1;
          serializedLinkNumber = parentLink?.linkNumber ?? -1;
          serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
@@ -89,12 +88,12 @@ namespace ChainErrand.ChainHierarchy {
       [OnSerialized]
       public void OnSerializedDebug() {
          Debug.Log("ChainedErrand.OnSerialized");
-         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
+         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
       }
       [OnDeserializing]
       public void OnDeserializingDebug() {
          Debug.Log("ChainedErrand.OnDeserializing");
-         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
+         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
       }
 
       private bool TrySetOwnerErrand() {
@@ -105,10 +104,10 @@ namespace ChainErrand.ChainHierarchy {
          if(ownerErrand != null)
          {
             Debug.Log("And its: " + ownerErrand.GetType());
-            errand = new Ref<Workable>(ownerErrand);
+            Errand = ownerErrand;
          }
 
-         return errand?.Get() != null;
+         return Errand != null;
       }
 
       public override void OnCleanUp() {
@@ -121,7 +120,7 @@ namespace ChainErrand.ChainHierarchy {
          if(Main.chainOverlay != default)
          {
             Debug.Log("UpdateChainNumber, bearer not null: " + (chainNumberBearer?.Get()?.gameObject != null));
-            Main.chainOverlay.UpdateChainNumber(chainNumberBearer?.Get()?.gameObject, errand?.Get(), parentLink);
+            Main.chainOverlay.UpdateChainNumber(chainNumberBearer?.Get()?.gameObject, Errand, parentLink);
          }
       }
 
@@ -156,10 +155,46 @@ namespace ChainErrand.ChainHierarchy {
    }
 
 
-   public class ChainedErrand_Constructable : ChainedErrand { }
-   public class ChainedErrand_Deconstructable : ChainedErrand { }
-   public class ChainedErrand_Diggable : ChainedErrand { }
-   public class ChainedErrand_Moppable : ChainedErrand { }
-   public class ChainedErrand_EmptyConduitWorkable : ChainedErrand { }
-   public class ChainedErrand_Movable : ChainedErrand { }
+   [SerializationConfig(MemberSerialization.OptIn)]
+   public class ChainedErrand_Constructable : ChainedErrand {
+      [Serialize]
+      private Ref<Constructable> errand;
+
+      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Constructable>(value as Constructable); }
+   }
+   [SerializationConfig(MemberSerialization.OptIn)]
+   public class ChainedErrand_Deconstructable : ChainedErrand {
+      [Serialize]
+      private Ref<Deconstructable> errand;
+
+      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Deconstructable>(value as Deconstructable); }
+   }
+   [SerializationConfig(MemberSerialization.OptIn)]
+   public class ChainedErrand_Diggable : ChainedErrand {
+      [Serialize]
+      private Ref<Diggable> errand;
+
+      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Diggable>(value as Diggable); }
+   }
+   [SerializationConfig(MemberSerialization.OptIn)]
+   public class ChainedErrand_Moppable : ChainedErrand {
+      [Serialize]
+      private Ref<Moppable> errand;
+
+      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Moppable>(value as Moppable); }
+   }
+   [SerializationConfig(MemberSerialization.OptIn)]
+   public class ChainedErrand_EmptyConduitWorkable : ChainedErrand {
+      [Serialize]
+      private Ref<EmptyConduitWorkable> errand;
+
+      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<EmptyConduitWorkable>(value as EmptyConduitWorkable); }
+   }
+   [SerializationConfig(MemberSerialization.OptIn)]
+   public class ChainedErrand_Movable : ChainedErrand {
+      [Serialize]
+      private Ref<Movable> errand;
+
+      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Movable>(value as Movable); }
+   }
 }

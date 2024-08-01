@@ -119,7 +119,7 @@ namespace ChainErrand.Patches {
                foreach(var chainedErrand in chainedErrands)
                {
                   Debug.Log(chainedErrand.GetType());
-                  Debug.Log(chainedErrand.errand?.Get()?.GetType().ToString() ?? "NULL");
+                  Debug.Log(chainedErrand.Errand?.GetType().ToString() ?? "NULL");
                }
             }
          }
