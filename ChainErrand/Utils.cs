@@ -1,4 +1,5 @@
-﻿using ChainErrand.ChainHierarchy;
+﻿using ChainErrand.ChainedErrandPacks;
+using ChainErrand.ChainHierarchy;
 using ChainErrand.Strings;
 using System;
 using System.Collections.Generic;
@@ -13,77 +14,7 @@ using static KSnap;
 
 namespace ChainErrand {
    public static class Utils {
-      /// <summary>
-      /// Retrieves the correct ChainedErrand type for the specified errand.
-      /// </summary>
-      /// <param name="errand">The errand</param>
-      /// <returns>The ChainedErrand's type.</returns>
-      public static Type ChainedErrandTypeFromErrand(Workable errand) {
-         if(errand is Constructable)
-         {
-            return typeof(ChainedErrand_Constructable);
-         }
-         else if(errand is Deconstructable)
-         {
-            return typeof(ChainedErrand_Deconstructable);
-         }
-         else if(errand is Diggable)
-         {
-            return typeof(ChainedErrand_Diggable);
-         }
-         else if(errand is Moppable)
-         {
-            return typeof(ChainedErrand_Moppable);
-         }
-         else if(errand is EmptyConduitWorkable)
-         {
-            return typeof(ChainedErrand_EmptyConduitWorkable);
-         }
-         else if(errand is Movable)
-         {
-            return typeof(ChainedErrand_Movable);
-         }
-         else
-         {
-            throw new ArgumentException(Main.debugPrefix + $"No corresponding ChainedErrand type found for errand of type {errand.GetType()}");
-         }
-      }
-      /// <summary>
-      /// Retrieves the correct errand type for the specified ChainedErrand.
-      /// </summary>
-      /// <param name="chainedErrand">The ChainedErrand</param>
-      /// <returns>The errand's type.</returns>
-      public static Type ChainedErrandToErrandType(ChainedErrand chainedErrand) {
-         if(chainedErrand is ChainedErrand_Constructable)
-         {
-            return typeof(Constructable);
-         }
-         else if(chainedErrand is ChainedErrand_Deconstructable)
-         {
-            return typeof(Deconstructable);
-         }
-         else if(chainedErrand is ChainedErrand_Diggable)
-         {
-            return typeof(Diggable);
-         }
-         else if(chainedErrand is ChainedErrand_Moppable)
-         {
-            return typeof(Moppable);
-         }
-         else if(chainedErrand is ChainedErrand_EmptyConduitWorkable)
-         {
-            return typeof(EmptyConduitWorkable);
-         }
-         else if(chainedErrand is ChainedErrand_Movable)
-         {
-            return typeof(Movable);
-         }
-         else
-         {
-            throw new ArgumentException(Main.debugPrefix + $"No corresponding Errand type found for ChainedErrand of type {chainedErrand.GetType()}");
-         }
-      }
-
+      public static readonly BindingFlags GeneralBindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
       public static HashSet<ObjectLayer> ObjectLayersFromChainToolFilter(ChainToolFilter filter) {
          HashSet<ObjectLayer> layers = new();
@@ -155,45 +86,6 @@ namespace ChainErrand {
          }
       }
 
-      public static Chore GetChoreFromErrand(Workable errand) {
-         if(errand == null)
-            return null;
-
-         if(errand is Constructable constructable)
-         {
-            return constructable.buildChore;
-         }
-         else if(errand is Deconstructable deconstructable)
-         {
-            return deconstructable.chore;
-         }
-         else if(errand is Diggable diggable)
-         {
-            return diggable.chore;
-         }
-         else if(errand is Moppable)
-         {
-            if(errand.TryGetComponent(out StateMachineController controller))
-            {
-               var workChore = (WorkChore<Moppable>.StatesInstance)controller.stateMachines.FirstOrDefault(sm => sm.GetType() == typeof(WorkChore<Moppable>.StatesInstance));
-               return (Chore)workChore?.master;
-            }
-         }
-         else if(errand is EmptyConduitWorkable emptyPipe)
-         {
-            return emptyPipe.chore;
-         }
-         else if(errand is Movable movable)
-         {
-            if(movable.StorageProxy?.TryGetComponent(out CancellableMove cancellableMove) ?? false)
-            {
-               return cancellableMove.fetchChore;
-            }
-         }
-
-         return null;
-      }
-
       public static HashSet<GameObject> CollectPrioritizableObjects(Extents extents) {
          HashSet<GameObject> collectedGOs = new();
 
@@ -239,7 +131,8 @@ namespace ChainErrand {
       public static bool TryGetCorrespondingChainedErrand(this Workable errand, out ChainedErrand chainedErrand, bool allowDisabled = false) {
          chainedErrand = null;
 
-         if(errand.TryGetComponent(ChainedErrandTypeFromErrand(errand), out Component ce) && (allowDisabled || ((KMonoBehaviour)ce).enabled))
+         Type chainedErrandType = ChainedErrandPackRegistry.GetChainedErrandPack(errand).GetChainedErrandType();
+         if(errand.TryGetComponent(chainedErrandType, out Component ce) && (allowDisabled || ((KMonoBehaviour)ce).enabled))
          {
             chainedErrand = ce as ChainedErrand;
          }

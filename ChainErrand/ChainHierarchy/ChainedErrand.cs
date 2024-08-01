@@ -1,4 +1,5 @@
-﻿using ChainErrand.Patches;
+﻿using ChainErrand.ChainedErrandPacks;
+using ChainErrand.Patches;
 using ChainErrand.Strings;
 using KSerialization;
 using System;
@@ -29,8 +30,10 @@ namespace ChainErrand.ChainHierarchy {
       private Color serializedChainColor;
 
       public void ConfigureChorePrecondition(Chore chore = null) {
+         Debug.Log("ConfigureChorePrecondition errand: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
+         Debug.Log("This is " + this.GetType());
          if(chore == null)
-            chore = Utils.GetChoreFromErrand(errand?.Get());
+            chore = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetChoreFromErrand(errand?.Get());
          
          this.chore = chore;
 
@@ -42,7 +45,7 @@ namespace ChainErrand.ChainHierarchy {
          }
       }
 
-      public override void OnPrefabInit() {// runs when an instance of ChainedErrand gets created (despite its name)
+      public override void OnPrefabInit() {
          base.OnPrefabInit();
          Debug.Log("ChainedErrand.OnPrefabInit, go name: " + (this.gameObject?.name ?? "NULL"));
 
@@ -60,6 +63,7 @@ namespace ChainErrand.ChainHierarchy {
       [OnDeserialized]
       public void OnDeserialized() {
          Debug.Log("ChainedErrand.OnDeserialized");
+         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
          if(errand?.Get() == null)// this ChainedErrand component was added to its GameObject's prefab for the first time; have to set owner errand
          {
             if(!TrySetOwnerErrand())
@@ -77,19 +81,30 @@ namespace ChainErrand.ChainHierarchy {
       [OnSerializing]
       public void OnSerializing() {
          Debug.Log("ChainedErrand.OnSerializing");
+         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
          serializedChainID = parentLink?.parentChain?.chainID ?? -1;
          serializedLinkNumber = parentLink?.linkNumber ?? -1;
          serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
       }
+      [OnSerialized]
+      public void OnSerializedDebug() {
+         Debug.Log("ChainedErrand.OnSerialized");
+         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
+      }
+      [OnDeserializing]
+      public void OnDeserializingDebug() {
+         Debug.Log("ChainedErrand.OnDeserializing");
+         Debug.Log("type: " + (errand?.Get()?.GetType().ToString() ?? "NULL"));
+      }
 
       private bool TrySetOwnerErrand() {
-         Type errandType = Utils.ChainedErrandToErrandType(this);
-         if(!errandType.IsSubclassOf(typeof(Workable)))
-            throw new Exception(Main.debugPrefix + $"Failed to get the owner errand type for ChainedErrand {this.GetType()}");
+         Debug.Log("TrySetOwnerErrand for " + this.GetType());
+         Type errandType = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetErrandType();
 
          Workable ownerErrand = (Workable)this.gameObject.GetComponent(errandType);
          if(ownerErrand != null)
          {
+            Debug.Log("And its: " + ownerErrand.GetType());
             errand = new Ref<Workable>(ownerErrand);
          }
 
@@ -105,6 +120,7 @@ namespace ChainErrand.ChainHierarchy {
       public void UpdateChainNumber() {
          if(Main.chainOverlay != default)
          {
+            Debug.Log("UpdateChainNumber, bearer not null: " + (chainNumberBearer?.Get()?.gameObject != null));
             Main.chainOverlay.UpdateChainNumber(chainNumberBearer?.Get()?.gameObject, errand?.Get(), parentLink);
          }
       }
@@ -133,6 +149,7 @@ namespace ChainErrand.ChainHierarchy {
             chore = null;
             chainNumberBearer = null;
 
+            Debug.Log("QYBS: " + this.IsNullOrDestroyed());
             this.enabled = false;
          }
       }

@@ -101,10 +101,27 @@ namespace ChainErrand.Patches {
             Main.IsGameLoaded = true;
          }
       }
+
       [HarmonyPatch(typeof(Game), "OnDestroy")]
       public static class OnGameDestroy_Patch {
-         public static void Postfix() {
+         public static void Postfix(Game __instance) {
+            Debug.Log("$$$Game.Destroyed");
             Main.IsGameLoaded = false;
+         }
+      }
+
+      [HarmonyPatch(typeof(SelectTool), "Select")]
+      public static class Debug_Patch {
+         public static void Postfix(KSelectable new_selected, bool skipSound, SelectTool __instance) {
+            if(new_selected != null && new_selected.TryGetComponents(out ChainedErrand[] chainedErrands))
+            {
+               Debug.Log("ChainedErrand types:");
+               foreach(var chainedErrand in chainedErrands)
+               {
+                  Debug.Log(chainedErrand.GetType());
+                  Debug.Log(chainedErrand.errand?.Get()?.GetType().ToString() ?? "NULL");
+               }
+            }
          }
       }
    }

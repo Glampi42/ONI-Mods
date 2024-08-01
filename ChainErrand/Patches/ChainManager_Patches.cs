@@ -1,4 +1,5 @@
-﻿using ChainErrand.ChainHierarchy;
+﻿using ChainErrand.ChainedErrandPacks;
+using ChainErrand.ChainHierarchy;
 using HarmonyLib;
 using KSerialization;
 using System;
@@ -22,41 +23,19 @@ namespace ChainErrand.Patches {
          public static void Postfix() {
             foreach(var prefab in Assets.Prefabs)
             {
-               HashSet<Workable> errands;
-               if((errands = RequiredChainedErrands(prefab.gameObject)).Count > 0)
+               IEnumerable<Type> errandTypes = ChainedErrandPackRegistry.AllErrandTypes();
+               foreach(var errandType in errandTypes)
                {
-                  foreach(var errand in errands)
+                  if(prefab.gameObject.TryGetComponent(errandType, out _))
                   {
-                     var chainedErrand = prefab.gameObject.AddComponent(Utils.ChainedErrandTypeFromErrand(errand)) as ChainedErrand;
+                     var chainedErrand = prefab.gameObject.AddComponent(ChainedErrandPackRegistry.GetChainedErrandPack(errandType).GetChainedErrandType()) as ChainedErrand;
                      if(chainedErrand == null)
-                        throw new Exception(Main.debugPrefix + $"Failed to add ChainedErrand component for errand of type {errand.GetType()}");
+                        throw new Exception(Main.debugPrefix + $"Failed to add ChainedErrand component for errand of type {errandType}");
 
                      chainedErrand.enabled = false;
                   }
                }
             }
-         }
-      }
-      /// <summary>
-      /// Collects all errands attached to the specified GameObject that need to have a related ChainedErrand component.
-      /// </summary>
-      /// <param name="gameObject">The GameObject</param>
-      /// <returns>The errands.</returns>
-      private static HashSet<Workable> RequiredChainedErrands(GameObject gameObject) {
-         HashSet<Workable> errands = new();
-
-         TryAdd(gameObject.GetComponent<Constructable>());
-         TryAdd(gameObject.GetComponent<Deconstructable>());
-         TryAdd(gameObject.GetComponent<EmptyConduitWorkable>());
-         TryAdd(gameObject.GetComponent<Diggable>());
-         TryAdd(gameObject.GetComponent<Moppable>());
-         TryAdd(gameObject.GetComponent<Movable>());
-
-         return errands;
-
-         void TryAdd(Workable errand) {
-            if(errand != null)
-               errands.Add(errand);
          }
       }
 

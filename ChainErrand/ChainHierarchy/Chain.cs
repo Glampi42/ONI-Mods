@@ -23,7 +23,7 @@ namespace ChainErrand.ChainHierarchy {
       /// </summary>
       /// <param name="linkNumber">The number of the specified link</param>
       /// <param name="insertNewLink">Whether a new link should be inserted at the specified index, or the specified link should be expanded</param>
-      /// <param name="linkErrands">The errands to be added to the link</param>
+      /// <param name="linkErrands">The errands to be added to the link; the GameObject is the chain number bearer</param>
       /// <param name="forceInsertAtLinkNumber">If true, a link will be inserted(not expanded) at the desired index even if it surpasses the current links count</param>
       /// <returns>The newly created/expanded link.</returns>
       public Link CreateOrExpandLink(int linkNumber, bool insertNewLink, Dictionary<GameObject, HashSet<Workable>> linkErrands, bool forceInsertAtLinkNumber = false) {

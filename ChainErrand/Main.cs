@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ChainErrand;
@@ -14,6 +15,8 @@ using UnityEngine;
 namespace ChainErrand {
    public static class Main {
       public const string debugPrefix = "[ChainErrand] > ";
+
+      public static readonly Assembly Assembly = typeof(Main).Assembly;
 
       public static readonly Color grayBackgroundColor = new Color32(73, 73, 73, byte.MaxValue);
       public static readonly ColorStyleSetting whiteToggleSetting;// gets darker when hovering over it/activating it

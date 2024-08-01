@@ -1,4 +1,5 @@
-﻿using ChainErrand.ChainHierarchy;
+﻿using ChainErrand.ChainedErrandPacks;
+using ChainErrand.ChainHierarchy;
 using ChainErrand.Enums;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,6 @@ namespace ChainErrand {
       public static HashSet<Workable> CollectFilteredErrands(this GameObject errand_go, out KMonoBehaviour errandReference, ErrandsSearchMode searchMode = ErrandsSearchMode.ALL_ERRANDS) {
          errandReference = default;
          var errands = new HashSet<Workable>();
-         int collectedErrands = 0;
 
          if(errand_go == null)
             return errands;
@@ -32,39 +32,42 @@ namespace ChainErrand {
                switch(filter)
                {
                   case ChainToolFilter.ALL:
-                     CheckConstruction();// pipes can have multiple errands(deconstruct + empty)
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     // pipes can have multiple errands(deconstruct + empty)
 
-                     if(CheckEmptyPipe())
+                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// buildings can't have other errands
 
-                     if(CheckDigging())
+                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// digging markers can't have other errands
 
-                     if(CheckMopping())
+                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// mopping markers can't have other errands
 
-                     if(CheckMoveTo(ref errandReference))
+                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// moveto markers can't have other errands
                      break;
 
                   case ChainToolFilter.CONSTRUCTION:
-                     CheckConstruction();
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
                      break;
 
                   case ChainToolFilter.DIG:
-                     CheckDigging();
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference);
                      break;
 
                   case ChainToolFilter.MOP:
-                     CheckMopping();
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference);
                      break;
 
                   case ChainToolFilter.EMPTY_PIPE:
-                     CheckEmptyPipe();
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
                      break;
 
                   case ChainToolFilter.MOVE_TO:
-                     CheckMoveTo(ref errandReference);
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference);
                      break;
 
                   case ChainToolFilter.STANDARD_BUILDINGS:
@@ -79,7 +82,8 @@ namespace ChainErrand {
                         ObjectLayer objLayer = building.Def.ObjectLayer;
                         if(Utils.ObjectLayersFromChainToolFilter(filter).Contains(objLayer))
                         {
-                           CheckConstruction();
+                           ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+                           ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
                         }
                      }
                      break;
@@ -105,80 +109,6 @@ namespace ChainErrand {
             errandReference = errands.FirstOrDefault();
 
          return errands;
-
-
-         bool CheckConstruction() {
-            collectedErrands = 0;
-
-            if(errand_go.TryGetComponent(out Constructable constructable))
-            {
-               errands.Add(constructable);
-               collectedErrands++;
-            }
-            else if(errand_go.TryGetComponent(out Deconstructable deconstructable) &&
-               deconstructable.IsMarkedForDeconstruction())
-            {
-               errands.Add(deconstructable);
-               collectedErrands++;
-            }
-
-            return collectedErrands > 0;
-         }
-
-         bool CheckDigging() {
-            collectedErrands = 0;
-
-            if(errand_go.TryGetComponent(out Diggable diggable))
-            {
-               errands.Add(diggable);
-               collectedErrands++;
-            }
-
-            return collectedErrands > 0;
-         }
-
-         bool CheckMopping() {
-            collectedErrands = 0;
-
-            if(errand_go.TryGetComponent(out Moppable moppable))
-            {
-               errands.Add(moppable);
-               collectedErrands++;
-            }
-
-            return collectedErrands > 0;
-         }
-
-         bool CheckEmptyPipe() {
-            collectedErrands = 0;
-
-            if(errand_go.TryGetComponent(out EmptyConduitWorkable emptyPipe) &&
-               emptyPipe.chore != null)
-            {
-               errands.Add(emptyPipe);
-               collectedErrands++;
-            }
-
-            return collectedErrands > 0;
-         }
-
-         bool CheckMoveTo(ref KMonoBehaviour specialErrand_inner) {
-            specialErrand_inner = default;
-            collectedErrands = 0;
-
-            if(errand_go.TryGetComponent(out CancellableMove cancellableMove) &&
-               cancellableMove.movingObjects.Count > 0)
-            {
-               foreach(var movable in cancellableMove.movingObjects)
-               {
-                  errands.Add(movable.Get());
-               }
-               specialErrand_inner = cancellableMove;
-               collectedErrands += cancellableMove.movingObjects.Count;
-            }
-
-            return collectedErrands > 0;
-         }
       }
 
       public static void CreateNewChain(Dictionary<GameObject, HashSet<Workable>> firstLinkErrands) {
@@ -213,7 +143,6 @@ namespace ChainErrand {
       }
 
       public static void DeleteChains(HashSet<Workable> errands) {
-         Debug.Log("DeleteChains");
          HashSet<Chain> chainsToDelete = new();
          foreach(var errand in errands)
          {
@@ -225,13 +154,11 @@ namespace ChainErrand {
 
          foreach(var chain in chainsToDelete)
          {
-            Debug.Log("Removing chain " + chain.chainID);
             ChainsContainer.RemoveChain(chain);
          }
       }
 
       public static void DeleteErrands(HashSet<Workable> errands) {
-         Debug.Log("DeleteErrands");
          foreach(var errand in errands)
          {
             if(errand.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
