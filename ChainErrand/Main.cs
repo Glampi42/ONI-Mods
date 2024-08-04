@@ -33,12 +33,21 @@ namespace ChainErrand {
          id = nameof(ChainedErrandPrecondition),
          description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK,
          fn = (ref Chore.Precondition.Context context, object _) => {
-            if(context.chore.TryGetCorrespondingChainedErrand(context.chore.prioritizable.gameObject, out ChainedErrand chainedErrand))
+            GameObject go;
+            if(context.chore is MovePickupableChore moveChore)
+            {
+               go = moveChore.smi.sm.pickupablesource.Get(moveChore.smi);// MoveTo errand's prioritizable isn't attached to the GameObject that has the errand
+            }
+            else
+            {
+               go = context.chore.prioritizable.gameObject;
+            }
+            if(go != null && context.chore.TryGetCorrespondingChainedErrand(go, out ChainedErrand chainedErrand))
             {
                return chainedErrand.parentLink == null || chainedErrand.parentLink.linkNumber == 0;
             }
 
-            return false;
+            return false;//TODO switch to true
          }
       };
 

@@ -44,8 +44,6 @@ namespace ChainErrand.ChainHierarchy {
          }
          else
          {
-            Debug.Log("start count: " + links.Count);
-            Debug.Log("linkNumber: " + linkNumber);
             if(linkNumber > links.Count)
             {
                int repeat = linkNumber - links.Count;
@@ -58,8 +56,6 @@ namespace ChainErrand.ChainHierarchy {
                links.RemoveAt(linkNumber);// replacing the null entry with this chain
             }
             link = new Link(this, linkNumber);
-            Debug.Log("count: " + links.Count);
-            Debug.Log("linkNumber: " + linkNumber);
             links.Insert(linkNumber, link);
          }
          UpdateAllLinkNumbers();
@@ -73,14 +69,21 @@ namespace ChainErrand.ChainHierarchy {
                {
                   if(errand.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand, true))
                   {
-                     chainedErrand.enabled = true;
-                     chainedErrand.parentLink = link;
-                     chainedErrand.chainNumberBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
+                     if(!chainedErrand.enabled)
+                     {
+                        chainedErrand.enabled = true;
+                        chainedErrand.parentLink = link;
+                        chainedErrand.chainNumberBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
 
-                     chainedErrand.ConfigureChorePrecondition();
-                     chainedErrand.UpdateChainNumber();
+                        chainedErrand.ConfigureChorePrecondition();
+                        chainedErrand.UpdateChainNumber();
 
-                     newErrands.Add(chainedErrand);
+                        newErrands.Add(chainedErrand);
+                     }
+                     else
+                     {
+                        Debug.LogWarning(Main.debugPrefix + $"Tried to add errand of type {errand.GetType()} of the GameObject {pair.Key.name} to a chain, but it is already in a chain");
+                     }
                   }
                   else
                   {
@@ -127,16 +130,27 @@ namespace ChainErrand.ChainHierarchy {
             if(links[index] == null)
                continue;
 
-            bool changed = links[index].linkNumber != index;
+            int previousNum = links[index].linkNumber;
 
             links[index].linkNumber = index;
 
-            if(changed)
+            if(previousNum != index)
+            {
                links[index].UpdateChainNumbers();
+
+               if(previousNum == 0)
+               {
+                  foreach(var chainedErrand in links[index].errands)
+                  {
+                     chainedErrand.InterruptChore("New link was inserted in front");
+                  }
+               }
+            }
          }
       }
 
       public void Remove(bool removeFromChainsContainer) {
+         Debug.Log("Chain.Remove");
          foreach(var link in links)
          {
             if(link == null)
@@ -149,16 +163,6 @@ namespace ChainErrand.ChainHierarchy {
          if(removeFromChainsContainer)
          {
             ChainsContainer.RemoveChain(this);
-
-            if(chainID < Main.chainTool.GetSelectedChain())
-            {
-               Main.chainTool.SetSelectedChain(Main.chainTool.GetSelectedChain() - 1);// to keep the same chain selected
-            }
-            else
-            {
-               Main.chainTool.SetSelectedChain(Main.chainTool.GetSelectedChain());// making sure the selected chain is inside of the chains count and updating the selected link
-            }
-            ChainToolMenu.Instance.UpdateNumberSelectionDisplay();
          }
       }
    }

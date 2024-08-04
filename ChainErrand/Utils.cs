@@ -131,6 +131,9 @@ namespace ChainErrand {
       public static bool TryGetCorrespondingChainedErrand(this Workable errand, out ChainedErrand chainedErrand, bool allowDisabled = false) {
          chainedErrand = null;
 
+         if(errand.IsNullOrDestroyed())
+            return false;
+
          Type chainedErrandType = ChainedErrandPackRegistry.GetChainedErrandPack(errand).GetChainedErrandType();
          if(errand.TryGetComponent(chainedErrandType, out Component ce) && (allowDisabled || ((KMonoBehaviour)ce).enabled))
          {

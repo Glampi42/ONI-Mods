@@ -90,7 +90,7 @@ namespace ChainErrand {
          {
             foreach(var chainNumber in pair.Value)
             {
-               if(chainNumber.GetRelatedErrand().isNull)
+               if(chainNumber.GetParent().IsNullOrDestroyed() || chainNumber.GetRelatedErrand().isNull)
                {
                   if(!chainNumbersToRemove.ContainsKey(pair.Key))
                      chainNumbersToRemove.Add(pair.Key, new HashSet<ChainNumber>());
@@ -314,7 +314,7 @@ namespace ChainErrand {
       }
       //--------------------------Chain Numbers - UTILS--------------------------DOWN
       public void CreateChainNumber(GameObject parentGO, Workable relatedErrand) {
-         if(parentGO == null)
+         if(parentGO == null || relatedErrand == null)
             return;
 
          ChainNumber chainNumber = new ChainNumber(chainNumbersUIPool.GetFreeElement(GameScreenManager.Instance.worldSpaceCanvas), parentGO, relatedErrand, Main.DefaultChainNumberColor, 0);
@@ -345,7 +345,7 @@ namespace ChainErrand {
       }
 
       public void UpdateChainNumber(GameObject parentGO, Workable relatedErrand, Link link) {
-         if(parentGO == null || relatedErrand == null)
+         if(parentGO.IsNullOrDestroyed() || relatedErrand.IsNullOrDestroyed())
             return;
 
          if(chainNumbers.TryGetChainNumber(parentGO, relatedErrand, out ChainNumber chainNumber))
@@ -384,6 +384,12 @@ namespace ChainErrand {
          chainNumbers.RemoveAttached(parentGO);
       }
 
+      public void RemoveChainNumber(GameObject parentGO, Workable relatedErrand) {
+         if(chainNumbers.TryGetChainNumber(parentGO, relatedErrand, out ChainNumber chainNumber))
+         {
+            RemoveChainNumber(parentGO, chainNumber);
+         }
+      }
       public void RemoveChainNumber(GameObject parentGO, ChainNumber chainNumber) {
          chainNumbersUIPool.ClearElement(chainNumber.GetLocText());
          chainNumbers.Remove(parentGO, chainNumber);
@@ -404,13 +410,13 @@ namespace ChainErrand {
       /// <summary>
       /// Updates a specific errand's display.
       /// </summary>
-      /// <param name="errand">The errand</param>
-      public void UpdateErrand(KMonoBehaviour errand) {
-         if(errand == null)
+      /// <param name="errandReference">The component that represents the errand that should be updated</param>
+      public void UpdateErrand(KMonoBehaviour errandReference) {
+         if(errandReference == null)
             return;
 
-         RemoveFromVisible(errand, true);
-         notVisibleErrands.Remove(errand.gameObject);
+         RemoveFromVisible(errandReference, true);
+         notVisibleErrands.Remove(errandReference.gameObject);
       }
 
       /// <summary>

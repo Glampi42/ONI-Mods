@@ -29,8 +29,7 @@ namespace ChainErrand.ChainHierarchy {
       private Color serializedChainColor;
 
       public void ConfigureChorePrecondition(Chore chore = null) {
-         Debug.Log("ConfigureChorePrecondition errand: " + (Errand?.GetType().ToString() ?? "NULL"));
-         Debug.Log("This is " + this.GetType());
+         Debug.Log("ConfigureChorePrecondition for " + this.GetType().ToString());
          if(chore == null)
             chore = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetChoreFromErrand(Errand);
          
@@ -38,15 +37,25 @@ namespace ChainErrand.ChainHierarchy {
 
          if(chore != null)
          {
-            chore.AddPrecondition(Main.ChainedErrandPrecondition);
+            Debug.Log("AddPrecondition");
+            if(!chore.preconditions.Any(p => p.id == Main.ChainedErrandPrecondition.id))
+               chore.AddPrecondition(Main.ChainedErrandPrecondition);
             if(parentLink.linkNumber != 0)// stop dupes from doing errands that are not in the first link
-               chore.Fail("Chore added to chain");
+               InterruptChore("Chore added to chain");
          }
       }
 
+      /// <summary>
+      /// Stops the execution of the chore related to this errand.
+      /// </summary>
+      /// <param name="reason">The reason it was interrupted</param>
+      public void InterruptChore(string reason) {
+         chore?.Fail(reason);
+      }
+
       public override void OnPrefabInit() {
+         Debug.Log("ChainedErrand.OnPrefabInit");
          base.OnPrefabInit();
-         Debug.Log("ChainedErrand.OnPrefabInit, go name: " + (this.gameObject?.name ?? "NULL"));
 
          if(Main.IsGameLoaded)// won't run this code for buildings that get deserialized from a save file
          {
@@ -62,7 +71,6 @@ namespace ChainErrand.ChainHierarchy {
       [OnDeserialized]
       public void OnDeserialized() {
          Debug.Log("ChainedErrand.OnDeserialized");
-         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
          if(Errand == null)// this ChainedErrand component was added to its GameObject's prefab for the first time; have to set owner errand
          {
             if(!TrySetOwnerErrand())
@@ -79,21 +87,9 @@ namespace ChainErrand.ChainHierarchy {
 
       [OnSerializing]
       public void OnSerializing() {
-         Debug.Log("ChainedErrand.OnSerializing");
-         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
          serializedChainID = parentLink?.parentChain?.chainID ?? -1;
          serializedLinkNumber = parentLink?.linkNumber ?? -1;
          serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
-      }
-      [OnSerialized]
-      public void OnSerializedDebug() {
-         Debug.Log("ChainedErrand.OnSerialized");
-         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
-      }
-      [OnDeserializing]
-      public void OnDeserializingDebug() {
-         Debug.Log("ChainedErrand.OnDeserializing");
-         Debug.Log("type: " + (Errand?.GetType().ToString() ?? "NULL"));
       }
 
       private bool TrySetOwnerErrand() {
@@ -119,12 +115,12 @@ namespace ChainErrand.ChainHierarchy {
       public void UpdateChainNumber() {
          if(Main.chainOverlay != default)
          {
-            Debug.Log("UpdateChainNumber, bearer not null: " + (chainNumberBearer?.Get()?.gameObject != null));
             Main.chainOverlay.UpdateChainNumber(chainNumberBearer?.Get()?.gameObject, Errand, parentLink);
          }
       }
 
       public void Remove(bool tryRemoveLink, bool isBeingDestroyed = false) {
+         Debug.Log("ChainedErrand.Remove");
          if(tryRemoveLink && parentLink != null)
          {
             parentLink.errands.Remove(this);
@@ -148,7 +144,6 @@ namespace ChainErrand.ChainHierarchy {
             chore = null;
             chainNumberBearer = null;
 
-            Debug.Log("QYBS: " + this.IsNullOrDestroyed());
             this.enabled = false;
          }
       }
@@ -159,6 +154,8 @@ namespace ChainErrand.ChainHierarchy {
    public class ChainedErrand_Constructable : ChainedErrand {
       [Serialize]
       private Ref<Constructable> errand;
+      // Ref<> needs to contain the actual type of the referenced errand. If it was Ref<Workable>, then the reference wouldn't be persistent
+      //(for example pipe has both Deconstructable and EmptyConduitWorkable, Ref<Workable> would keep a reference to one of them, without the ability to differentiate)
 
       public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Constructable>(value as Constructable); }
    }

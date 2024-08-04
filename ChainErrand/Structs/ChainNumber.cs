@@ -91,6 +91,9 @@ namespace ChainErrand.Structs {
          return displayedLocText;
       }
 
+      public GameObject GetParent() {
+         return parent;
+      }
       public Workable GetRelatedErrand() {
          return relatedErrand;
       }

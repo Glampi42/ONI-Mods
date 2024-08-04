@@ -8,6 +8,7 @@ using PeterHan.PLib.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -57,16 +58,10 @@ namespace ChainErrand.Patches {
                   insertionIndex = i + 1;
                   break;
                }
-               else if(!__instance.basicTools[i].largeIcon)
-               {
-                  Debug.LogError(Main.debugPrefix + "Prioritize tool couldn't be found; inserting chain tool at the end of tools with large icons");
-                  insertionIndex = i;
-                  break;
-               }
             }
             if(insertionIndex == -1)
             {
-               Debug.LogError(Main.debugPrefix + "Inserting chain tool at the end of tools menu instead of after the prioritize tool");
+               Debug.LogWarning(Main.debugPrefix + "Prioritize tool couldn't be found; inserting chain tool at the end of tools");
                insertionIndex = __instance.basicTools.Count;
             }
 
@@ -94,9 +89,9 @@ namespace ChainErrand.Patches {
          }
       }
 
-      [HarmonyPatch(typeof(Game), "Load")]
+      [HarmonyPatch(typeof(SaveLoader), "OnSpawn")]
       public static class OnGameLoad_Patch {
-         public static void Postfix(Deserializer deserializer, Game __instance) {
+         public static void Postfix() {
             Debug.Log("$$$Game.Loaded");
             Main.IsGameLoaded = true;
          }
@@ -107,21 +102,7 @@ namespace ChainErrand.Patches {
          public static void Postfix(Game __instance) {
             Debug.Log("$$$Game.Destroyed");
             Main.IsGameLoaded = false;
-         }
-      }
-
-      [HarmonyPatch(typeof(SelectTool), "Select")]
-      public static class Debug_Patch {
-         public static void Postfix(KSelectable new_selected, bool skipSound, SelectTool __instance) {
-            if(new_selected != null && new_selected.TryGetComponents(out ChainedErrand[] chainedErrands))
-            {
-               Debug.Log("ChainedErrand types:");
-               foreach(var chainedErrand in chainedErrands)
-               {
-                  Debug.Log(chainedErrand.GetType());
-                  Debug.Log(chainedErrand.Errand?.GetType().ToString() ?? "NULL");
-               }
-            }
+            ChainsContainer.Clear();
          }
       }
    }

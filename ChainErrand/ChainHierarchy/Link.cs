@@ -29,6 +29,8 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       public void Remove(bool tryRemoveChain) {
+         Debug.Log("Link.Remove");
+         Debug.Log("count: " + errands.Count);
          foreach(var errand in errands)
          {
             errand.Remove(false);
@@ -39,17 +41,20 @@ namespace ChainErrand.ChainHierarchy {
          {
             parentChain.RemoveLink(this);
 
-            if(linkNumber < Main.chainTool.GetSelectedLink())
+            if(parentChain.chainID == Main.chainTool.GetSelectedChain())
             {
-               Main.chainTool.SetSelectedLink(Main.chainTool.GetSelectedLink() - 1, Main.chainTool.GetInsertNewLink());// to keep the same link selected
+               if(linkNumber < Main.chainTool.GetSelectedLink())
+               {
+                  Main.chainTool.SetSelectedLink(Main.chainTool.GetSelectedLink() - 1, Main.chainTool.GetInsertNewLink());// to keep the same link selected
+               }
+               else if(Main.chainTool.GetSelectedLink() > parentChain.LastLinkNumber())
+               {
+                  Main.chainTool.SetSelectedLink(parentChain.LastLinkNumber() + 1, true);
+               }
+               ChainToolMenu.Instance.UpdateNumberSelectionDisplay();
             }
-            else if(Main.chainTool.GetSelectedLink() > parentChain.LastLinkNumber() + 1)
-            {
-               Main.chainTool.SetSelectedLink(parentChain.LastLinkNumber() + 1, true);
-            }
-            ChainToolMenu.Instance.UpdateNumberSelectionDisplay();
 
-            if(parentChain != null && parentChain.LastLinkNumber() < 0)
+            if(parentChain.LastLinkNumber() < 0)
             {
                parentChain.Remove(true);
             }

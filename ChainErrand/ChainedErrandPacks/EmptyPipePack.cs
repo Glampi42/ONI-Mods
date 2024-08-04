@@ -26,30 +26,31 @@ namespace ChainErrand.ChainedErrandPacks {
 
       public override List<GPatchInfo> OnChoreDelete_Patch() {
          var targetMethod = typeof(EmptyConduitWorkable).GetMethod("CancelEmptying", Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => DeletePostfix1(default));
+         var postfix = SymbolExtensions.GetMethodInfo(() => CancelEmptyingPostfix(default));
 
          var targetMethod2 = typeof(EmptyConduitWorkable).GetMethod("OnWorkTick", Utils.GeneralBindingFlags);
-         var postfix2 = SymbolExtensions.GetMethodInfo(() => DeletePostfix2(default, default, default));
+         var postfix2 = SymbolExtensions.GetMethodInfo(() => OnWorkTickPostfix(default, default, default));
 
          return new([new GPatchInfo(targetMethod, null, postfix), new GPatchInfo(targetMethod2, null, postfix2)]);
       }
-      private static void DeletePostfix1(EmptyConduitWorkable __instance) {
+      private static void CancelEmptyingPostfix(EmptyConduitWorkable __instance) {
          if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             chainedErrand.Remove(true);
          }
       }
-      private static void DeletePostfix2(Worker worker, float dt, EmptyConduitWorkable __instance) {
+      private static void OnWorkTickPostfix(Worker worker, float dt, EmptyConduitWorkable __instance) {
          if(__instance.chore == null)
          {
-            if(Main.chainOverlay != null && Main.chainOverlay.IsEnabled)
-            {
-               Main.chainOverlay.UpdateErrand(__instance);
-            }
-
             if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
             {
                chainedErrand.Remove(true);
+            }
+
+            // removing the old chore's ChainNumber (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
+            if(Main.chainOverlay != default && Main.chainOverlay.IsEnabled)
+            {
+               Main.chainOverlay.RemoveChainNumber(__instance.gameObject, __instance);
             }
          }
       }

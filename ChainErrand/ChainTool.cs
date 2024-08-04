@@ -238,7 +238,7 @@ namespace ChainErrand {
          ChainToolMenu.Instance.HideMenu();
          ToolMenu.Instance.PriorityScreen.Show(false);
          OverlayScreen.Instance.ToggleOverlay(OverlayModes.None.ID);
-         
+
          if(!ModConfig.Instance.DisableUIHelp)
          {
             SetToolMode(ChainToolMode.CREATE_CHAIN);
@@ -301,6 +301,7 @@ namespace ChainErrand {
 
       public override void OnDragComplete(Vector3 cursorDown, Vector3 cursorUp) {
          base.OnDragComplete(cursorDown, cursorUp);
+         Debug.Log("OnDragComplete");
 
          Vector2I dragMin = new Vector2I((int)Math.Floor(Math.Min(cursorDown.x, cursorUp.x)), (int)Math.Floor(Math.Min(cursorDown.y, cursorUp.y)));
          Vector2I dragMax = new Vector2I((int)Math.Ceiling(Math.Max(cursorDown.x, cursorUp.x)), (int)Math.Ceiling(Math.Max(cursorDown.y, cursorUp.y)));
@@ -338,7 +339,7 @@ namespace ChainErrand {
                   ChainToolUtils.CreateNewChain(collectedErrands);
                   break;
 
-                  case ChainToolMode.CREATE_LINK:
+               case ChainToolMode.CREATE_LINK:
                   ChainToolUtils.CreateOrExpandLink(collectedErrands);
                   break;
 
@@ -351,10 +352,7 @@ namespace ChainErrand {
                   break;
             }
 
-            if(ChainToolMenu.Instance != default)
-            {
-               ChainToolMenu.Instance.UpdateNumberSelectionDisplay();
-            }
+            ChainToolMenu.Instance?.UpdateNumberSelectionDisplay();
          }
       }
 

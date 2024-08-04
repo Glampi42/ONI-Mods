@@ -1,4 +1,5 @@
 ﻿using ChainErrand.ChainedErrandPacks;
+using ChainErrand.Custom;
 using HarmonyLib;
 using KMod;
 using PeterHan.PLib.Actions;
@@ -30,7 +31,7 @@ namespace ChainErrand {
             {
                foreach(var patch in createPatches)
                {
-                  harmony.Patch(patch.patchedMethod, patch.prefix, patch.postfix);
+                  TryPatch(harmony, patch);
                }
             }
 
@@ -39,9 +40,22 @@ namespace ChainErrand {
             {
                foreach(var patch in deletePatches)
                {
-                  harmony.Patch(patch.patchedMethod, patch.prefix, patch.postfix);
+                  TryPatch(harmony, patch);
                }
             }
+         }
+      }
+      private static void TryPatch(Harmony harmony, GPatchInfo patchInfo) {
+         try
+         {
+            harmony.Patch(patchInfo.patchedMethod, patchInfo.prefix, patchInfo.postfix, patchInfo.transpiler);
+         }
+         catch(Exception ex)
+         {
+            Debug.LogError(Main.debugPrefix + $"Could not patch method {patchInfo.patchedMethod.FullDescription()};");
+            Debug.LogError(Main.debugPrefix + $"Prefix that couldn't be patched: {patchInfo.prefix?.method.FullDescription() ?? "null"}");
+            Debug.LogError(Main.debugPrefix + $"Postfix that couldn't be patched: {patchInfo.postfix?.method.FullDescription() ?? "null"}");
+            throw ex;
          }
       }
    }

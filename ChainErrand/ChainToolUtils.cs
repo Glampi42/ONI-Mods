@@ -119,9 +119,9 @@ namespace ChainErrand {
 
          Main.chainTool.SetSelectedChain(ChainsContainer.ChainsCount - 1);
 
-         if(!ModConfig.Instance.DisableUIHelp && ChainToolMenu.Instance != default)
+         if(!ModConfig.Instance.DisableUIHelp)
          {
-            ChainToolMenu.Instance.modeToggles[ChainToolMode.CREATE_LINK].onClick();// switching to Create Link
+            ChainToolMenu.Instance?.modeToggles[ChainToolMode.CREATE_LINK].onClick();// switching to Create Link
          }
       }
 
@@ -143,6 +143,7 @@ namespace ChainErrand {
       }
 
       public static void DeleteChains(HashSet<Workable> errands) {
+         Debug.Log("DeleteChains");
          HashSet<Chain> chainsToDelete = new();
          foreach(var errand in errands)
          {
@@ -193,6 +194,9 @@ namespace ChainErrand {
          if(!float.TryParse(text, out inputNum)) {
             inputNum = 1f;
          }
+
+         if(inputNum == 0f)
+            return (0, true);
 
          bool insertNewLink = inputNum != (int)inputNum;// if the number has digits after dot
 

@@ -44,15 +44,31 @@ namespace ChainErrand.ChainHierarchy {
          if(chain == null)
             return;
 
+         Debug.Log("ChainsContainer.RemoveChain");
+         int chainID = chain.chainID;
          chain.Remove(false);
 
          chains.Remove(chain);
          UpdateAllChainIDs();
+
+         if(chainID < Main.chainTool.GetSelectedChain())
+         {
+            Main.chainTool.SetSelectedChain(Main.chainTool.GetSelectedChain() - 1);// to keep the same chain selected
+         }
+         else
+         {
+            Main.chainTool.SetSelectedChain(Main.chainTool.GetSelectedChain());// making sure the selected chain is inside of the chains count and updating the selected link
+         }
+         ChainToolMenu.Instance?.UpdateNumberSelectionDisplay();
       }
 
       public static void RemoveNullChains() {
          chains = chains.Where(x => x != null).ToList();
          UpdateAllChainIDs();
+      }
+
+      public static void Clear() {
+         chains.Clear();
       }
 
       public static bool TryGetChain(int chainID, out Chain chain) {
