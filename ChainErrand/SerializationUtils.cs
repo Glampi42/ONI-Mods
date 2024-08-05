@@ -12,7 +12,7 @@ namespace ChainErrand {
       public static void ReconstructChain(int chainID, int linkNumber, ChainedErrand chainedErrand, Color chainColor) {
          lock(reconstructChainLock)// in case deserialization happens in parallel
          {
-            if(chainID == -1 || linkNumber == -1 || chainedErrand == null)
+            if(chainID == -1 || linkNumber == -1 || chainedErrand.IsNullOrDestroyed())
                return;
 
             Chain chain;
