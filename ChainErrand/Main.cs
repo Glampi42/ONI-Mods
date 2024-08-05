@@ -59,8 +59,6 @@ namespace ChainErrand {
       public static ChainOverlay chainOverlay;
       public static ChainTool chainTool;
 
-      public static bool IsGameLoaded = false;
-
       static Main() {
          Color gray = new Color(0.784f, 0.784f, 0.784f, 1f);
          Color darkerGray = new Color(0.695f, 0.695f, 0.695f, 1f);

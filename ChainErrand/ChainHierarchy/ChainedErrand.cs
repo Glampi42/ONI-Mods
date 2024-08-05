@@ -16,10 +16,10 @@ namespace ChainErrand.ChainHierarchy {
    public abstract class ChainedErrand : KMonoBehaviour {
       public Link parentLink;
 
-      public abstract Workable Errand { get; protected set; }
+      public abstract Workable Errand { get; }
       public Chore chore;
       [Serialize]
-      public Ref<KPrefabID> chainNumberBearer;// the GameObject that the chain number will be displayed on (isn't always the GameObject that has the errand component: f.e. MoveTo errand)
+      public Ref<KPrefabID> chainNumberBearer;// the GameObject that the ChainNumber will be displayed on (isn't always the GameObject that has the errand component: f.e. MoveTo errand)
 
       [Serialize]
       private int serializedChainID;
@@ -39,7 +39,7 @@ namespace ChainErrand.ChainHierarchy {
             if(!chore.preconditions.Any(p => p.id == Main.ChainedErrandPrecondition.id))
                chore.AddPrecondition(Main.ChainedErrandPrecondition);
             if(parentLink.linkNumber != 0)// stop dupes from doing errands that are not in the first link
-               InterruptChore("Chore added to chain");
+               InterruptChore("Chore was added to a chain");
          }
       }
 
@@ -54,31 +54,16 @@ namespace ChainErrand.ChainHierarchy {
       public override void OnPrefabInit() {
          base.OnPrefabInit();
 
-         if(Main.IsGameLoaded)// won't run this code for buildings that get deserialized from a save file
+         if(Errand == null)
          {
-            // setting owner errand:
-            if(!TrySetOwnerErrand())
-            {
-               Debug.LogWarning(Main.debugPrefix + "Couldn't find an owner errand for this ChainedErrand component; destroying the component.");
-               UnityEngine.Object.Destroy(this);
-            }
+            Debug.LogWarning(Main.debugPrefix + "This ChainedErrand component doesn't have a referenced errand; destroying the component.");
+            UnityEngine.Object.Destroy(this);
          }
       }
 
       [OnDeserialized]
       public void OnDeserialized() {
-         if(Errand == null)// this ChainedErrand component was added to its GameObject's prefab for the first time; have to set owner errand
-         {
-            if(!TrySetOwnerErrand())
-            {
-               Debug.LogWarning(Main.debugPrefix + "Couldn't find an owner errand for this deserialized ChainedErrand component; destroying the component.");
-               UnityEngine.Object.Destroy(this);
-            }
-         }
-         else// this ChainedErrand component was already there when the save file was created; have to recreate its chain
-         {
-            SerializationUtils.ReconstructChain(serializedChainID, serializedLinkNumber, this, serializedChainColor);
-         }
+         SerializationUtils.ReconstructChain(serializedChainID, serializedLinkNumber, this, serializedChainColor);
       }
 
       [OnSerializing]
@@ -86,18 +71,6 @@ namespace ChainErrand.ChainHierarchy {
          serializedChainID = parentLink?.parentChain?.chainID ?? -1;
          serializedLinkNumber = parentLink?.linkNumber ?? -1;
          serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
-      }
-
-      private bool TrySetOwnerErrand() {
-         Type errandType = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetErrandType();
-
-         Workable ownerErrand = (Workable)this.gameObject.GetComponent(errandType);
-         if(ownerErrand != null)
-         {
-            Errand = ownerErrand;
-         }
-
-         return Errand != null;
       }
 
       public override void OnCleanUp() {
@@ -143,48 +116,59 @@ namespace ChainErrand.ChainHierarchy {
    }
 
 
+   // have to do all this because MonoBehaviour components can't be generic (welp):
    [SerializationConfig(MemberSerialization.OptIn)]
    public class ChainedErrand_Constructable : ChainedErrand {
-      [Serialize]
-      private Ref<Constructable> errand;
-      // Ref<> needs to contain the actual type of the referenced errand. If it was Ref<Workable>, then the reference wouldn't be persistent
-      //(for example pipe has both Deconstructable and EmptyConduitWorkable, Ref<Workable> would keep a reference to one of them, without the ability to differentiate)
+#pragma warning disable CS0649// warning about the field not being assigned a value (it is, by unity)
+      [MyCmpGet]
+      private Constructable errand;
+#pragma warning restore CS0649
 
-      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Constructable>(value as Constructable); }
+      public override Workable Errand { get => errand; }
    }
    [SerializationConfig(MemberSerialization.OptIn)]
    public class ChainedErrand_Deconstructable : ChainedErrand {
-      [Serialize]
-      private Ref<Deconstructable> errand;
+#pragma warning disable CS0649
+      [MyCmpGet]
+      private Deconstructable errand;
+#pragma warning restore CS0649
 
-      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Deconstructable>(value as Deconstructable); }
+      public override Workable Errand { get => errand; }
    }
    [SerializationConfig(MemberSerialization.OptIn)]
    public class ChainedErrand_Diggable : ChainedErrand {
-      [Serialize]
-      private Ref<Diggable> errand;
+#pragma warning disable CS0649
+      [MyCmpGet]
+      private Diggable errand;
+#pragma warning restore CS0649
 
-      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Diggable>(value as Diggable); }
+      public override Workable Errand { get => errand; }
    }
    [SerializationConfig(MemberSerialization.OptIn)]
    public class ChainedErrand_Moppable : ChainedErrand {
-      [Serialize]
-      private Ref<Moppable> errand;
+#pragma warning disable CS0649
+      [MyCmpGet]
+      private Moppable errand;
+#pragma warning restore CS0649
 
-      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Moppable>(value as Moppable); }
+      public override Workable Errand { get => errand; }
    }
    [SerializationConfig(MemberSerialization.OptIn)]
    public class ChainedErrand_EmptyConduitWorkable : ChainedErrand {
-      [Serialize]
-      private Ref<EmptyConduitWorkable> errand;
+#pragma warning disable CS0649
+      [MyCmpGet]
+      private EmptyConduitWorkable errand;
+#pragma warning restore CS0649
 
-      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<EmptyConduitWorkable>(value as EmptyConduitWorkable); }
+      public override Workable Errand { get => errand; }
    }
    [SerializationConfig(MemberSerialization.OptIn)]
    public class ChainedErrand_Movable : ChainedErrand {
-      [Serialize]
-      private Ref<Movable> errand;
+#pragma warning disable CS0649
+      [MyCmpGet]
+      private Movable errand;
+#pragma warning restore CS0649
 
-      public override Workable Errand { get => errand?.Get(); protected set => errand = new Ref<Movable>(value as Movable); }
+      public override Workable Errand { get => errand; }
    }
 }
