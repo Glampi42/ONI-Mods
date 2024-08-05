@@ -47,7 +47,7 @@ namespace ChainErrand {
                return chainedErrand.parentLink == null || chainedErrand.parentLink.linkNumber == 0;
             }
 
-            return false;//TODO switch to true
+            return true;// this return shouldn't normally be reached, but if it is reached - no need to block the execution of the chore
          }
       };
 

@@ -400,7 +400,9 @@ namespace ChainErrand {
 
             // adding tooltips should be done here because the GameObject of toolsPanel is realized after the labels' GameObjects
             this.chainNumberLabel.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
+            this.chainNumberField.gameObject.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
             this.linkNumberLabel.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
+            this.linkNumberField.gameObject.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
          });
 
          PRelativePanel createOrDelete = new PRelativePanel("CreateOrDeletePanel") {
