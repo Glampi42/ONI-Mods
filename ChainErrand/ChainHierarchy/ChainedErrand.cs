@@ -29,7 +29,6 @@ namespace ChainErrand.ChainHierarchy {
       private Color serializedChainColor;
 
       public void ConfigureChorePrecondition(Chore chore = null) {
-         Debug.Log("ConfigureChorePrecondition for " + this.GetType().ToString());
          if(chore == null)
             chore = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetChoreFromErrand(Errand);
          
@@ -37,7 +36,6 @@ namespace ChainErrand.ChainHierarchy {
 
          if(chore != null)
          {
-            Debug.Log("AddPrecondition");
             if(!chore.preconditions.Any(p => p.id == Main.ChainedErrandPrecondition.id))
                chore.AddPrecondition(Main.ChainedErrandPrecondition);
             if(parentLink.linkNumber != 0)// stop dupes from doing errands that are not in the first link
@@ -54,7 +52,6 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       public override void OnPrefabInit() {
-         Debug.Log("ChainedErrand.OnPrefabInit");
          base.OnPrefabInit();
 
          if(Main.IsGameLoaded)// won't run this code for buildings that get deserialized from a save file
@@ -70,7 +67,6 @@ namespace ChainErrand.ChainHierarchy {
 
       [OnDeserialized]
       public void OnDeserialized() {
-         Debug.Log("ChainedErrand.OnDeserialized");
          if(Errand == null)// this ChainedErrand component was added to its GameObject's prefab for the first time; have to set owner errand
          {
             if(!TrySetOwnerErrand())
@@ -93,13 +89,11 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       private bool TrySetOwnerErrand() {
-         Debug.Log("TrySetOwnerErrand for " + this.GetType());
          Type errandType = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetErrandType();
 
          Workable ownerErrand = (Workable)this.gameObject.GetComponent(errandType);
          if(ownerErrand != null)
          {
-            Debug.Log("And its: " + ownerErrand.GetType());
             Errand = ownerErrand;
          }
 
@@ -120,7 +114,6 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       public void Remove(bool tryRemoveLink, bool isBeingDestroyed = false) {
-         Debug.Log("ChainedErrand.Remove");
          if(tryRemoveLink && parentLink != null)
          {
             parentLink.errands.Remove(this);

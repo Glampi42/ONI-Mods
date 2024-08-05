@@ -57,32 +57,64 @@ namespace ChainErrand {
       /// Returns the corresponding postfix to the specified link number. Keep in mind that 0th link is displayed as the 1st!
       /// </summary>
       /// <param name="linkNumber">The link number</param>
+      /// <param name="useTranslated">If true, the translated version of the postfix will be retrieved; otherwise, the english version will be returned</param>
       /// <returns>The postfix.</returns>
-      public static string GetPostfixForLinkNumber(int linkNumber) {
-         switch(linkNumber)
+      public static string GetPostfixForLinkNumber(int linkNumber, bool useTranslated) {
+         if(useTranslated)
          {
-            case 0:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_1;
-            case 1:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_2;
-            case 2:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_3;
-            case 3:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_4;
-            case 4:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_5;
-            case 5:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_6;
-            case 6:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_7;
-            case 7:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_8;
-            case 8:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_9;
-            case 9:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_10;
-            default:
-               return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_DEFAULT;
+            switch(linkNumber)
+            {
+               case 0:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_1;
+               case 1:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_2;
+               case 2:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_3;
+               case 3:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_4;
+               case 4:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_5;
+               case 5:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_6;
+               case 6:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_7;
+               case 7:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_8;
+               case 8:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_9;
+               case 9:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_10;
+               default:
+                  return MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_DEFAULT;
+            }
+         }
+         else
+         {
+            switch(linkNumber)
+            {
+               case 0:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_1;
+               case 1:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_2;
+               case 2:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_3;
+               case 3:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_4;
+               case 4:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_5;
+               case 5:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_6;
+               case 6:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_7;
+               case 7:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_8;
+               case 8:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_9;
+               case 9:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_10;
+               default:
+                  return MYSTRINGS.UI.CHAINNUMBERS.UNTRANSLATED_POSTFIX_DEFAULT;
+            }
          }
       }
 

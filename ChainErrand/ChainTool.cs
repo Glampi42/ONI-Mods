@@ -301,7 +301,6 @@ namespace ChainErrand {
 
       public override void OnDragComplete(Vector3 cursorDown, Vector3 cursorUp) {
          base.OnDragComplete(cursorDown, cursorUp);
-         Debug.Log("OnDragComplete");
 
          Vector2I dragMin = new Vector2I((int)Math.Floor(Math.Min(cursorDown.x, cursorUp.x)), (int)Math.Floor(Math.Min(cursorDown.y, cursorUp.y)));
          Vector2I dragMax = new Vector2I((int)Math.Ceiling(Math.Max(cursorDown.x, cursorUp.x)), (int)Math.Ceiling(Math.Max(cursorDown.y, cursorUp.y)));
@@ -330,7 +329,6 @@ namespace ChainErrand {
             }
          }
 
-         Debug.Log("ChainTool collectedErrands Count: " + collectedErrands.Count);
          if(collectedErrands.Count > 0)
          {
             switch(currentMode)

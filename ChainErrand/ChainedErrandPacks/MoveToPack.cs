@@ -33,7 +33,6 @@ namespace ChainErrand.ChainedErrandPacks {
          new GPatchInfo(targetMethod4, null, postfix4), new GPatchInfo(targetMethod5, null, postfix5)];
       }
       private static void OnSpawnPostfix(CancellableMove __instance) {
-         Debug.Log("CancellableMove.OnSpawn");
          if(__instance.fetchChore != null)
          {
             GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
@@ -44,7 +43,6 @@ namespace ChainErrand.ChainedErrandPacks {
          }
       }
       private static void SetMovablePostfix(Movable movable, CancellableMove __instance) {
-         Debug.Log("CancellableMove.SetMovable");
          if(__instance.fetchChore != null)
          {
             GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
@@ -57,7 +55,6 @@ namespace ChainErrand.ChainedErrandPacks {
       }
 
       private static void OnChunkTakePrefix(Pickupable pickupable, HandleVector<int>.Handle handle, float amount, ElementSplitterComponents __instance, out System.Action<Movable> __state) {// occurs when a material chunk or its portion gets picked up by a dupe
-         Debug.Log("OnChunkTakePrefix");
          __state = null;
 
          Movable parentMovable = pickupable?.GetComponent<Movable>();
@@ -72,13 +69,11 @@ namespace ChainErrand.ChainedErrandPacks {
       }
       private static void OnChunkTakePostfix(Pickupable pickupable, HandleVector<int>.Handle handle, float amount, ElementSplitterComponents __instance, Pickupable __result,
          ref System.Action<Movable> __state) {
-         Debug.Log("OnChunkTakePostfix");
          Movable movable = __result?.GetComponent<Movable>();
          if(movable != null)
          {
             if(__state != null)
             {
-               Debug.Log("Adding errand to chain");
                // adding the split chunk to the same chain its parent is/was in:
                __state(movable);
             }
@@ -94,25 +89,21 @@ namespace ChainErrand.ChainedErrandPacks {
       }
 
       private static void OnChoreEndPostfix(Chore chore, CancellableMove __instance) {
-         Debug.Log("CancellableMove.OnChoreEnd");
          if(__instance.fetchChore != null)// after a chore ends, a new one gets created if the MoveTo errand has more objects that need to be carried
          {
             GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
             if(movable_go != null && movable_go.TryGetComponent(out ChainedErrand_Movable chainedErrand) && chainedErrand.enabled)
             {
-               Debug.Log("New chore on the way");
                chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
             }
          }
       }
       private static void OnChoreSuccessPostfix(MovePickupableChore.StatesInstance smi) {
-         Debug.Log("OnChoreSuccess");
          if(smi != null && !smi.sm.IsDeliveryComplete(smi))// after a chore succeeds, a new one gets created if the MoveTo errand has more objects that need to be carried
          {
             GameObject movable_go = smi.sm.pickupablesource.Get(smi);
             if(movable_go != null && movable_go.TryGetComponent(out ChainedErrand_Movable chainedErrand) && chainedErrand.enabled)
             {
-               Debug.Log("New chore on the way");
                chainedErrand.ConfigureChorePrecondition(smi.master);
             }
          }
@@ -141,14 +132,12 @@ namespace ChainErrand.ChainedErrandPacks {
             {
                if(movable.Get().TryGetComponent(out ChainedErrand_Movable chainedErrand) && chainedErrand.enabled)
                {
-                  Debug.Log("CancellableMove.OnCancel remove ChainedErrand");
                   chainedErrand.Remove(true);
                }
             }
          }
       }
       private static void ClearMovePrefix(Movable __instance) {
-         Debug.Log("Movable.ClearMove");
          if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             chainedErrand.Remove(true);

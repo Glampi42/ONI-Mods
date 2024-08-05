@@ -29,8 +29,6 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       public void Remove(bool tryRemoveChain) {
-         Debug.Log("Link.Remove");
-         Debug.Log("count: " + errands.Count);
          foreach(var errand in errands)
          {
             errand.Remove(false);

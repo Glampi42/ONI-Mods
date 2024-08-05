@@ -92,7 +92,6 @@ namespace ChainErrand.Patches {
       [HarmonyPatch(typeof(SaveLoader), "OnSpawn")]
       public static class OnGameLoad_Patch {
          public static void Postfix() {
-            Debug.Log("$$$Game.Loaded");
             Main.IsGameLoaded = true;
          }
       }
@@ -100,9 +99,9 @@ namespace ChainErrand.Patches {
       [HarmonyPatch(typeof(Game), "OnDestroy")]
       public static class OnGameDestroy_Patch {
          public static void Postfix(Game __instance) {
-            Debug.Log("$$$Game.Destroyed");
             Main.IsGameLoaded = false;
             ChainsContainer.Clear();
+            ChainNumberPrefab.DestroyPrefab();
          }
       }
    }

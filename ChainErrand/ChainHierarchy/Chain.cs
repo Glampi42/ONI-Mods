@@ -27,7 +27,6 @@ namespace ChainErrand.ChainHierarchy {
       /// <param name="forceInsertAtLinkNumber">If true, a link will be inserted(not expanded) at the desired index even if it surpasses the current links count</param>
       /// <returns>The newly created/expanded link.</returns>
       public Link CreateOrExpandLink(int linkNumber, bool insertNewLink, Dictionary<GameObject, HashSet<Workable>> linkErrands, bool forceInsertAtLinkNumber = false) {
-         Debug.Log($"CreateOrExpandLink, chain {this.chainID}");
          Link link;
          if(!forceInsertAtLinkNumber)
          {
@@ -150,7 +149,6 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       public void Remove(bool removeFromChainsContainer) {
-         Debug.Log("Chain.Remove");
          foreach(var link in links)
          {
             if(link == null)

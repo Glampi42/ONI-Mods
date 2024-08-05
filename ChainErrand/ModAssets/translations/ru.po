@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.CHAIN.NAME"
+msgid "Chain"
+msgstr "Цепь"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME"
+msgid "Mopping"
+msgstr "Вытирание"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
+msgid "Target <style="KKeyword">Mopping</style> errands only"
+msgstr "Выбрать только поручения на <style="KKeyword">Вытирание</style>"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
+msgid "Target <style="KKeyword">Empty Pipe</style> errands only"
+msgstr "Выбрать только поручения на <style="KKeyword">Опустошение Трубы</style>"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
+msgid "Target <style="KKeyword">Move To</style> errands only"
+msgstr "Выбрать только поручения на <style="KKeyword">Перемещение</style>"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLTIPS.CHAINBUTTON"
+msgid "Chain up errands to be executed in some specific order {Hotkey}"
+msgstr "Соединить поручения для их исполнения в определённом порядке {Hotkey}"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.TITLE"
+msgid "Chain Tools"
+msgstr "Инструменты Цепи"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATEBUTTON"
+msgid "Create"
+msgstr "Создать"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETEBUTTON"
+msgid "Delete"
+msgstr "Удалить"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN"
+msgid "Create Chain"
+msgstr "Создать Цепь"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN_TOOLTIP"
+msgid "Create the first link of a new chain"
+msgstr "Создать первое звено новой цепи"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK"
+msgid "Create/Expand Link"
+msgstr "Создать/Расширить Звено"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK_TOOLTIP"
+msgid "Create a new link at the end/inside of an existing chain, or expand an existing link"
+msgstr "Создать новое звено цепи в конце/между другими, или расширить уже существующее звено"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER"
+msgid "Chain ID:"
+msgstr "ID Цепи:"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP"
+msgid "ID of the chain that should be modified"
+msgstr "ID цепи которая должна быть модифицирована"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER"
+msgid "Link Nr.:"
+msgstr "Н-р. Звена:"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
+msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
+msgstr "Номер звена цепи\nЕсли число целое, тогда уже существующее звено будет расширено\nЕсли число дробное, тогда будет вставлено новое звено"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
+msgid "NO CHAINS"
+msgstr "НЕТ ЦЕПЕЙ"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_NOTFOUND"
+msgid "NO LINKS"
+msgstr "НЕТ ЗВЁН"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN"
+msgid "Delete Chain"
+msgstr "Удалить Цепь"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN_TOOLTIP"
+msgid "Delete an entire chain"
+msgstr "Удалить всю цепь"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK"
+msgid "Delete Errand"
+msgstr "Удалить Поручение"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK_TOOLTIP"
+msgid "Delete selected errands from the chain they are in"
+msgstr "Удалить выбранные поручения из цепи в которой они находятся"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_1"
+msgid "st"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_2"
+msgid "nd"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_3"
+msgid "rd"
+msgstr "ье"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_4"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_5"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_6"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_7"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_8"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_9"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_10"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_DEFAULT"
+msgid "th"
+msgstr "ое"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
+msgid "Must be in the 1st link"
+msgstr "Должно быть в первом звене цепи"
+
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
+msgid "Disable UI Help"
+msgstr "Отключить UI Помощь"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP_TOOLTIP"
+msgid "If enabled, all UI help such as automatically switching from \"Create Chain\" to \"Create/Expand Link\"\nor automatically increasing the link number will be disabled."
+msgstr "Если включено, тогда вся помощь в UI, такая как автоматическое переключение от \"Создать Цепь\" к \"Создать/Расширить Звено\"\nили автоматическое увеличение номера звена, будет отключена."

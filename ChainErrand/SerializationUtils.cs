@@ -15,7 +15,6 @@ namespace ChainErrand {
             if(chainID == -1 || linkNumber == -1 || chainedErrand == null)
                return;
 
-            Debug.Log($"ReconstructChain ID:{chainID}, linkNum:{linkNumber}, errandType:{chainedErrand.GetType()}");
             Chain chain;
             if(!ChainsContainer.TryGetChain(chainID, out chain))
             {

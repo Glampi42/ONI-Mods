@@ -62,6 +62,7 @@ namespace ChainErrand.Strings {
 
             public static LocString POSTFIX_STYLE_START = "<sup><u>";
             public static LocString POSTFIX_STYLE_END = "</sup></u>";
+
             public static LocString POSTFIX_1 = "st";
             public static LocString POSTFIX_2 = "nd";
             public static LocString POSTFIX_3 = "rd";
@@ -73,6 +74,19 @@ namespace ChainErrand.Strings {
             public static LocString POSTFIX_9 = "th";
             public static LocString POSTFIX_10 = "th";
             public static LocString POSTFIX_DEFAULT = "th";
+
+            // english versions of the postfixes:
+            public static LocString UNTRANSLATED_POSTFIX_1 = "st";
+            public static LocString UNTRANSLATED_POSTFIX_2 = "nd";
+            public static LocString UNTRANSLATED_POSTFIX_3 = "rd";
+            public static LocString UNTRANSLATED_POSTFIX_4 = "th";
+            public static LocString UNTRANSLATED_POSTFIX_5 = "th";
+            public static LocString UNTRANSLATED_POSTFIX_6 = "th";
+            public static LocString UNTRANSLATED_POSTFIX_7 = "th";
+            public static LocString UNTRANSLATED_POSTFIX_8 = "th";
+            public static LocString UNTRANSLATED_POSTFIX_9 = "th";
+            public static LocString UNTRANSLATED_POSTFIX_10 = "th";
+            public static LocString UNTRANSLATED_POSTFIX_DEFAULT = "th";
          }
          public class CHOREPRECONDITION {
             public static LocString NOTFIRSTLINK = "Must be in the 1st link";

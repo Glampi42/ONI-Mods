@@ -143,7 +143,6 @@ namespace ChainErrand {
       }
 
       public static void DeleteChains(HashSet<Workable> errands) {
-         Debug.Log("DeleteChains");
          HashSet<Chain> chainsToDelete = new();
          foreach(var errand in errands)
          {

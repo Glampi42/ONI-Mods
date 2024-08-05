@@ -9,18 +9,28 @@ using UnityEngine;
 
 namespace ChainErrand {
    public static class ChainNumberPrefab {
-      public const float boundsHeightDelta = 0.1f;
-      public static readonly Vector2f boundsYOffset = new Vector2f(0.0f, -0.04f);
+      private static LocText chainNumberPrefab = null;
 
       public static LocText GetChainNumberPrefab() {
-         LocText chainNumberPrefab = UnityEngine.Object.Instantiate(OverlayScreen.Instance.powerLabelPrefab);
+         if(chainNumberPrefab != null)
+            return chainNumberPrefab;
+
+         chainNumberPrefab = UnityEngine.Object.Instantiate(OverlayScreen.Instance.powerLabelPrefab);
          chainNumberPrefab.name = "ChainNumber";
          chainNumberPrefab.raycastTarget = false;
          //UnityEngine.Object.Destroy(chainNumberPrefab.GetComponent<ContentSizeFitter>());
          UnityEngine.Object.Destroy(chainNumberPrefab.GetComponent<ToolTip>());
          UnityEngine.Object.Destroy(chainNumberPrefab.transform.GetChildSafe(0)?.gameObject);
          chainNumberPrefab.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
-         chainNumberPrefab.font = Localization.GetFont("GRAYSTROKE OUTLINE SDF");
+
+         var font = Localization.GetFont("GRAYSTROKE OUTLINE SDF");
+         if(font == null)
+         {
+            font = Localization.GetFont("GRAYSTROKE REGULAR SDF");// some localizations don't have the outline font for some reason (but it looks better than the regular because it doesn't have artifacts with big outlines)
+            Main.outlineWidthMultiplier = 0.0191f;// this font has other scale for the outline
+         }
+
+         chainNumberPrefab.font = font;
          chainNumberPrefab.alignment = TextAlignmentOptions.Center;
          chainNumberPrefab.fontSize = Main.maxChainNumberFontSize;
          chainNumberPrefab.outlineColor = Color.white;
@@ -31,7 +41,12 @@ namespace ChainErrand {
          chainNumberPrefab.enableWordWrapping = true;
          chainNumberPrefab.overflowMode = TextOverflowModes.Overflow;
          chainNumberPrefab.UpdateMeshPadding();
+
          return chainNumberPrefab;
+      }
+
+      public static void DestroyPrefab() {
+         chainNumberPrefab = null;
       }
    }
 }

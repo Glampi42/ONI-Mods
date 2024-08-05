@@ -56,7 +56,7 @@ namespace ChainErrand.Structs {
          if(num > 0)
          {
             displayedLocText.text = "<b>" + number.ToString() + "</b>" +
-               MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_STYLE_START + Utils.GetPostfixForLinkNumber(num - 1) + MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_STYLE_END;
+               MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_STYLE_START + Utils.GetPostfixForLinkNumber(num - 1, false/*for technical reasons this can't be localized properly without looking weird(sad smiley)*/) + MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_STYLE_END;
          }
          else
          {

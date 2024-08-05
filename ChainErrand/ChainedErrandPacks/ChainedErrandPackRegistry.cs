@@ -59,7 +59,6 @@ namespace ChainErrand.ChainedErrandPacks {
       }
 
       private static void RegisterAllPacks() {
-         Debug.Log("$$$RegisterAllPacks");
          // getting all ChainedErrandPack types (all types that extend the AChainedErrandPack base type):
          var types = Main.Assembly.GetTypes().Where(t => t.IsClass && !t.IsInterface &&
          t.BaseType != null && t.BaseType.IsGenericType && t.BaseType.GetGenericTypeDefinition() == typeof(AChainedErrandPack<,>));
@@ -67,9 +66,6 @@ namespace ChainErrand.ChainedErrandPacks {
          foreach(var type in types)
          {
             var genericParameters = type.BaseType.GetGenericArguments();
-            Debug.Log("Registered " + type.ToString());
-            Debug.Log("Key1: " + genericParameters[0].ToString());
-            Debug.Log("Key2: " + genericParameters[1].ToString());
             Register(genericParameters[0], type);// so that you can access the relating ChainedErrandPack from an errand
             Register(genericParameters[1], type);// so that you can access the relating ChainedErrandPack from a ChainedErrand
          }
@@ -82,7 +78,6 @@ namespace ChainErrand.ChainedErrandPacks {
             throw new ArgumentException(Main.debugPrefix + $"Type {chainedErrandPackType.FullName} is not a valid ChainedErrandPack type");
 
          var instance = Activator.CreateInstance(chainedErrandPackType);
-         Debug.Log("Who?: " + (instance.GetType().FullName));
          _typeToPackMappings[type] = (IChainedErrandPack)instance;
       }
    }

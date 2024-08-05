@@ -44,7 +44,6 @@ namespace ChainErrand.ChainHierarchy {
          if(chain == null)
             return;
 
-         Debug.Log("ChainsContainer.RemoveChain");
          int chainID = chain.chainID;
          chain.Remove(false);
 

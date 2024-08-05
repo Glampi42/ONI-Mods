@@ -206,7 +206,7 @@ namespace ChainErrand {
                if(Main.chainTool.GetSelectedLink() > chain.LastLinkNumber())
                {
                   // appending link at the end of the chain won't show a fraction (3.5) but a whole number (4th)
-                  SetTextFieldText(linkNumberField, (Main.chainTool.GetSelectedLink() + 1/*0th link -> 1st link*/).ToString() + Utils.GetPostfixForLinkNumber(Main.chainTool.GetSelectedLink()));
+                  SetTextFieldText(linkNumberField, (Main.chainTool.GetSelectedLink() + 1/*0th link -> 1st link*/).ToString() + Utils.GetPostfixForLinkNumber(Main.chainTool.GetSelectedLink(), true));
                }
                else
                {
@@ -215,7 +215,7 @@ namespace ChainErrand {
             }
             else
             {
-               SetTextFieldText(linkNumberField, (Main.chainTool.GetSelectedLink() + 1/*0th link -> 1st link*/).ToString() + Utils.GetPostfixForLinkNumber(Main.chainTool.GetSelectedLink()));
+               SetTextFieldText(linkNumberField, (Main.chainTool.GetSelectedLink() + 1/*0th link -> 1st link*/).ToString() + Utils.GetPostfixForLinkNumber(Main.chainTool.GetSelectedLink(), true));
             }
          }
          else
