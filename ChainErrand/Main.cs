@@ -33,6 +33,9 @@ namespace ChainErrand {
          id = nameof(ChainedErrandPrecondition),
          description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK,
          fn = (ref Chore.Precondition.Context context, object _) => {
+            if(context.chore.masterPriority.priority_class == PriorityScreen.PriorityClass.topPriority)
+               return true;
+
             GameObject go;
             if(context.chore is MovePickupableChore moveChore)
             {
