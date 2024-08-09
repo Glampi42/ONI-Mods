@@ -96,7 +96,7 @@ namespace HighlightOverlay {
             DynamicSize = true
          }
          .AddChild(new PCheckBox("SelectAll") {
-            Text = STRINGS.UI.UISIDESCREENS.TREEFILTERABLESIDESCREEN.ALLBUTTON,
+            Text = global::Strings.Get("STRINGS.UI.TOOLS.FILTERLAYERS.ALL.NAME"),
             CheckSize = ROW_SIZE,
             InitialState = PCheckBox.STATE_CHECKED,
             OnChecked = OnCheck,

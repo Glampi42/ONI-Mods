@@ -1,0 +1,50 @@
+﻿using ChainErrand.ChainHierarchy;
+using ChainErrand.Custom;
+using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace ChainErrand.ChainedErrandPacks {
+   public class MoppablePack : AChainedErrandPack<Moppable, ChainedErrand_Moppable> {
+      public override List<GPatchInfo> OnChoreCreate_Patch() {
+         var targetMethod = typeof(Moppable).GetMethod("OnSpawn", Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix(default));
+         return [new GPatchInfo(targetMethod, null, postfix)];
+      }
+      private static void CreatePostfix(Moppable __instance) {
+         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand) &&
+            chainedErrand.chore == null)
+         {
+            chainedErrand.ConfigureChorePrecondition();
+         }
+      }
+
+      public override List<GPatchInfo> OnChoreDelete_Patch() {
+         return null;// the GameObject gets destroyed in either case
+      }
+
+      public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {
+         if(gameObject.TryGetComponent(out Moppable moppable))
+         {
+            errands.Add(moppable);
+            return true;
+         }
+
+         return false;
+      }
+
+      public override Chore GetChoreFromErrand(Moppable errand) {
+         if(errand.TryGetComponent(out StateMachineController controller))
+         {
+            var workChore = (WorkChore<Moppable>.StatesInstance)controller.stateMachines.FirstOrDefault(sm => sm.GetType() == typeof(WorkChore<Moppable>.StatesInstance));
+            return (Chore)workChore?.master;
+         }
+         return null;
+      }
+   }
+}

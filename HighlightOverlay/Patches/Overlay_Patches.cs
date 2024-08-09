@@ -54,9 +54,9 @@ namespace HighlightOverlay.Patches {
             Prefabs.RunAfterPrefabsInit(createOverlayLegend, nameof(Prefabs.LabelPrefab), nameof(Prefabs.CheckboxPrefab), nameof(Prefabs.FilterTogglePrefab));
          }
       }
-      [HarmonyPatch(typeof(OverlayLegend), "PopulateOverlayInfoUnits")]
+      [HarmonyPatch(typeof(OverlayLegend), "PopulateOverlayDiagrams")]
       public static class ConfigureDiagram_Patch {
-         public static void Postfix(OverlayLegend.OverlayInfo overlayInfo, bool isRefresh, OverlayLegend __instance) {
+         public static void Postfix(OverlayLegend.OverlayInfo overlayInfo, bool isRefresh) {
             if(isRefresh || overlayInfo.mode != HighlightMode.ID)
                return;
 

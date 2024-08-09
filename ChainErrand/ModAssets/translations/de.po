@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.CHAIN.NAME"
+msgid "Chain"
+msgstr "Kette"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME"
+msgid "Mopping"
+msgstr "Wischen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
+msgid "Target <style="KKeyword">Mopping</style> errands only"
+msgstr "Nur <style="KKeyword">Wischen</style>saufträge anvisieren"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
+msgid "Target <style="KKeyword">Empty Pipe</style> errands only"
+msgstr "Nur <style="KKeyword">Rohr-Lehrung</style>saufträge anvisieren"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
+msgid "Target <style="KKeyword">Move To</style> errands only"
+msgstr "Nur <style="KKeyword">Verlagerung</style>saufträge anvisieren"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLTIPS.CHAINBUTTON"
+msgid "Chain up errands to be executed in some specific order {Hotkey}"
+msgstr "Aufträge verketten, sodass sie in einer bestimmten Reihenfolge ausgeführt werden {Hotkey}"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.TITLE"
+msgid "Chain Tools"
+msgstr "Ketteninstrumente"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATEBUTTON"
+msgid "Create"
+msgstr "Erstellen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETEBUTTON"
+msgid "Delete"
+msgstr "Löschen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN"
+msgid "Create Chain"
+msgstr "Kette Erstellen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN_TOOLTIP"
+msgid "Create the first link of a new chain"
+msgstr "Das erste Glied einer neuen Kette erstellen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK"
+msgid "Create/Expand Link"
+msgstr "Glied Erstellen/Erweitern"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK_TOOLTIP"
+msgid "Create a new link at the end/inside of an existing chain, or expand an existing link"
+msgstr "Ein neues Kettenglied am Ende/innerhalb einer bestehenden Kette erstellen, oder ein bestehendes Kettenglied erweitern"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER"
+msgid "Chain ID:"
+msgstr "ID der Kette:"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP"
+msgid "ID of the chain that should be modified"
+msgstr "ID der Kette, die modifiziert werden soll"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER"
+msgid "Link Nr.:"
+msgstr "Nr. des Glieds:"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
+msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
+msgstr "Nummer des Kettenglieds\nWenn die Zahl ganz ist, wird ein bestehender Kettenglied erweitert\nWenn die Zahl eine Bruchzahl ist, wird dazwischen ein neuer Kettenglied eingefügt"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
+msgid "NO CHAINS"
+msgstr "KEINE KETTEN"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_NOTFOUND"
+msgid "NO LINKS"
+msgstr "KEINE GLIEDER"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN"
+msgid "Delete Chain"
+msgstr "Kette Löschen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN_TOOLTIP"
+msgid "Delete an entire chain"
+msgstr "Eine ganze Kette löschen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK"
+msgid "Delete Errand"
+msgstr "Auftrag Löschen"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK_TOOLTIP"
+msgid "Delete selected errands from the chain they are in"
+msgstr "Ausgewählte Aufträge aus der Kette löschen, in der sie sich befinden"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_1"
+msgid "st"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_2"
+msgid "nd"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_3"
+msgid "rd"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_4"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_5"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_6"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_7"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_8"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_9"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_10"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_DEFAULT"
+msgid "th"
+msgstr "es"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
+msgid "Must be in the 1st link"
+msgstr "Muss im ersten Kettenglied sein"
+
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
+msgid "Disable UI Help"
+msgstr "UI-Hilfe Deaktivieren"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP_TOOLTIP"
+msgid "If enabled, all UI help such as automatically switching from \"Create Chain\" to \"Create/Expand Link\"\nor automatically increasing the link number will be disabled."
+msgstr "Wenn aktiviert, werden sämtliche UI-Hilfen, wie bspw. das automatische Umschalten von \"Kette Erstellen\" zu \"Glied Erstellen/Erweitern\"\noder das automatische Erhöhen der Kettengliednummer, deaktiviert."

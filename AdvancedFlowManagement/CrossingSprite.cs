@@ -125,7 +125,7 @@ namespace AdvancedFlowManagement {
          crossingIconPrefab.transform.localScale = new Vector3(0.0117f, 0.0117f, 1f);
          crossingIconPrefab.SetActive(false);
 
-         GameObject pulsing_go = new GameObject("SizePulsingGO");// Needed so that the localScale is a reasonable number(not 0.0119)
+         GameObject pulsing_go = new GameObject("SizePulsingGO");// Needed so that the localScale is a reasonable number(not 0.0117)
          pulsing_go.transform.SetParent(crossingIconPrefab.transform, false);
 
          Image image = pulsing_go.AddComponent<Image>();

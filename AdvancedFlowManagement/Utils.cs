@@ -197,49 +197,26 @@ namespace AdvancedFlowManagement {
       public static bool TryGetVisualEndpoint(CrossingCmp fakeCrossingCmp, out GameObject building_go) {
          return (building_go = Grid.Objects[fakeCrossingCmp.crossingCell, (int)(fakeCrossingCmp.conduitType == ConduitType.Liquid ? ObjectLayer.LiquidConduitConnection : ObjectLayer.GasConduitConnection)]) != null;
       }
-      public static bool TryGetVisualEndpointType(CrossingCmp fakeCrossingCmp, out Endpoint endpoint_type, out bool isSecondary) {
+      public static bool TryGetVisualEndpointType(CrossingCmp fakeCrossingCmp, out Endpoint endpoint_type) {
          endpoint_type = Endpoint.Conduit;// = no type
-         isSecondary = false;
          if(!TryGetVisualEndpoint(fakeCrossingCmp, out GameObject building_go))
             return false;
-         Building building = building_go?.GetComponent<Building>();
-         if(building != null)
+
+         BuildingCellVisualizer cellVisualizer = building_go?.GetComponent<BuildingCellVisualizer>();
+         if(cellVisualizer != null)
          {
-            //-----Primary in/outputs-----DOWN
-            if(building.Def.InputConduitType.Equals(fakeCrossingCmp.conduitType) && building.GetUtilityInputCell() == fakeCrossingCmp.crossingCell)
+            if(fakeCrossingCmp.crossingCell == cellVisualizer.building.GetUtilityInputCell())
             {
                endpoint_type = Endpoint.Sink;
                return true;
             }
-            if(building.Def.OutputConduitType.Equals(fakeCrossingCmp.conduitType) && building.GetUtilityOutputCell() == fakeCrossingCmp.crossingCell)
+            else if(fakeCrossingCmp.crossingCell == cellVisualizer.building.GetUtilityOutputCell())
             {
                endpoint_type = Endpoint.Source;
                return true;
             }
-            //-----Primary in/outputs-----UP
-            //-----Secondary in/outputs-----DOWN
-            isSecondary = true;
-
-            ISecondaryInput[] components = building.GetComponents<ISecondaryInput>();
-            foreach(ISecondaryInput secondaryInput in components)
-            {
-               if(secondaryInput.HasSecondaryConduitType(fakeCrossingCmp.conduitType) && Grid.OffsetCell(building.NaturalBuildingCell(), building.GetRotatedOffset(secondaryInput.GetSecondaryConduitOffset(fakeCrossingCmp.conduitType))) == fakeCrossingCmp.crossingCell)
-               {
-                  endpoint_type = Endpoint.Sink;
-                  return true;
-               }
-            }
-            ISecondaryOutput[] components2 = building.GetComponents<ISecondaryOutput>();
-            foreach(ISecondaryOutput secondaryOutput in components2)
-            {
-               if(secondaryOutput.HasSecondaryConduitType(fakeCrossingCmp.conduitType) && Grid.OffsetCell(building.NaturalBuildingCell(), building.GetRotatedOffset(secondaryOutput.GetSecondaryConduitOffset(fakeCrossingCmp.conduitType))) == fakeCrossingCmp.crossingCell)
-               {
-                  endpoint_type = Endpoint.Source;
-                  return true;
-               }
-            }
-            //-----Secondary in/outputs-----UP
          }
+
          return false;
       }
 
@@ -326,36 +303,24 @@ namespace AdvancedFlowManagement {
          if(buildingCellVisualizer == null)
             return false;
 
-         if(TryGetVisualEndpointType(crossingCmp, out Endpoint endpoint_type, out bool isSecondary))
+         if(TryGetVisualEndpointType(crossingCmp, out Endpoint endpoint_type))
          {
             if(endpoint_type.Equals(Endpoint.Sink))
             {
-               if(isSecondary)
-               {
-                  visualizerObj = buildingCellVisualizer.secondaryInputVisualizer;
-               }
-               else
-               {
-                  visualizerObj = buildingCellVisualizer.inputVisualizer;
-               }
+               visualizerObj = buildingCellVisualizer.ports.FirstOrDefault(port => (crossingCmp.conduitType == ConduitType.Liquid && port.type == EntityCellVisualizer.Ports.LiquidIn) ||
+               (crossingCmp.conduitType == ConduitType.Gas && port.type == EntityCellVisualizer.Ports.GasIn))?.visualizer;
             }
             else if(endpoint_type.Equals(Endpoint.Source))
             {
-               if(isSecondary)
-               {
-                  visualizerObj = buildingCellVisualizer.secondaryOutputVisualizer;
-               }
-               else
-               {
-                  visualizerObj = buildingCellVisualizer.outputVisualizer;
-               }
+               visualizerObj = buildingCellVisualizer.ports.FirstOrDefault(port => (crossingCmp.conduitType == ConduitType.Liquid && port.type == EntityCellVisualizer.Ports.LiquidOut) ||
+               (crossingCmp.conduitType == ConduitType.Gas && port.type == EntityCellVisualizer.Ports.GasOut))?.visualizer;
             }
             if(visualizerObj == null)
                return false;
 
             if(resetToDefaults)
             {
-               BuildingCellVisualizerResources resources = buildingCellVisualizer.resources;
+               BuildingCellVisualizerResources resources = buildingCellVisualizer.Resources;
                Dictionary<GameObject, Image> icons = buildingCellVisualizer.icons;
 
                switch(crossingCmp.conduitType)

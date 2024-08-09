@@ -361,4 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/ONI_Mods.sln
+/Robo Rockets/Sprites
+/Plib/PLibUI.dll
+/Plib/PLibOptions.dll
+/Plib/PLibCore.dll
+/Directory.Build.props
+/Directory.Build.props
+/PublicisedAssembly
+/InvertedItemFilter/Patches.cs
