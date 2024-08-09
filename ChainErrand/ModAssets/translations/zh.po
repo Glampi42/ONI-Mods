@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Language-Team: Xiaohulizi\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_cn简体中文\n"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.CHAIN.NAME"
+msgid "Chain"
+msgstr "链排序"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME"
+msgid "Mopping"
+msgstr "擦拭"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
+msgid "Target <style="KKeyword">Mopping</style> errands only"
+msgstr "仅以<style="KKeyword">擦拭</style>任务为目标"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
+msgid "Target <style="KKeyword">Empty Pipe</style> errands only"
+msgstr "仅以<style="KKeyword">清空管道</style>任务为目标"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
+msgid "Target <style="KKeyword">Move To</style> errands only"
+msgstr "仅以<style="KKeyword">移至</style>任务为目标"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLTIPS.CHAINBUTTON"
+msgid "Chain up errands to be executed in some specific order {Hotkey}"
+msgstr "按特定顺序执行任务链 {Hotkey}"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.TITLE"
+msgid "Chain Tools"
+msgstr "链排序工具"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATEBUTTON"
+msgid "Create"
+msgstr "创建"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETEBUTTON"
+msgid "Delete"
+msgstr "删除"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN"
+msgid "Create Chain"
+msgstr "创建新的序列链接"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN_TOOLTIP"
+msgid "Create the first link of a new chain"
+msgstr "创建新序列链接的第一个序号任务"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK"
+msgid "Create/Expand Link"
+msgstr "新增/扩展序列链接"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK_TOOLTIP"
+msgid "Create a new link at the end/inside of an existing chain, or expand an existing link"
+msgstr "展开已存在的序列链接，在已存在的序列链的末尾/中间增加一个序号任务"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER"
+msgid "Chain ID:"
+msgstr "链 ID："
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP"
+msgid "ID of the chain that should be modified"
+msgstr "需要修改的链 ID"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER"
+msgid "Link Nr.:"
+msgstr "序号ID:"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
+msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
+msgstr "链接的编号（序号ID）\n如果编号是整数，则会新增同级序号任务；\n如果编号是小数，则会在中间插入新的序号任务。"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
+msgid "NO CHAINS"
+msgstr "NONE"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_NOTFOUND"
+msgid "NO LINKS"
+msgstr "NONE"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN"
+msgid "Delete Chain"
+msgstr "删除整个序列链接"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN_TOOLTIP"
+msgid "Delete an entire chain"
+msgstr "删除整个序列链接"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK"
+msgid "Delete Errand"
+msgstr "删除选定序号任务"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK_TOOLTIP"
+msgid "Delete selected errands from the chain they are in"
+msgstr "从链中删除选定的序号任务"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_1"
+msgid "st"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_2"
+msgid "nd"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_3"
+msgid "rd"
+msgstr "я"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_4"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_5"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_6"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_7"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_8"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_9"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_10"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_DEFAULT"
+msgid "th"
+msgstr "а"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
+msgid "Must be in the 1st link"
+msgstr "必须从1开始"
+
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
+msgid "Disable UI Help"
+msgstr "禁用辅助操作"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP_TOOLTIP"
+msgid "If enabled, all UI help such as automatically switching from \"Create Chain\" to \"Create/Expand Link\"\nor automatically increasing the link number will be disabled."
+msgstr "如果启用，则将禁用所有用户界面辅助功能，例如从 "创建新的序列链接" 自动切换到 "新增/扩展序列链接" 或自动递增链号。"
