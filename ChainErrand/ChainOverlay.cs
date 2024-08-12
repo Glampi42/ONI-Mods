@@ -150,7 +150,10 @@ namespace ChainErrand {
          if(errandRef.TryGetComponent(out KBatchedAnimController animController))
          {
             // normal buildings:
-            animController.SetLayer(targetLayer);
+            if(!animController.IsNullOrDestroyed())
+            {
+               animController.SetLayer(targetLayer);
+            }
          }
          else if(Utils.IsTile(errandRef.gameObject, out SimCellOccupier cellOccupier))
          {
