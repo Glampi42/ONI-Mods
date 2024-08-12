@@ -141,7 +141,7 @@ namespace ChainErrand {
          //}
       }
       private void AddToVisible(KMonoBehaviour errandRef, HashSet<Workable> collectedErrands) {
-         if(errandRef == null)
+         if(errandRef.IsNullOrDestroyed())
             return;
 
          visibleErrands.Add(errandRef);
