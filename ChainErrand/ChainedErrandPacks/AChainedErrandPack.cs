@@ -28,6 +28,11 @@ namespace ChainErrand.ChainedErrandPacks {
       public abstract List<GPatchInfo> OnChoreDelete_Patch();
 
       /// <summary>
+      /// The patches that add a newly created errand to a chain automatically.
+      /// </summary>
+      public abstract List<GPatchInfo> OnAutoChain_Patch();
+
+      /// <summary>
       /// Collects errands of type ErrandType that may be added to a chain.
       /// </summary>
       /// <param name="gameObject">The GameObject the errands will be collected from</param>
@@ -58,6 +63,8 @@ namespace ChainErrand.ChainedErrandPacks {
       public abstract List<GPatchInfo> OnChoreCreate_Patch();
 
       public abstract List<GPatchInfo> OnChoreDelete_Patch();
+
+      public abstract List<GPatchInfo> OnAutoChain_Patch();
 
       public abstract bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference);
 

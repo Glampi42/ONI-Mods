@@ -13,23 +13,23 @@ using UnityEngine;
 namespace ChainErrand.ChainedErrandPacks {
    public class MoveToPack : AChainedErrandPack<Movable, ChainedErrand_Movable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
-         var targetMethod = typeof(CancellableMove).GetMethod("OnSpawn", Utils.GeneralBindingFlags);
+         var targetMethod = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnSpawn), Utils.GeneralBindingFlags);
          var postfix = SymbolExtensions.GetMethodInfo(() => OnSpawnPostfix(default));
 
-         var targetMethod2 = typeof(CancellableMove).GetMethod("SetMovable", Utils.GeneralBindingFlags);
+         var targetMethod2 = typeof(CancellableMove).GetMethod(nameof(CancellableMove.SetMovable), Utils.GeneralBindingFlags);
          var postfix2 = SymbolExtensions.GetMethodInfo(() => SetMovablePostfix(default, default));
 
-         var targetMethod3 = typeof(ElementSplitterComponents).GetMethod("OnTake", Utils.GeneralBindingFlags, null, [typeof(Pickupable), typeof(HandleVector<int>.Handle), typeof(float)], null);
-         var prefix = SymbolExtensions.GetMethodInfo(() => OnChunkTakePrefix(default, default, default, default, out InstancesLibrary.Action_Movable));
+         var targetMethod3 = typeof(ElementSplitterComponents).GetMethod(nameof(ElementSplitterComponents.OnTake), Utils.GeneralBindingFlags, null, [typeof(Pickupable), typeof(HandleVector<int>.Handle), typeof(float)], null);
+         var prefix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePrefix(default, default, default, default, out InstancesLibrary.Action_Movable));
          var postfix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePostfix(default, default, default, default, default, ref InstancesLibrary.Action_Movable));
 
-         var targetMethod4 = typeof(CancellableMove).GetMethod("OnChoreEnd", Utils.GeneralBindingFlags);
+         var targetMethod4 = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnChoreEnd), Utils.GeneralBindingFlags);
          var postfix4 = SymbolExtensions.GetMethodInfo(() => OnChoreEndPostfix(default, default));
 
-         var targetMethod5 = typeof(MovePickupableChore.States).GetMethod("<InitializeStates>b__16_4", Utils.GeneralBindingFlags);// inner lambda expression inside of success.Enter([...])
+         var targetMethod5 = typeof(MovePickupableChore.States).GetMethod("<InitializeStates>b__16_4", Utils.GeneralBindingFlags);// inner lambda expression inside of success.Enter([...]) inside of InitializeStates()
          var postfix5 = SymbolExtensions.GetMethodInfo(() => OnChoreSuccessPostfix(default));
 
-         return [new GPatchInfo(targetMethod, null, postfix), new GPatchInfo(targetMethod2, null, postfix2), new GPatchInfo(targetMethod3, prefix, postfix3),
+         return [new GPatchInfo(targetMethod, null, postfix), new GPatchInfo(targetMethod2, null, postfix2), new GPatchInfo(targetMethod3, prefix3, postfix3),
          new GPatchInfo(targetMethod4, null, postfix4), new GPatchInfo(targetMethod5, null, postfix5)];
       }
       private static void OnSpawnPostfix(CancellableMove __instance) {
@@ -61,6 +61,7 @@ namespace ChainErrand.ChainedErrandPacks {
          if(parentMovable != null && parentMovable.IsMarkedForMove && parentMovable.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             __state = (newMovable) => {
+               // adding the split chunk to the same chain its parent is/was in:
                Dictionary<GameObject, HashSet<Workable>> newErrands = new();
                newErrands.Add(parentMovable.StorageProxy.gameObject, new([newMovable]));
                chainedErrand.parentLink.parentChain.CreateOrExpandLink(chainedErrand.parentLink.linkNumber, false, newErrands);
@@ -111,11 +112,11 @@ namespace ChainErrand.ChainedErrandPacks {
 
 
       public override List<GPatchInfo> OnChoreDelete_Patch() {
-         var targetMethod = typeof(CancellableMove).GetMethod("OnCancel", Utils.GeneralBindingFlags, null, [typeof(Movable)], null);
+         var targetMethod = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnCancel), Utils.GeneralBindingFlags, null, [typeof(Movable)], null);
          var prefix = SymbolExtensions.GetMethodInfo(() => OnCancelPrefix(default, default, out InstancesLibrary.List_Movable));
          var postfix1 = SymbolExtensions.GetMethodInfo(() => OnCancelPostfix(default, default, ref InstancesLibrary.List_Movable));
 
-         var targetMethod2 = typeof(Movable).GetMethod("ClearMove", Utils.GeneralBindingFlags);
+         var targetMethod2 = typeof(Movable).GetMethod(nameof(Movable.ClearMove), Utils.GeneralBindingFlags);
          var prefix2 = SymbolExtensions.GetMethodInfo(() => ClearMovePrefix(default));
 
          return [new GPatchInfo(targetMethod, prefix, postfix1), new GPatchInfo(targetMethod2, prefix2, null)];
@@ -148,6 +149,16 @@ namespace ChainErrand.ChainedErrandPacks {
          {
             Main.chainOverlay.RemoveChainNumber(__instance.StorageProxy?.gameObject, __instance);
          }
+      }
+
+      public override List<GPatchInfo> OnAutoChain_Patch() {
+         var targetMethod = typeof(Movable).GetMethod(nameof(Movable.MarkForMove), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnMarkForMove(default));
+
+         return [new GPatchInfo(targetMethod, null, postfix)];
+      }
+      private static void OnMarkForMove(Movable __instance) {
+         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
       }
 
 

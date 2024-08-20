@@ -160,7 +160,7 @@ namespace ChainErrand.ChainHierarchy {
 
          if(removeFromChainsContainer)
          {
-            ChainsContainer.RemoveChain(this);
+            ChainsContainer.RemoveChain(this, false);
          }
       }
    }

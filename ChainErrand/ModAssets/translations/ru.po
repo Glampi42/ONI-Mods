@@ -146,6 +146,30 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
 msgid "Must be in the 1st link"
 msgstr "Должно быть в первом звене цепи"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_HEADER"
+msgid "Toggle Auto Chain"
+msgstr "Переключить Авто Цепь"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_CONTENT"
+msgid "If enabled, all new errands (that can be added to a chain) will be chained up.\nSwitch off and on to create a new chain.\n\nErrands that were created simultaneously and building errands that were created with one stroke (without releasing the left mouse button) will be added to the same link."
+msgstr "Если включено, все новые поручения (которые можно добавить в цепь) будут объединены в цепь.\nВыключите и включите, чтобы создать новую цепь.\n\nПоручения, созданные одновременно, и строительные поручения, созданные одним движением (не отпуская левую кнопку мыши), будут добавлены в одно и то же звено."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME"
+msgid "Auto Chain Enabled"
+msgstr "Авто Цепь Включена"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP"
+msgid "All newly created errands will be chained up\n\nPress to disable"
+msgstr "Все созданные поручения будут добавлены в цепь\n\nНажмите, чтобы отключить"
+
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
+msgid "Disable Auto Chain Vignette"
+msgstr "Отключить Виньетку Авто Цепи"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
+msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its defaut state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
+msgstr "Если эта опция включена, синяя виньетка вокруг экрана не будет отображаться при включенной \"Авто Цепи\".\nДля вашего удобства рекомендуется оставить эту опцию в состоянии по умолчанию\n(вы можете забыть о включенной \"Авто Цепи\", если виньетка отсутствует)."
 
 msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
 msgid "Disable UI Help"

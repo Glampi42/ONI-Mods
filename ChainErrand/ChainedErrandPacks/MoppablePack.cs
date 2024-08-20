@@ -12,13 +12,13 @@ using UnityEngine;
 namespace ChainErrand.ChainedErrandPacks {
    public class MoppablePack : AChainedErrandPack<Moppable, ChainedErrand_Moppable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
-         var targetMethod = typeof(Moppable).GetMethod("OnSpawn", Utils.GeneralBindingFlags);
+         var targetMethod = typeof(Moppable).GetMethod(nameof(Moppable.OnSpawn), Utils.GeneralBindingFlags);
          var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix(default));
+
          return [new GPatchInfo(targetMethod, null, postfix)];
       }
       private static void CreatePostfix(Moppable __instance) {
-         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand) &&
-            chainedErrand.chore == null)
+         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             chainedErrand.ConfigureChorePrecondition();
          }
@@ -26,6 +26,16 @@ namespace ChainErrand.ChainedErrandPacks {
 
       public override List<GPatchInfo> OnChoreDelete_Patch() {
          return null;// the GameObject gets destroyed in either case
+      }
+
+      public override List<GPatchInfo> OnAutoChain_Patch() {
+         var targetMethod = typeof(Moppable).GetMethod(nameof(Moppable.OnPrefabInit), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix2(default));
+
+         return [new GPatchInfo(targetMethod, null, postfix)];
+      }
+      private static void CreatePostfix2(Moppable __instance) {
+         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

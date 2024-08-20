@@ -146,6 +146,30 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
 msgid "Must be in the 1st link"
 msgstr "Muss im ersten Kettenglied sein"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_HEADER"
+msgid "Toggle Auto Chain"
+msgstr "Auto Kette umschalten"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_CONTENT"
+msgid "If enabled, all new errands (that can be added to a chain) will be chained up.\nSwitch off and on to create a new chain.\n\nErrands that were created simultaneously and building errands that were created with one stroke (without releasing the left mouse button) will be added to the same link."
+msgstr "Wenn aktiviert, werden alle neuen Aufträge (die einer Kette hinzugefügt werden können) verkettet.\nSchalten Sie den Schalter aus und wieder ein, um eine neue Kette zu erstellen.\n\nGleichzeitig erstellte Aufträge und Bauaufträge, die mit einem Strich (ohne Loslassen der linken Maustaste) erstellt wurden, werden demselben Kettenglied hinzugefügt."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME"
+msgid "Auto Chain Enabled"
+msgstr "Auto Kette Aktiviert"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP"
+msgid "All newly created errands will be chained up\n\nPress to disable"
+msgstr "Alle neu erstellten Aufträge werden verkettet\n\nDrücken Sie, um zu deaktivieren"
+
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
+msgid "Disable Auto Chain Vignette"
+msgstr "Vignette der Auto Kette Deaktivieren"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
+msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its defaut state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
+msgstr "Wenn diese Option aktiviert ist, wird die blaue Vignette um den Bildschirm nicht angezeigt, wenn die \"Auto Kette\" aktiviert ist.\nEs wird empfohlen, diese Option aus praktischen Gründen in ihrem Standardzustand zu belassen.\n(Sie können vergessen, dass die \"Auto Kette\" aktiviert ist, wenn keine Vignette vorhanden ist)."
 
 msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
 msgid "Disable UI Help"

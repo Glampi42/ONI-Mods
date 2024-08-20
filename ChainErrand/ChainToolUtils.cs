@@ -112,12 +112,11 @@ namespace ChainErrand {
       }
 
       public static void CreateNewChain(Dictionary<GameObject, HashSet<Workable>> firstLinkErrands) {
-         Chain chain = new Chain(ChainsContainer.ChainsCount, UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 0.9f, 0.6f, 0.9f));
-         ChainsContainer.StoreChain(chain);
+         Chain chain = ChainsContainer.CreateNewChain();
 
-         chain.CreateOrExpandLink(0, false, firstLinkErrands);
+         chain.CreateOrExpandLink(0, true, firstLinkErrands);
 
-         Main.chainTool.SetSelectedChain(ChainsContainer.ChainsCount - 1);
+         Main.chainTool.SetSelectedChain(chain.chainID);
 
          if(!ModConfig.Instance.DisableUIHelp)
          {

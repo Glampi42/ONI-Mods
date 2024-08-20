@@ -21,11 +21,16 @@ namespace ChainErrand.Patches {
       public static class Assets_OnPrefabInit_Patch {
          public static void Postfix() {
             Utils.SaveSpriteToAssets("ce_icon_action_chain");
+            Utils.SaveSpriteToAssets("ce_auto_chain");
 
             MYSPRITES.SaveSprite("ce_create_chain");
             MYSPRITES.SaveSprite("ce_create_link");
             MYSPRITES.SaveSprite("ce_delete_chain");
             MYSPRITES.SaveSprite("ce_delete_link");
+
+            Main.autoChainNotification = new(MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME, NotificationType.Neutral,
+               (List<Notification> List, object data) => MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP, expires: false,
+               custom_click_callback: new Notification.ClickCallback((object data) => AutoChainUtils.ToggleAutoChain()));
          }
       }
 
@@ -94,6 +99,7 @@ namespace ChainErrand.Patches {
          public static void Postfix(Game __instance) {
             ChainsContainer.Clear();
             ChainNumberPrefab.DestroyPrefab();
+            Main.autoChainEnabled = false;
          }
       }
    }

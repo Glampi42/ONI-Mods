@@ -17,8 +17,7 @@ namespace ChainErrand.ChainedErrandPacks {
          return [new GPatchInfo(targetMethod, null, postfix)];
       }
       private static void CreatePostfix(bool userTriggered, Deconstructable __instance) {
-         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand) &&
-            chainedErrand.chore == null)
+         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             chainedErrand.ConfigureChorePrecondition(__instance.chore);
          }
@@ -34,6 +33,16 @@ namespace ChainErrand.ChainedErrandPacks {
          {
             chainedErrand.Remove(true);
          }
+      }
+
+      public override List<GPatchInfo> OnAutoChain_Patch() {
+         var targetMethod = typeof(Deconstructable).GetMethod(nameof(Deconstructable.QueueDeconstruction), Utils.GeneralBindingFlags, null, []/*patching the overload without arguments*/, null);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnQueueDeconstruct(default));
+
+         return [new GPatchInfo(targetMethod, null, postfix)];
+      }
+      private static void OnQueueDeconstruct(Deconstructable __instance) {
+         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

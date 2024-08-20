@@ -15,6 +15,13 @@ namespace ChainErrand.ChainHierarchy {
 
       public static int ChainsCount => chains.Count;
 
+      public static Chain CreateNewChain() {
+         Chain newChain = new Chain(ChainsCount, Utils.RandomChainColor());
+         StoreChain(newChain);
+
+         return newChain;
+      }
+
       public static void StoreChain(Chain chain, int atIndex = -1) {
          if(atIndex == -1)
          {
@@ -40,12 +47,18 @@ namespace ChainErrand.ChainHierarchy {
          ChainToolMenu.Instance?.UpdateNumberSelectionDisplay();
       }
 
-      public static void RemoveChain(Chain chain) {
+      public static void RemoveChain(Chain chain, bool callRemoveChain = true) {
          if(chain == null)
             return;
 
          int chainID = chain.chainID;
-         chain.Remove(false);
+
+         AutoChainUtils.NullifyAutomaticChain(chain);
+
+         if(callRemoveChain)
+         {
+            chain.Remove(false);
+         }
 
          chains.Remove(chain);
          UpdateAllChainIDs();

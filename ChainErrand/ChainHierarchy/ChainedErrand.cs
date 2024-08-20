@@ -29,6 +29,9 @@ namespace ChainErrand.ChainHierarchy {
       private Color serializedChainColor;
 
       public void ConfigureChorePrecondition(Chore chore = null) {
+         if(this.chore != null && this.chore.driver != null)
+            return;
+
          if(chore == null)
             chore = ChainedErrandPackRegistry.GetChainedErrandPack(this).GetChoreFromErrand(Errand);
          
@@ -158,6 +161,14 @@ namespace ChainErrand.ChainHierarchy {
 #pragma warning disable CS0649
       [MyCmpGet]
       private EmptyConduitWorkable errand;
+#pragma warning restore CS0649
+
+      public override Workable Errand { get => errand; }
+   }
+   public class ChainedErrand_EmptySolidConduitWorkable : ChainedErrand {
+#pragma warning disable CS0649
+      [MyCmpGet]
+      private EmptySolidConduitWorkable errand;
 #pragma warning restore CS0649
 
       public override Workable Errand { get => errand; }

@@ -20,7 +20,7 @@ namespace ChainErrand {
 
          PUtil.InitLibrary();
 
-         Main.chainTool_binding = new PActionManager().CreateAction("glampi.ChainTool", (LocString)"ChainTool", new PKeyBinding());
+         Main.chainTool_binding = new PActionManager().CreateAction("glampi.ChainTool", (LocString)"ChainTool", new PKeyBinding(KKeyCode.C, Modifier.Shift));
          new POptions().RegisterOptions(this, typeof(ModConfig));
 
          // patching the pathes defined in ChainedErrandPacks:
@@ -43,6 +43,15 @@ namespace ChainErrand {
                   TryPatch(harmony, patch);
                }
             }
+
+            var autoChainPatches = pack.OnAutoChain_Patch();
+            if(autoChainPatches != null)
+            {
+               foreach(var patch in autoChainPatches)
+               {
+                  TryPatch(harmony, patch);
+               }
+            }
          }
       }
       private static void TryPatch(Harmony harmony, GPatchInfo patchInfo) {
@@ -55,6 +64,7 @@ namespace ChainErrand {
             Debug.LogError(Main.debugPrefix + $"Could not patch method {patchInfo.patchedMethod.FullDescription()};");
             Debug.LogError(Main.debugPrefix + $"Prefix that couldn't be patched: {patchInfo.prefix?.method.FullDescription() ?? "null"}");
             Debug.LogError(Main.debugPrefix + $"Postfix that couldn't be patched: {patchInfo.postfix?.method.FullDescription() ?? "null"}");
+            Debug.LogError(Main.debugPrefix + $"Transpiler that couldn't be patched: {patchInfo.transpiler?.method.FullDescription() ?? "null"}");
             throw ex;
          }
       }

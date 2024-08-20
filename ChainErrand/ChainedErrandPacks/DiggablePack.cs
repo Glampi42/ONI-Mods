@@ -14,11 +14,11 @@ namespace ChainErrand.ChainedErrandPacks {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
          var targetMethod = typeof(Diggable).GetMethod("OnSpawn", Utils.GeneralBindingFlags);
          var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix(default));
+
          return [new GPatchInfo(targetMethod, null, postfix)];
       }
       private static void CreatePostfix(Diggable __instance) {
-         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand) &&
-            chainedErrand.chore == null)
+         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             chainedErrand.ConfigureChorePrecondition(__instance.chore);
          }
@@ -26,6 +26,19 @@ namespace ChainErrand.ChainedErrandPacks {
 
       public override List<GPatchInfo> OnChoreDelete_Patch() {
          return null;// the GameObject gets destroyed in either case
+      }
+
+      public override List<GPatchInfo> OnAutoChain_Patch() {
+         var targetMethod = typeof(DigTool).GetMethod(nameof(DigTool.PlaceDig), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnPlaceDig(default, default, default));
+
+         return [new GPatchInfo(targetMethod, null, postfix)];
+      }
+      private static void OnPlaceDig(int cell, int animationDelay, GameObject __result) {
+         if(__result != null && __result.TryGetComponent(out Diggable diggable))
+         {
+            AutoChainUtils.TryAddToAutomaticChain(__result, diggable);
+         }
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

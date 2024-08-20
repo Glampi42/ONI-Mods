@@ -100,47 +100,47 @@ msgstr "从链中删除选定的序号任务"
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_1"
 msgid "st"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_2"
 msgid "nd"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_3"
 msgid "rd"
-msgstr "я"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_4"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_5"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_6"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_7"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_8"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_9"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_10"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_DEFAULT"
 msgid "th"
-msgstr "а"
+msgstr ""
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
 msgid "Must be in the 1st link"

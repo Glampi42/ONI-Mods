@@ -16,6 +16,8 @@ namespace ChainErrand {
    public static class Utils {
       public static readonly BindingFlags GeneralBindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
+      public static Color RandomChainColor() => UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 0.9f, 0.6f, 0.9f);
+
       public static HashSet<ObjectLayer> ObjectLayersFromChainToolFilter(ChainToolFilter filter) {
          HashSet<ObjectLayer> layers = new();
 

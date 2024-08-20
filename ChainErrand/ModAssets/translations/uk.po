@@ -146,6 +146,30 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
 msgid "Must be in the 1st link"
 msgstr "Має бути в першій ланці ланцюга"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_HEADER"
+msgid "Toggle Auto Chain"
+msgstr "Перемкнути Авто Ланцюг"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_CONTENT"
+msgid "If enabled, all new errands (that can be added to a chain) will be chained up.\nSwitch off and on to create a new chain.\n\nErrands that were created simultaneously and building errands that were created with one stroke (without releasing the left mouse button) will be added to the same link."
+msgstr "Якщо ввімкнути, усі нові доручення (які можна додати до ланцюга) будуть об’єднані.\nВимкніть і ввімкніть, щоб створити новий ланцюг.\n\nДоручення, створені одночасно, і доручення на будівнитство, створені одним рухом (без відпускання лівої кнопки миші) буде додано до тої самої ланки."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME"
+msgid "Auto Chain Enabled"
+msgstr "Авто Ланцюг Увімкнено"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP"
+msgid "All newly created errands will be chained up\n\nPress to disable"
+msgstr "Всі створені доручення будуть об'єднані ланцюгом\n\nНатисніть, щоб вимкнути"
+
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
+msgid "Disable Auto Chain Vignette"
+msgstr "Вимкнути Віньєтку Авто Ланцюга"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
+msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its defaut state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
+msgstr "Якщо ввімкнено, синя віньєтка навколо екрана не відображатиметься, коли ввімкнено Авто Ланцюг.\nДля вашої зручності радимо залишити цей параметр у стані за замовчуванням\n(ви можете забути, що Авто Ланцюг увімкнено, якщо віньєтка не відображатиметься)."
 
 msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
 msgid "Disable UI Help"

@@ -21,6 +21,8 @@ namespace ChainErrand {
       public static readonly Color grayBackgroundColor = new Color32(73, 73, 73, byte.MaxValue);
       public static readonly ColorStyleSetting whiteToggleSetting;// gets darker when hovering over it/activating it
 
+      public static readonly Color autoChainVignetteColor = new Color(0f, 0f, 1f, 0.4f);
+
       public static readonly float noChainMarkerFontSize = 21f;
       public static readonly float maxChainNumberFontSize = 28f;
       public static readonly float minChainNumberFontSize = 13f;
@@ -54,10 +56,15 @@ namespace ChainErrand {
          }
       };
 
+      public static Notification autoChainNotification = null;
+
       public static PAction chainTool_binding;
 
       public static ChainOverlay chainOverlay;
       public static ChainTool chainTool;
+
+      public static bool autoChainEnabled = false;
+
 
       static Main() {
          Color gray = new Color(0.784f, 0.784f, 0.784f, 1f);
