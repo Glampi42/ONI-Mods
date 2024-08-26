@@ -61,7 +61,7 @@ namespace ChainErrand.ChainedErrandPacks {
          if(parentMovable != null && parentMovable.IsMarkedForMove && parentMovable.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             __state = (newMovable) => {
-               // adding the split chunk to the same chain its parent is/was in:
+               // adding the split chunk to the same chain & link its parent is/was in:
                Dictionary<GameObject, HashSet<Workable>> newErrands = new();
                newErrands.Add(parentMovable.StorageProxy.gameObject, new([newMovable]));
                chainedErrand.parentLink.parentChain.CreateOrExpandLink(chainedErrand.parentLink.linkNumber, false, newErrands);

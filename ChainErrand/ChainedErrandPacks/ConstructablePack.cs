@@ -20,9 +20,23 @@ namespace ChainErrand.ChainedErrandPacks {
          return [new GPatchInfo(targetMethod, null, postfix)];
       }
       private static void CreatePostfix(Constructable __instance) {
-         if(__instance.buildChore != null && __instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
+         if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
-            chainedErrand.ConfigureChorePrecondition(__instance.buildChore);
+            if(__instance.buildChore != null)
+            {
+               chainedErrand.ConfigureChorePrecondition(__instance.buildChore);
+            }
+
+            // adding the placed diggables to the same chain & link the construction errand is in:
+            __instance.building.RunOnArea(cell => {
+               Diggable diggable = Diggable.GetDiggable(cell);
+               if(diggable.IsNullOrDestroyed())
+                  return;
+
+               Dictionary<GameObject, HashSet<Workable>> newErrands = new();
+               newErrands.Add(diggable.gameObject, new([diggable]));
+               chainedErrand.parentLink.parentChain.CreateOrExpandLink(chainedErrand.parentLink.linkNumber, false, newErrands);
+            });
          }
       }
 
