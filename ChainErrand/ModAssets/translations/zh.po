@@ -146,6 +146,29 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
 msgid "Must be in the 1st link"
 msgstr "必须从1开始"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_HEADER"
+msgid "Toggle Auto Chain"
+msgstr "切换自动链"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_CONTENT"
+msgid "If enabled, all new errands (that can be added to a chain) will be chained up.\nSwitch off and on to create a new chain.\n\nErrands that were created simultaneously and building errands that were created with one stroke (without releasing the left mouse button) will be added to the same link."
+msgstr "如果启用，所有新任务（可以添加到链中的）将被链接在一起。\n关闭再打开以创建新的链。\n\n同时创建的任务和使用一次鼠标点击创建的任务（不释放鼠标左键）将被添加到同一链接中。"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME"
+msgid "Auto Chain Enabled"
+msgstr "自动链已启用"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP"
+msgid "All newly created errands will be chained up\n\nPress to disable"
+msgstr "所有新创建的任务将被链接\n\n点击以禁用"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
+msgid "Disable Auto Chain Vignette"
+msgstr "禁用自动链阴影"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
+msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its default state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
+msgstr "如果启用，屏幕周围的蓝色阴影在自动链启用时将不显示。\n建议将此选项保持为默认状态，以方便使用\n（如果没有阴影，您可能会忘记自动链已启用）。"
 
 msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
 msgid "Disable UI Help"
