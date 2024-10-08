@@ -1,0 +1,119 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: edubistkrank\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_ES\n"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.NAME"
+msgid "Show Junctions"
+msgstr "Mostrar Uniones"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.TOOLTIP"
+msgid "Make junctions visible"
+msgstr "Muestra las uniones"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.NAME"
+msgid "Hide Junctions"
+msgstr "Ocultar Uniones"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.TOOLTIP"
+msgid "Make junctions invisible"
+msgstr "Oculta las uniones"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
+msgid "Buffer Contents: {Contents}"
+msgstr "Contenido Búfer: {Contents}"
+
+msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.TOOLTIP"
+msgid "This pipe's buffer contains: {Contents}"
+msgstr "El búfer de la tubería contiene: {Contents}"
+
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME"
+msgid "Junction"
+msgstr "Unión"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTION.TOOLTIP"
+msgid "A pipe section with more than 2 connections"
+msgstr "Sección de tubería con mas de 2 conexiones"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME"
+msgid "Junction Input"
+msgstr "Entrada de la Unión"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_LIQUID"
+msgid "Direction from which liquid enters the junction"
+msgstr "Dirección por la que el líquido entra en la unión"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_GAS"
+msgid "Direction from which gas enters the junction"
+msgstr "Dirección por la que el gas entra en la unión"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME"
+msgid "Junction Output"
+msgstr "Salida de la Unión"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_LIQUID"
+msgid "Direction in which liquid escapes the junction"
+msgstr "Dirección por la que el líquido sale de la unión"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_GAS"
+msgid "Direction in which gas escapes the junction"
+msgstr "Dirección por la que el gas sale de la unión"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME"
+msgid "Illegal Junction"
+msgstr "Unión Errónea"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_LIQUID"
+msgid "A junction which liquid cannot enter or escape"
+msgstr "Unión en la que el líquido no puede entrar o salir"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_GAS"
+msgid "A junction which gas cannot enter or escape"
+msgstr "Unión en la que el gas no puede entrar o salir"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.TITLE"
+msgid "Flow Configuration"
+msgstr "Configuración de flujo"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.DIRECTION"
+msgid "Direction"
+msgstr "Dirección"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.SWITCHDIRECTION"
+msgid "Switch Flow Direction"
+msgstr "Cambiar Dirección de Flujo"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.DIRECTIONSCREEN.FIXEDDIRECTION"
+msgid "Fixed Flow Direction"
+msgstr "Dirección de Flujo Fija"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.PRIORITY"
+msgid "Priority"
+msgstr "Prioridad"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.SHOWPRIORITIES"
+msgid "Show flow priorities of:"
+msgstr "Mostrar la prioridad de flujo de:"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.INPUTS"
+msgid "Inputs"
+msgstr "Entradas"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.OUTPUTS"
+msgid "Outputs"
+msgstr "Salidas"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.BOTH"
+msgid "Both"
+msgstr "Ambas"
+
+msgctxt "AdvancedFlowManagement.MYSTRINGS.SIDESCREEN.PRIORITYSCREEN.CHANGEPRIORITY"
+msgid "Change Flow Priority"
+msgstr "Cambiar Prioridad de Flujo"
