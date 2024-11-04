@@ -83,9 +83,9 @@ namespace ChainErrand.ChainHierarchy {
       }
 
       public void UpdateChainNumber() {
-         if(Main.chainOverlay != default)
+         if(Main.chainOverlay != default && (!chainNumberBearer?.Get()?.IsNullOrDestroyed() ?? false))
          {
-            Main.chainOverlay.UpdateChainNumber(chainNumberBearer?.Get()?.gameObject, Errand, parentLink);
+            Main.chainOverlay.UpdateChainNumber(chainNumberBearer.Get().gameObject, Errand, parentLink);
          }
       }
 
@@ -102,7 +102,7 @@ namespace ChainErrand.ChainHierarchy {
          parentLink = null;
          UpdateChainNumber();
 
-         if(!isBeingDestroyed)
+         if(!isBeingDestroyed && !this.IsNullOrDestroyed())
          {
             // removing the chore precondition:
             if(chore != null)

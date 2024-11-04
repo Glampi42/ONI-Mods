@@ -15,11 +15,11 @@ namespace ChainErrand.ChainedErrandPacks {
    public class ConstructablePack : AChainedErrandPack<Constructable, ChainedErrand_Constructable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
          var targetMethod = typeof(Constructable).GetMethod(nameof(Constructable.PlaceDiggables), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix(default));
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnPlaceDiggables(default));
 
          return [new GPatchInfo(targetMethod, null, postfix)];
       }
-      private static void CreatePostfix(Constructable __instance) {
+      private static void OnPlaceDiggables(Constructable __instance) {
          if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
          {
             if(__instance.buildChore != null)
@@ -30,7 +30,8 @@ namespace ChainErrand.ChainedErrandPacks {
             // adding the placed diggables to the same chain & link the construction errand is in:
             __instance.building.RunOnArea(cell => {
                Diggable diggable = Diggable.GetDiggable(cell);
-               if(diggable.IsNullOrDestroyed())
+
+               if(diggable.IsNullOrDestroyed() || !diggable.enabled)
                   return;
 
                Dictionary<GameObject, HashSet<Workable>> newErrands = new();

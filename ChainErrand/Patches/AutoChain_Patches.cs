@@ -47,8 +47,6 @@ namespace ChainErrand.Patches {
                autoChainTooltip.AddMultiStringTooltip(MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_HEADER, MeterScreen.Instance.ToolTipStyle_Header);
                autoChainTooltip.AddMultiStringTooltip(MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_CONTENT, MeterScreen.Instance.ToolTipStyle_Property);
             }
-
-            Debug.Log("$$$Created button");
          }
       }
 

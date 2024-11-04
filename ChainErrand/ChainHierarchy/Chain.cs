@@ -10,7 +10,7 @@ namespace ChainErrand.ChainHierarchy {
    public class Chain {
       public int chainID;
       public Color chainColor;
-      private List<Link> links;
+      public List<Link> links;// TODO private
 
       public Chain(int chainID, Color chainColor) {
          this.chainID = chainID;
