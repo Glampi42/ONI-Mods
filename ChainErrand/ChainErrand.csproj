@@ -3,7 +3,7 @@
 	<!-- General Package Properties -->
 	<PropertyGroup>
 		<PackageId>ChainErrand</PackageId>
-		<Version>1.1.4.0</Version>
+		<Version>1.1.4.1</Version>
 		<Authors>Glampi</Authors>
 		<Copyright>$(AssemblyCopyright)</Copyright>
 		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>
@@ -26,7 +26,7 @@
 		<ModName>Chain Tool</ModName>
 		<ModDescription>This mod lets you chain up multiple errands to be performed after each other</ModDescription>
 		<SupportedContent>ALL</SupportedContent> <!-- Use "EXPANSION1_ID" for dlc only -->
-		<MinimumSupportedBuild>621068</MinimumSupportedBuild>
+		<MinimumSupportedBuild>642443</MinimumSupportedBuild>
 		<APIVersion>2</APIVersion>
 	</PropertyGroup>
 
