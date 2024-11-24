@@ -34,7 +34,10 @@ namespace ChainErrand {
       public static readonly Chore.Precondition ChainedErrandPrecondition = new() {
          id = nameof(ChainedErrandPrecondition),
          description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK,
-         fn = (ref Chore.Precondition.Context context, object _) => {
+         fn = (ref Chore.Precondition.Context context, object preconditionEnabled) => {
+            if(preconditionEnabled == null || !(bool)preconditionEnabled)
+               return true;
+
             if(context.chore.masterPriority.priority_class == PriorityScreen.PriorityClass.topPriority)
                return true;
 

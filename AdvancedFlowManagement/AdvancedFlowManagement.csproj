@@ -3,7 +3,7 @@
 	<!-- General Package Properties -->
 	<PropertyGroup>
 		<PackageId>AdvancedFlowManagement</PackageId>
-		<Version>2.0.6.0</Version>
+		<Version>2.0.7.0</Version>
 		<Authors>Glampi</Authors>
 		<Copyright>$(AssemblyCopyright)</Copyright>
 		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>
@@ -11,7 +11,7 @@
 
 	<!-- Build Properties -->
 	<PropertyGroup>
-		<TargetFramework>net471</TargetFramework>
+		<TargetFramework>net48</TargetFramework>
 		<Configurations>Debug;Release</Configurations>
 		<AssemblyName>AdvancedFlowManagement</AssemblyName>
 		<RootNamespace>AdvancedFlowManagement</RootNamespace>
@@ -41,6 +41,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="PLib" Version="4.15.0" />
+	  <PackageReference Include="PLib" Version="4.17.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="ILRepack.Lib.MSBuild.Task" Version="2.0.34.2">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
 	</ItemGroup>
 </Project>

@@ -25,7 +25,7 @@ namespace ChainErrand.Strings {
                   public static LocString TOOLTIP = "Target <style=\"KKeyword\">Empty Pipe</style> errands only";
                }
                public class MOVETO {
-                  public static LocString TOOLTIP = "Target <style=\"KKeyword\">Move To</style> errands only";
+                  public static LocString TOOLTIP = "Target <style=\"KKeyword\">Relocate To</style> errands only";
                }
             }
          }

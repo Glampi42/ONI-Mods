@@ -38,7 +38,7 @@ namespace ChainErrand.ChainedErrandPacks {
             chainedErrand.Remove(true);
          }
       }
-      private static void OnWorkTickPostfix(Worker worker, float dt, EmptyConduitWorkable __instance) {
+      private static void OnWorkTickPostfix(WorkerBase worker, float dt, EmptyConduitWorkable __instance) {
          if(__instance.chore == null)
          {
             if(__instance.TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))

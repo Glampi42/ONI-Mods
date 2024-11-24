@@ -453,7 +453,7 @@ namespace HighlightOverlay.Structs {
          {
             return ObjectType.CRITTEROREGG;
          }
-         if(obj.HasTag(GameTags.Minion))
+         if(obj.HasTag(GameTags.BaseMinion))
          {
             return ObjectType.DUPLICANT;
          }

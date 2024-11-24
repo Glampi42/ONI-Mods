@@ -39,8 +39,16 @@ namespace ChainErrand.ChainHierarchy {
 
          if(chore != null)
          {
-            if(!chore.preconditions.Any(p => p.id == Main.ChainedErrandPrecondition.id))
-               chore.AddPrecondition(Main.ChainedErrandPrecondition);
+            var precondition = chore.GetPreconditions().FirstOrDefault(p => p.condition.id == Main.ChainedErrandPrecondition.id);
+            if(precondition.condition.id == default)
+            {
+               chore.AddPrecondition(Main.ChainedErrandPrecondition, true/*<--Enables the precondition. If false, the precondition is ignored*/);
+            }
+            else if(precondition.data != null && ((bool)precondition.data == false))// if precondition is disabled
+            {
+               precondition.data = true;
+            }
+
             if(parentLink.linkNumber != 0)// stop dupes from doing errands that are not in the first link
                InterruptChore("Chore was added to a chain");
          }
@@ -104,10 +112,12 @@ namespace ChainErrand.ChainHierarchy {
 
          if(!isBeingDestroyed && !this.IsNullOrDestroyed())
          {
-            // removing the chore precondition:
+            // disabling the chore precondition:
             if(chore != null)
             {
-               chore.preconditions.Remove(chore.preconditions.FirstOrDefault(precondition => precondition.id == nameof(Main.ChainedErrandPrecondition)));
+               var precondition = chore.GetPreconditions().FirstOrDefault(precondition => precondition.condition.id == nameof(Main.ChainedErrandPrecondition));
+               if(precondition.condition.id != default)
+                  precondition.data = false;
             }
 
             chore = null;
