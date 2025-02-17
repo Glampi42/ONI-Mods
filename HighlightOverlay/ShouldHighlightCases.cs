@@ -13,8 +13,20 @@ using System.Reflection;
 using System.Linq.Expressions;
 
 namespace HighlightOverlay {
+   /// <summary>
+   /// This class contains the methods that describe how to decide whether an object should be highlighted or not depending on its properties as well as the properties of the selected object.<br></br>
+   /// Different "Cases" represent different selected objects and target objects' types.<br></br><br></br>
+   /// 
+   /// Cases naming structure: CASE_[ObjectType of source]_[HighlightOption]_[ObjectType(s) of target(s) (separated with "_") OR EVERYTHING]<br></br>
+   /// Examples:<br></br><br></br>
+   /// 
+   /// CASE_ELEMENT_COPIES_EVERYTHING:<br></br>
+   /// This method describes how EVERYTHING is highlighted when an ELEMENT's COPIES are selected<br></br><br></br>
+   /// 
+   /// CASE_BUILDING_CONSUMABLES_ELEMENT_ITEM_PLANTORSEED_CRITTEROREGG:<br></br>
+   /// This method describes how ELEMENT, ITEM, PLANTORSEED, and CRITTEROREGG are highlighted when a BUILDING's CONSUMABLES are selected
+   /// </summary>
    public static class ShouldHighlightCases {
-      // Cases naming: CASE_[ObjectType of source]_[HighlightOption]_[ObjectType(s) of target(s) (separated with "_") OR EVERYTHING]
 
       private static bool CASE_ELEMENT_PRODUCE_ELEMENT(ObjectProperties producer, ObjectProperties producee) {
          bool considerStateProducer = producer.objectType.ConsiderOption1();

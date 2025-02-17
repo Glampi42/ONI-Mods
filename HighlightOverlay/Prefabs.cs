@@ -54,11 +54,17 @@ namespace HighlightOverlay {
 
          FilterToggleReversedPrefab = Util.KInstantiateUI(FilterTogglePrefab);
 
-         GameObject label = FilterToggleReversedPrefab.GetComponentInChildren<LocText>().gameObject;
-         label.transform.SetAsLastSibling();// switching label and toggle places
+         // switching the order of the label and the toggle:
+         FilterToggleReversedPrefab.transform.localScale = new Vector3(-FilterToggleReversedPrefab.transform.localScale.x,
+                                                                        FilterToggleReversedPrefab.transform.localScale.y,
+                                                                        FilterToggleReversedPrefab.transform.localScale.z);
+         FilterToggleReversedPrefab.transform.ForEachChild(child => {
+            var scale = child.rectTransform().localScale;
+            child.rectTransform().localScale = new Vector3(-scale.x, scale.y, scale.z);
+         }, true);
 
-         // flipping toggle's collider horizontally:
-         RectTransformUtility.FlipLayoutOnAxis(FilterToggleReversedPrefab.GetComponentInChildren<MultiToggle>().transform.Find("collider").rectTransform(), 0, false, false);
+         // increasing the spacing between the toggle and the label:
+         FilterToggleReversedPrefab.GetComponent<HorizontalLayoutGroup>().spacing *= 2;
 
          TryRunCode(nameof(FilterTogglePrefab));
          TryRunCode(nameof(FilterToggleReversedPrefab));

@@ -127,6 +127,41 @@ namespace HighlightOverlay {
          tooltipCmp.SetSimpleTooltip(tooltip);
          return tooltipCmp;
       }
+      /// <summary>
+      /// Adds a ToolTip to the specified GameObject that mimics the style of tooltips in tool filter menu: the tooltip is located to the left of the panel and stays at the same location
+      /// even for different objects.
+      /// </summary>
+      /// <param name="go">The GameObject</param>
+      /// <param name="tooltip">The text that will be displayed in the tooltip</param>
+      /// <param name="parentOverride">The object that overrides the positioning of the tooltip (it will be positioned relative to it instead of the GameObject that is the owner of the tooltip)</param>
+      /// <param name="spacingToLeft">Distance between the tooltip and the parent object</param>
+      /// <param name="wrapWidth">The wrap width of the tooltip; if 0, the width will be dynamic to fit all contents without wrapping</param>
+      /// <returns>The created ToolTip component.</returns>
+      public static ToolTip AddFilterMenuTooltip(this GameObject go, string tooltip, RectTransform parentOverride, float spacingToLeft = 4f, float wrapWidth = 0f) {
+         if(go == null)
+            return null;
+
+         var tooltipCmp = go.AddOrGet<ToolTip>();
+         tooltipCmp.UseFixedStringKey = false;
+         tooltipCmp.enabled = true;
+         tooltipCmp.toolTipPosition = ToolTip.TooltipPosition.Custom;
+         tooltipCmp.overrideParentObject = parentOverride;
+         tooltipCmp.tooltipPivot = new Vector2(1f, 1f);
+         tooltipCmp.tooltipPositionOffset = new Vector2(-spacingToLeft, 0f);
+         tooltipCmp.parentPositionAnchor = new Vector2(0f, 1f);
+         if(wrapWidth > 0f)
+         {
+            tooltipCmp.WrapWidth = wrapWidth;
+            tooltipCmp.SizingSetting = ToolTip.ToolTipSizeSetting.MaxWidthWrapContent;
+         }
+         else
+         {
+            tooltipCmp.SizingSetting = ToolTip.ToolTipSizeSetting.DynamicWidthNoWrap;
+         }
+         //ToolTipScreen.Instance.SetToolTip(tooltipCmp);
+         tooltipCmp.SetSimpleTooltip(tooltip);
+         return tooltipCmp;
+      }
 
       public static HighlightOverlayDiagram GetHighlightOverlayDiagram() {
          return OverlayLegend.Instance?.activeDiagrams?.FirstOrDefault(diagram_go => diagram_go.name == nameof(HighlightOverlayDiagram))?.GetComponent<HighlightOverlayDiagram>();
@@ -417,6 +452,13 @@ namespace HighlightOverlay {
          return default;
       }
 
+      public static Transform TryGetChild(this Transform parent, int index) {
+         if(index < 0 || index >= parent.childCount)
+            return null;
+
+         return parent.GetChild(index);
+      }
+
       public static bool ContainsAnyFrom<T>(this IEnumerable<T> collection, IEnumerable<T> other) {
          return other.Any(x => collection.Contains(x));
       }
@@ -442,6 +484,47 @@ namespace HighlightOverlay {
       public static void AddAll<T>(this HashSet<T> set, IEnumerable<T> other) {
          foreach(var item in other)
             set.Add(item);
+      }
+
+      public static void ForEachChild(this Transform parent, System.Action<Transform> action, bool recursive) {
+         for(int i = 0; i < parent.childCount; i++)
+         {
+            action(parent.GetChild(i));
+
+            if(recursive)
+               parent.GetChild(i).ForEachChild(action, true);
+         }
+      }
+
+      /// <summary>
+      /// Sets the size of a 2d object (target) to overlap with the "external" 2d object in the world space,
+      /// whereas "external" means that this object doesn't have to be in the target's hierarchy (parent/child).
+      /// </summary>
+      /// <param name="targetRect">The rect whose size is to be modified</param>
+      /// <param name="externalRect">The rect whose size is to be taken as the reference size</param>
+      public static void SetSizeExternally(this RectTransform targetRect, RectTransform externalRect) {
+         if(targetRect.parent.IsNullOrDestroyed())
+            throw new InvalidOperationException(Main.debugPrefix + $"The targetRect {targetRect.name} doesn't have a parent");
+
+         Vector3[] worldCorners = new Vector3[4];
+         externalRect.GetWorldCorners(worldCorners);
+
+         // converting corners into the target's parent local space:
+         Vector2 bottomLeft = targetRect.parent.InverseTransformPoint(worldCorners[0]);
+         Vector2 topRight = targetRect.parent.InverseTransformPoint(worldCorners[2]);
+
+         Vector2 newSize = new Vector2(topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+
+         // setting pivot and anchors to center for easier positioning:
+         targetRect.pivot = new Vector2(0.5f, 0.5f);
+         targetRect.anchorMin = new Vector2(0.5f, 0.5f);
+         targetRect.anchorMax = new Vector2(0.5f, 0.5f);
+
+         // Calculate the new anchored position (the midpoint in toggle space).
+         Vector2 newAnchoredPosition = bottomLeft + newSize / 2f;
+
+         targetRect.sizeDelta = newSize;
+         targetRect.anchoredPosition = newAnchoredPosition;
       }
       //-----------------------------------Extentions-----------------------------------UP
 

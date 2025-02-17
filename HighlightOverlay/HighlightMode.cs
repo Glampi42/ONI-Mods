@@ -96,35 +96,29 @@ namespace HighlightOverlay {
 
                visibleObjects.Clear();
 
-               if((Main.highlightFilters & HighlightFilters.BUILDINGS) != 0)// not necessary; for optimization
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.completeBuildings, visibleObjects);// buildings
+               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
                {
-                  GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.completeBuildings, visibleObjects);
-                  foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-                  {
-                     BuildingComplete buildingComplete = (BuildingComplete)visibleObject.obj;
+                  BuildingComplete buildingComplete = (BuildingComplete)visibleObject.obj;
 
-                     if(buildingComplete.gameObject.layer != 0)
-                        continue;
+                  if(buildingComplete.gameObject.layer != 0)
+                     continue;
 
-                     if(Utils.IsTile(buildingComplete.gameObject, out _))
-                        continue;// tiles are highlighted via the cells system
+                  if(Utils.IsTile(buildingComplete.gameObject, out _))
+                     continue;// tiles are highlighted via the cells system
 
-                     TryAddObjectToHighlightedObjects(buildingComplete.gameObject);
-                  }
-
-                  visibleObjects.Clear();
+                  TryAddObjectToHighlightedObjects(buildingComplete.gameObject);
                }
 
-               if((Main.highlightFilters & HighlightFilters.PLANTS) != 0)// not necessary; for optimization
-               {
-                  GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.plants, visibleObjects);
-                  foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-                  {
-                     TryAddObjectToHighlightedObjects(((Component)visibleObject.obj).gameObject);
-                  }
+               visibleObjects.Clear();
 
-                  visibleObjects.Clear();
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.plants, visibleObjects);// plants
+               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
+               {
+                  TryAddObjectToHighlightedObjects(((Component)visibleObject.obj).gameObject);
                }
+
+               visibleObjects.Clear();
 
                GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// geysers, gravitas buildings
                foreach(GameObject building in buildings)

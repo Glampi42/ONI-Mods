@@ -72,7 +72,7 @@ namespace HighlightOverlay.Patches {
          }
       }
       private static Color GetCellColor(SimDebugView simDebugView, int cell) {
-         if(cell == Main.selectedCell || cell == Main.selectedTile.Item2)
+         if(cell == Main.selectedCell || (Main.selectedTile.Item1 != null && cell == Main.selectedTile.Item2))
             return Main.selectedCellHighlightColor;
 
          if(Main.tileColors[cell] != Main.blackBackgroundColor)
