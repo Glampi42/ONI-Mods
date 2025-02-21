@@ -27,6 +27,8 @@ namespace HighlightOverlay {
    /// This method describes how ELEMENT, ITEM, PLANTORSEED, and CRITTEROREGG are highlighted when a BUILDING's CONSUMABLES are selected
    /// </summary>
    public static class ShouldHighlightCases {
+#pragma warning disable IDE0051// private member is unused (it is lol)
+
 
       private static bool CASE_ELEMENT_PRODUCE_ELEMENT(ObjectProperties producer, ObjectProperties producee) {
          bool considerStateProducer = producer.objectType.ConsiderOption1();
@@ -1067,6 +1069,7 @@ namespace HighlightOverlay {
       }
 
 
+#pragma warning restore IDE0051
       public static Dictionary<int, Func<ObjectProperties, ObjectProperties, bool>> caseMethods = new Dictionary<int, Func<ObjectProperties, ObjectProperties, bool>>();
 
 
