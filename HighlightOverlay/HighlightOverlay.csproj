@@ -3,7 +3,7 @@
 	<!-- General Package Properties -->
 	<PropertyGroup>
 		<PackageId>HighlightOverlay</PackageId>
-		<Version>1.0.5.1</Version>
+		<Version>1.0.6.0</Version>
 		<Authors>Glampi</Authors>
 		<Copyright>$(AssemblyCopyright)</Copyright>
 		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>
