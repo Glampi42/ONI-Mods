@@ -94,7 +94,7 @@ namespace HighlightOverlay {
             if(prefab == null || prefab.gameObject == null)
                continue;
 
-            if(Utils.IsObjectValidForHighlight(prefab))
+            if(Utils.IsObjectValidForHighlight(prefab, out _))
             {
                cachedHighlightFilters.Add(prefab.PrefabTag, Utils.GetCorrespondingHighlightFilter(prefab));
             }

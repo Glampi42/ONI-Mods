@@ -240,19 +240,13 @@ namespace HighlightOverlay {
          return selectable == null || !selectable.IsSelectable;
       }
 
-      public static bool IsObjectValidForHighlight(KPrefabID go) {
-         PrimaryElement primaryElement;
-         return go != null && go.TryGetComponent(out primaryElement) &&
-            primaryElement.Element != null && !go.HasTag(GameTags.UnderConstruction);
-      }
       public static bool IsObjectValidForHighlight(KPrefabID go, out ObjectType objectType) {
+         PrimaryElement primaryElement;
          objectType = default;
-         if(IsObjectValidForHighlight(go))
-         {
-            objectType = GetObjectType(go);
-            return true;
-         }
-         return false;
+
+         return go != null && go.TryGetComponent(out primaryElement) &&
+            ((objectType = GetObjectType(go)) != ObjectType.ELEMENT || primaryElement.Element != null)/*prefabs of some objects don't have a primary element yet*/ &&
+            !go.HasTag(GameTags.UnderConstruction);
       }
 
       //-------------------------------------Elements stuff-------------------------------------DOWN
