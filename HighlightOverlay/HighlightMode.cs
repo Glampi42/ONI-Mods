@@ -81,20 +81,6 @@ namespace HighlightOverlay {
                   return;
 
 
-               if(testCount == 0)
-               {
-                  Debug.Log("Performance test start:");
-               }
-               if(testCount == 30)
-               {
-                  Debug.Log("Performance test end. Total elapsed time:");
-                  Debug.Log(cumulativeElapsed);
-
-                  testCount = 0;
-                  cumulativeElapsed = 0;
-               }
-               Stopwatch sw = Stopwatch.StartNew();
-
                WorldContainer activeWorld = ClusterManager.Instance.activeWorld;
                Vector2I min = new Vector2I((int)activeWorld.minimumBounds.x, (int)activeWorld.minimumBounds.y);
                Vector2I max = new Vector2I((int)activeWorld.maximumBounds.x, (int)activeWorld.maximumBounds.y);
@@ -190,11 +176,6 @@ namespace HighlightOverlay {
                   }
                }
                //----------------------Updating cells color----------------------UP
-
-               testCount++;
-               long elapsed = sw.ElapsedMilliseconds;
-               Debug.Log($"Trial {testCount}. Elapsed: {elapsed}");
-               cumulativeElapsed += elapsed;
             }
          }
       }
