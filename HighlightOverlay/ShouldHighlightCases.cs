@@ -598,10 +598,6 @@ namespace HighlightOverlay {
                   building.element.id == obj.element.id;
       }
 
-      private static bool CASE_UNDERCONSTRUCTION_COPIES_UNDERCONSTRUCTION(ObjectProperties building, ObjectProperties obj) {
-         return true;
-      }
-
       private static bool CASE_PLANTORSEED_CONSUMABLES_ELEMENT(ObjectProperties plant, ObjectProperties element) {
          PlantInfo plantInfo = (PlantInfo)plant.info;
          bool considerState = element.objectType.ConsiderOption1();

@@ -115,19 +115,6 @@ namespace HighlightOverlay {
 
                visibleObjects.Clear();
 
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.prioritizableObjects, visibleObjects);// under construction
-               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-               {
-                  Prioritizable prioritizable = (Prioritizable)visibleObject.obj;
-
-                  if(prioritizable?.TryGetComponent(out BuildingUnderConstruction _) ?? false)
-                  {
-                     TryAddObjectToHighlightedObjects(prioritizable.gameObject);
-                  }
-               }
-
-               visibleObjects.Clear();
-
                GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.plants, visibleObjects);// plants
                foreach(ScenePartitionerEntry visibleObject in visibleObjects)
                {
