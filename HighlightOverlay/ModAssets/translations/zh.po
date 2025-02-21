@@ -425,10 +425,6 @@ msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.SAPTREE"
 msgid "Experiment 52B"
 msgstr "试验体52B"
 
-msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.RADBOLT"
-msgid "Radbolt"
-msgstr "辐射粒子"
-
 
 
 
