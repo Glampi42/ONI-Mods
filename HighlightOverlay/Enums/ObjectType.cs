@@ -16,7 +16,6 @@ namespace HighlightOverlay.Enums {
       GEYSER,
       ROBOT,
       OILWELL,
-      SAPTREE,
-      RADBOLT
+      SAPTREE
    }
 }

@@ -151,7 +151,6 @@ namespace HighlightOverlay.Strings {
             public static LocString ROBOT = "Robot";
             public static LocString OILWELL = "Oil Reservoir";
             public static LocString SAPTREE = "Experiment 52B";
-            public static LocString RADBOLT = "Radbolt";
          }
       }
    }

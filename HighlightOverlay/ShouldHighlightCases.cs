@@ -353,10 +353,6 @@ namespace HighlightOverlay {
 
          return false;
       }
-      private static bool CASE_BUILDING_CONSUMABLES_RADBOLT(ObjectProperties building, ObjectProperties radbolt) {
-         BuildingInfo buildingInfo = (BuildingInfo)building.info;
-         return ObjectProperties.IsRadboltConsumer(buildingInfo.buildingGO);
-      }
 
       private static bool CASE_BUILDING_PRODUCE_ELEMENT_ITEM(ObjectProperties building, ObjectProperties produce) {
          BuildingInfo buildingInfo = (BuildingInfo)building.info;
@@ -522,11 +518,6 @@ namespace HighlightOverlay {
          return false;
       }
 
-      private static bool CASE_BUILDING_PRODUCE_RADBOLT(ObjectProperties building, ObjectProperties radbolt) {
-         BuildingInfo buildingInfo = (BuildingInfo)building.info;
-         return ObjectProperties.IsRadboltProducer(buildingInfo.buildingGO);
-      }
-
       private static bool CASE_BUILDING_BUILDINGMATERIAL_ELEMENT_ITEM(ObjectProperties building, ObjectProperties elemoritem) {
          BuildingInfo buildingInfo = (BuildingInfo)building.info;
          bool considerBuildingSettings = building.objectType.ConsiderOption1();
@@ -603,6 +594,10 @@ namespace HighlightOverlay {
       private static bool CASE_BUILDING_EXACTCOPIES_BUILDING(ObjectProperties building, ObjectProperties obj) {
          return obj.objectType == ObjectType.BUILDING && ((BuildingInfo)building.info).buildingID == ((BuildingInfo)obj.info).buildingID &&
                   building.element.id == obj.element.id;
+      }
+
+      private static bool CASE_UNDERCONSTRUCTION_COPIES_UNDERCONSTRUCTION(ObjectProperties building, ObjectProperties obj) {
+         return true;
       }
 
       private static bool CASE_PLANTORSEED_CONSUMABLES_ELEMENT(ObjectProperties plant, ObjectProperties element) {
@@ -1069,10 +1064,6 @@ namespace HighlightOverlay {
       private static bool CASE_SAPTREE_PRODUCE_ELEMENT(ObjectProperties saptree, ObjectProperties element) {
          bool considerState = ObjectType.ELEMENT.ConsiderOption1();
          return (considerState && element.element.id == SimHashes.Resin) || (!considerState && Utils.OtherAggregateStatesIDs(SimHashes.Resin).Contains(element.element.id));
-      }
-
-      private static bool CASE_RADBOLT_COPIES_RADBOLT(ObjectProperties radbolt, ObjectProperties obj) {
-         return true;
       }
 
 

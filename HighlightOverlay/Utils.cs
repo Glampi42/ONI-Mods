@@ -17,6 +17,9 @@ using static HighlightOverlay.Structs.ObjectProperties;
 using HighlightOverlay.Structs;
 using ProcGen.Noise;
 using static AttackProperties;
+using EventSystem2Syntax;
+using System.Runtime.InteropServices.WindowsRuntime;
+using static STRINGS.UI.ELEMENTAL;
 
 namespace HighlightOverlay {
    public static class Utils {
@@ -237,11 +240,19 @@ namespace HighlightOverlay {
          return selectable == null || !selectable.IsSelectable;
       }
 
-      public static bool IsObjectValidForHighlight(KPrefabID go, out ObjectType objectType) {
+      public static bool IsObjectValidForHighlight(KPrefabID go) {
          PrimaryElement primaryElement;
+         return go != null && go.TryGetComponent(out primaryElement) &&
+            primaryElement.Element != null && !go.HasTag(GameTags.UnderConstruction);
+      }
+      public static bool IsObjectValidForHighlight(KPrefabID go, out ObjectType objectType) {
          objectType = default;
-         return go != null && go.TryGetComponent(out primaryElement) && ((objectType = ObjectProperties.GetObjectType(go)) != ObjectType.ELEMENT || primaryElement.Element != null) &&
-            !go.HasTag(GameTags.UnderConstruction);
+         if(IsObjectValidForHighlight(go))
+         {
+            objectType = GetObjectType(go);
+            return true;
+         }
+         return false;
       }
 
       //-------------------------------------Elements stuff-------------------------------------DOWN
@@ -380,10 +391,8 @@ namespace HighlightOverlay {
          {
             return HighlightFilters.PLANTS;
          }
-         else
-         {
-            return HighlightFilters.OTHER;
-         }
+
+         return HighlightFilters.OTHER;
       }
       public static HighlightFilters GetCorrespondingHighlightFilterCell(Element element) {
          if(element.IsSolid)

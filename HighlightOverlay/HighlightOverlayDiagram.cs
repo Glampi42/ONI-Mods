@@ -94,6 +94,7 @@ namespace HighlightOverlay {
          VerticalLayoutGroup layoutGroup = diagramPrefab.AddComponent<VerticalLayoutGroup>();
          layoutGroup.childControlHeight = true;
          layoutGroup.childControlWidth = true;
+         layoutGroup.childForceExpandWidth = true;
          layoutGroup.spacing = 12f;
 
          RectTransform rectTransform = diagramPrefab.rectTransform();
@@ -297,7 +298,7 @@ namespace HighlightOverlay {
          layoutGroup = diagram.filtersContainer.AddComponent<VerticalLayoutGroup>();
          layoutGroup.childControlHeight = true;
          layoutGroup.childControlWidth = true;
-         layoutGroup.childAlignment = TextAnchor.MiddleLeft;
+         layoutGroup.childAlignment = TextAnchor.UpperLeft;
          //----------------------------Highlight Filters----------------------------UP
       }
 
@@ -396,7 +397,7 @@ namespace HighlightOverlay {
          var highlightFiltersTree = new HighlightFiltersTreeFilterable();
 
          GameObject rootPanel = highlightFiltersTree.RootPanel;
-         rootPanel.transform.SetParent(filtersContainer.transform);
+         rootPanel.transform.SetParent(filtersContainer.transform, false);
          rootPanel.SetActive(true);
       }
 
