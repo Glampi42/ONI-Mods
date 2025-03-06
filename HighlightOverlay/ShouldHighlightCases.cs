@@ -13,8 +13,22 @@ using System.Reflection;
 using System.Linq.Expressions;
 
 namespace HighlightOverlay {
+   /// <summary>
+   /// This class contains the methods that describe how to decide whether an object should be highlighted or not depending on its properties as well as the properties of the selected object.<br></br>
+   /// Different "Cases" represent different selected objects and target objects' types.<br></br><br></br>
+   /// 
+   /// Cases naming structure: CASE_[ObjectType of source]_[HighlightOption]_[ObjectType(s) of target(s) (separated with "_") OR EVERYTHING]<br></br>
+   /// Examples:<br></br><br></br>
+   /// 
+   /// CASE_ELEMENT_COPIES_EVERYTHING:<br></br>
+   /// This method describes how EVERYTHING is highlighted when an ELEMENT's COPIES are selected<br></br><br></br>
+   /// 
+   /// CASE_BUILDING_CONSUMABLES_ELEMENT_ITEM_PLANTORSEED_CRITTEROREGG:<br></br>
+   /// This method describes how ELEMENT, ITEM, PLANTORSEED, and CRITTEROREGG are highlighted when a BUILDING's CONSUMABLES are selected
+   /// </summary>
    public static class ShouldHighlightCases {
-      // Cases naming: CASE_[ObjectType of source]_[HighlightOption]_[ObjectType(s) of target(s) (separated with "_") OR EVERYTHING]
+#pragma warning disable IDE0051// private member is unused (it is lol)
+
 
       private static bool CASE_ELEMENT_PRODUCE_ELEMENT(ObjectProperties producer, ObjectProperties producee) {
          bool considerStateProducer = producer.objectType.ConsiderOption1();
@@ -341,10 +355,6 @@ namespace HighlightOverlay {
 
          return false;
       }
-      private static bool CASE_BUILDING_CONSUMABLES_RADBOLT(ObjectProperties building, ObjectProperties radbolt) {
-         BuildingInfo buildingInfo = (BuildingInfo)building.info;
-         return ObjectProperties.IsRadboltConsumer(buildingInfo.buildingGO);
-      }
 
       private static bool CASE_BUILDING_PRODUCE_ELEMENT_ITEM(ObjectProperties building, ObjectProperties produce) {
          BuildingInfo buildingInfo = (BuildingInfo)building.info;
@@ -508,11 +518,6 @@ namespace HighlightOverlay {
          }
 
          return false;
-      }
-
-      private static bool CASE_BUILDING_PRODUCE_RADBOLT(ObjectProperties building, ObjectProperties radbolt) {
-         BuildingInfo buildingInfo = (BuildingInfo)building.info;
-         return ObjectProperties.IsRadboltProducer(buildingInfo.buildingGO);
       }
 
       private static bool CASE_BUILDING_BUILDINGMATERIAL_ELEMENT_ITEM(ObjectProperties building, ObjectProperties elemoritem) {
@@ -1059,11 +1064,8 @@ namespace HighlightOverlay {
          return (considerState && element.element.id == SimHashes.Resin) || (!considerState && Utils.OtherAggregateStatesIDs(SimHashes.Resin).Contains(element.element.id));
       }
 
-      private static bool CASE_RADBOLT_COPIES_RADBOLT(ObjectProperties radbolt, ObjectProperties obj) {
-         return true;
-      }
 
-
+#pragma warning restore IDE0051
       public static Dictionary<int, Func<ObjectProperties, ObjectProperties, bool>> caseMethods = new Dictionary<int, Func<ObjectProperties, ObjectProperties, bool>>();
 
 

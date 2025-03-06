@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace HighlightOverlay {
    public class ComputedShouldHighlightValues {
-      private Dictionary<ObjectType, Dictionary<(object, HighlightFilters), bool>> values = new Dictionary<ObjectType, Dictionary<(object, HighlightFilters), bool>>(Enum.GetValues(typeof(ObjectType)).Length);
+      private Dictionary<ObjectType, Dictionary<object, bool>> values = new Dictionary<ObjectType, Dictionary<object, bool>>(Enum.GetValues(typeof(ObjectType)).Length);
 
-      public void StoreValue(ObjectType objectType, KPrefabID obj, Element element, HighlightFilters highlightFilter, bool shouldHighlight) {
+      public void StoreValue(ObjectType objectType, KPrefabID obj, Element element, bool shouldHighlight) {
          object objForShouldHighlight = ObjectProperties.ObjectForShouldHighlight(objectType, obj, element);
          if(objForShouldHighlight != null)
-            values[objectType].Add((objForShouldHighlight, highlightFilter), shouldHighlight);// there may be one object with multiple different highlight filters applied to it(f.e. element: cell, stored_item, on_ground)
+            values[objectType].Add(objForShouldHighlight, shouldHighlight);
       }
 
-      public bool TryGetValue(ObjectType objectType, KPrefabID obj, Element element, HighlightFilters highlightFilter, out bool shouldHighlight) {
+      public bool TryGetValue(ObjectType objectType, KPrefabID obj, Element element, out bool shouldHighlight) {
          shouldHighlight = default;
 
          object objForShouldHighlight = ObjectProperties.ObjectForShouldHighlight(objectType, obj, element);
-         if(objForShouldHighlight != null && values[objectType].ContainsKey((objForShouldHighlight, highlightFilter)))
+         if(objForShouldHighlight != null && values[objectType].ContainsKey(objForShouldHighlight))
          {
-            shouldHighlight = values[objectType][(objForShouldHighlight, highlightFilter)];
+            shouldHighlight = values[objectType][objForShouldHighlight];
             return true;
          }
 
@@ -40,7 +40,7 @@ namespace HighlightOverlay {
       public ComputedShouldHighlightValues() {
          foreach(ObjectType objType in Enum.GetValues(typeof(ObjectType)))
          {
-            values.Add(objType, new Dictionary<(object, HighlightFilters), bool>(32));
+            values.Add(objType, new Dictionary<object, bool>(32));
          }
       }
    }

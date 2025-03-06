@@ -5,24 +5,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using static StateMachine;
 
 namespace HighlightOverlay.Patches {
    public class DetailsScreenHide_Patches {
+
       [HarmonyPatch(typeof(DetailsScreen), "OnSpawn")]
       public static class OnDetailsScreenClose_Patch {
-         public static void Postfix(DetailsScreen __instance) {
-            __instance.CloseButton.onClick -= __instance.DeselectAndClose;
-            __instance.CloseButton.onClick += () => {
+         public static void Postfix() {
+            DetailsScreen screen = DetailsScreen.Instance;
+            screen.CloseButton.onClick -= screen.DeselectAndClose;
+            screen.CloseButton.onClick += () => {
                if(Main.highlightMode != default && Main.highlightMode.isEnabled)
                {
-                  // hiding the details screen without actually deselecting the object
-                  __instance.gameObject.transform.SetPosition(new Vector3(-Screen.currentResolution.width, __instance.gameObject.transform.position.y, __instance.gameObject.transform.position.z));// look, this works okay(disactivating the screen's GO is a worse way to implement this)
+                  // hiding the details screen without deselecting the object:
+                  screen.gameObject.SetActive(false);
                }
                else
                {
-                  __instance.DeselectAndClose();
+                  screen.DeselectAndClose();
                }
             };
+         }
+      }
+
+      [HarmonyPatch(typeof(KScreenManager), "OnKeyUp")]
+      public static class RightClickScreenCloseFix_Patch {
+         public static void Prefix(KButtonEvent e) {
+            if(e.IsAction(Action.MouseRight) && SelectTool.Instance?.selected != null && !(DetailsScreen.Instance?.gameObject.activeSelf ?? true))// if something is selected, but the details screen is disabled
+            {
+               DetailsScreen screen = DetailsScreen.Instance;
+               if(screen.isEditing || screen.target == null || !((PlayerController.Instance.dragAction != Action.MouseRight || !PlayerController.Instance.dragging) && e.IsAction(Action.MouseRight)))
+                  return;
+
+               DetailsScreen.Instance.gameObject.SetActive(true);// needed to close the screen when right clicking
+            }
          }
       }
    }

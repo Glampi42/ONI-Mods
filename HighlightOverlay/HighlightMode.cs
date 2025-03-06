@@ -14,6 +14,7 @@ using static ElementConverter;
 using static Game;
 using static HighlightOverlay.Structs.ObjectProperties;
 using static UnityEngine.GraphicsBuffer;
+using System.Diagnostics;
 
 namespace HighlightOverlay {
    public class HighlightMode : OverlayModes.Mode {
@@ -56,6 +57,8 @@ namespace HighlightOverlay {
          UpdateTileHighlight(Main.selectedTile, true);
       }
 
+      private static int testCount = 0;
+      private static long cumulativeElapsed = 0;
       public override void Update() {
          if(!ModConfig.Instance.AllowNotPaused && !Game.Instance.IsPaused)
          {
@@ -85,7 +88,7 @@ namespace HighlightOverlay {
 
                List<ScenePartitionerEntry> visibleObjects = new List<ScenePartitionerEntry>();
 
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.pickupablesLayer, visibleObjects);// debris, duplicants, critters
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.pickupablesLayer, visibleObjects);// debris, items, critters, duplicants
                foreach(ScenePartitionerEntry visibleObject in visibleObjects)
                {
                   if(((Component)visibleObject.obj).TryGetComponent(out PrimaryElement _))
@@ -96,53 +99,34 @@ namespace HighlightOverlay {
 
                visibleObjects.Clear();
 
-               if((Main.highlightFilters & HighlightFilters.BUILDINGS) != 0)// not necessary; for optimization
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.completeBuildings, visibleObjects);// buildings
+               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
                {
-                  GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.completeBuildings, visibleObjects);
-                  foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-                  {
-                     BuildingComplete buildingComplete = (BuildingComplete)visibleObject.obj;
+                  BuildingComplete buildingComplete = (BuildingComplete)visibleObject.obj;
 
-                     if(buildingComplete.gameObject.layer != 0)
-                        continue;
+                  if(buildingComplete.gameObject.layer != 0)
+                     continue;
 
-                     if(Utils.IsTile(buildingComplete.gameObject, out _))
-                        continue;// tiles are highlighted via the cells system
+                  if(Utils.IsTile(buildingComplete.gameObject, out _))
+                     continue;// tiles are highlighted via the cells system
 
-                     TryAddObjectToHighlightedObjects(buildingComplete.gameObject);
-                  }
-
-                  visibleObjects.Clear();
+                  TryAddObjectToHighlightedObjects(buildingComplete.gameObject);
                }
 
-               if((Main.highlightFilters & HighlightFilters.PLANTS) != 0)// not necessary; for optimization
-               {
-                  GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.plants, visibleObjects);
-                  foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-                  {
-                     TryAddObjectToHighlightedObjects(((Component)visibleObject.obj).gameObject);
-                  }
+               visibleObjects.Clear();
 
-                  visibleObjects.Clear();
+               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.plants, visibleObjects);// plants
+               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
+               {
+                  TryAddObjectToHighlightedObjects(((Component)visibleObject.obj).gameObject);
                }
 
-               GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// geysers, gravitas buildings
+               visibleObjects.Clear();
+
+               GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// geysers, oil wells, gravitas buildings
                foreach(GameObject building in buildings)
                {
                   TryAddObjectToHighlightedObjects(building);
-               }
-
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.collisionLayer, visibleObjects);// checking leftover things (radbolts)
-               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-               {
-                  KPrefabID prefabID = ((Component)visibleObject.obj).GetComponent<KPrefabID>();
-                  if(prefabID == null)
-                     continue;
-
-                  if(prefabID.HasTag(GameTags.HighEnergyParticle))
-                  {
-                     TryAddObjectToHighlightedObjects(prefabID.gameObject);
-                  }
                }
 
                TryAddObjectToHighlightedObjects(Main.selectedObj);// it is not guaranteed that the selected obj will get checked in the methods above
@@ -529,13 +513,13 @@ namespace HighlightOverlay {
 
          if(givenFilter == HighlightFilters.NONE)// if filter is given it means it was already checked whether the obj applies to the highlight filters
          {
-            if(!ApplyHighlightFilters(targetObject, element, isObject, out givenFilter))
+            if(!ApplyHighlightFilters(targetObject, element, isObject))
                return false;
          }
 
          bool shouldHighlight;
 
-         if(WasShouldHighlightAlreadyComputed(targetType, targetObject, element, givenFilter, out shouldHighlight))
+         if(WasShouldHighlightAlreadyComputed(targetType, targetObject, element, out shouldHighlight))
          {
             return shouldHighlight;
          }
@@ -560,28 +544,28 @@ namespace HighlightOverlay {
             shouldHighlight = ShouldHighlightCases.caseMethods[dictKey](selectedProperties, targetProperties);
          }
 
-         StoreShouldHighlight(targetType, targetObject, element, givenFilter, shouldHighlight);
+         StoreShouldHighlight(targetType, targetObject, element, shouldHighlight);
          return shouldHighlight;
       }
 
 
 
-      private bool WasShouldHighlightAlreadyComputed(ObjectType objectType, KPrefabID obj, Element element, HighlightFilters highlightFilter, out bool shouldHighlight) {
-         if(shouldHighlightObjects.TryGetValue(objectType, obj, element, highlightFilter, out shouldHighlight))
+      private bool WasShouldHighlightAlreadyComputed(ObjectType objectType, KPrefabID obj, Element element, out bool shouldHighlight) {
+         if(shouldHighlightObjects.TryGetValue(objectType, obj, element, out shouldHighlight))
             return true;
 
          return false;
       }
-      private void StoreShouldHighlight(ObjectType objectType, KPrefabID obj, Element element, HighlightFilters highlightFilter, bool shouldHighlight) {
-         shouldHighlightObjects.StoreValue(objectType, obj, element, highlightFilter, shouldHighlight);
+      private void StoreShouldHighlight(ObjectType objectType, KPrefabID obj, Element element, bool shouldHighlight) {
+         shouldHighlightObjects.StoreValue(objectType, obj, element, shouldHighlight);
       }
 
       /// <summary>
       /// Filters out objects that shouldn't be highlighted because of active highlight filters.
       /// </summary>
       /// <returns>True if the object passes all filters; false otherwise</returns>
-      private bool ApplyHighlightFilters(KPrefabID targetObject, Element element, bool isObject, out HighlightFilters highlightFilter) {
-         highlightFilter = HighlightFilters.NONE;
+      private bool ApplyHighlightFilters(KPrefabID targetObject, Element element, bool isObject) {
+         HighlightFilters highlightFilter = HighlightFilters.NONE;
 
          if(Main.highlightFilters == HighlightFilters.ALL)
             return true;

@@ -23,7 +23,7 @@ namespace HighlightOverlay {
       /// <summary>
       /// The size of the panel (UI sizes are hard coded in prefabs).
       /// </summary>
-      internal static readonly Vector2 PANEL_SIZE = new Vector2(260.0f, 320.0f);
+      internal static readonly Vector2 PANEL_SIZE = new Vector2(300.0f, 320.0f);
 
       /// <summary>
       /// The size of checkboxes and images in this control.
@@ -76,11 +76,6 @@ namespace HighlightOverlay {
       private GameObject allItems;
 
       /// <summary>
-      /// The child panel where all categories are added.
-      /// </summary>
-      public GameObject childPanel;
-
-      /// <summary>
       /// The child categories.
       /// </summary>
       private readonly Dictionary<HighlightFilters, TypeSelectCategory> children;
@@ -102,17 +97,17 @@ namespace HighlightOverlay {
             OnChecked = OnCheck,
             TextStyle = PUITuning.Fonts.TextLightStyle
          }.AddOnRealize((obj) => allItems = obj))
-         
-         .AddOnRealize((obj) => {
-            childPanel = obj;
-            childPanel.AddComponent<Canvas>();
-            childPanel.AddComponent<GraphicRaycaster>();
-            var sizeFitter = childPanel.AddComponent<ContentSizeFitter>();
-            sizeFitter.horizontalFit = ContentSizeFitter.FitMode.MinSize;
-            sizeFitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
-         }).Build();
+         .Build();
 
-         RootPanel.SetMinUISize(PANEL_SIZE);
+         //RootPanel.AddComponent<Canvas>();
+         //RootPanel.AddComponent<CanvasScaler>();
+         //RootPanel.AddComponent<KCanvasScaler>();
+         RootPanel.AddComponent<GraphicRaycaster>();
+         var sizeFitter = RootPanel.AddComponent<ContentSizeFitter>();
+         //sizeFitter.horizontalFit = ContentSizeFitter.FitMode.MinSize;
+         sizeFitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
+
+         //RootPanel.SetMinUISize(PANEL_SIZE);
 
          children = new Dictionary<HighlightFilters, TypeSelectCategory>(16);
 
@@ -181,10 +176,10 @@ namespace HighlightOverlay {
             int index = 1 + ((children.Count - 1) << 1);
             GameObject header = current.Header, panel = current.ChildPanel;
             // Header goes in even indexes, panel goes in odds
-            header.SetParent(childPanel);
+            header.SetParent(RootPanel);
             PUIElements.SetAnchors(header, PUIAnchoring.Stretch, PUIAnchoring.Stretch);
             header.transform.SetSiblingIndex(index);
-            panel.SetParent(childPanel);
+            panel.SetParent(RootPanel);
             PUIElements.SetAnchors(panel, PUIAnchoring.Stretch, PUIAnchoring.Stretch);
             panel.transform.SetSiblingIndex(index + 1);
          }

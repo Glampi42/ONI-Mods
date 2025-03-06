@@ -46,6 +46,13 @@ namespace HighlightOverlay.Patches {
                Main.selectedCell = -1;
                Main.selectedTile = isTile ? (selected, Utils.PosToCell(selected)) : default;
             }
+            else
+            {
+               Main.selectedObjProperties = default;
+               Main.selectedObj = null;
+               Main.selectedCell = -1;
+               Main.selectedTile = default;
+            }
          }
          else
          {

@@ -17,7 +17,7 @@ namespace HighlightOverlay {
 
       public static readonly Color whiteHighlightColor = new Color(0.90f, 0.90f, 0.90f, 0f);
       public static readonly Color whiteBackgroundColor = new Color(0.95f, 0.95f, 0.95f, 1f);
-      public static readonly Color blackBackgroundColor = new Color(0.15114269f, 0.15114269f, 0.15114269f, 1f);// should be unique because of technical reasons
+      public static readonly Color blackBackgroundColor = new Color(0.05114269f, 0.05114269f, 0.05114269f, 1f);// should be unique because of technical reasons
 
       public static readonly Color checkboxHoverColor = new Color(0.5f, 0.5f, 0.5f, 1f);
 

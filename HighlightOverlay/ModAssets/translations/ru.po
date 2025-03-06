@@ -424,10 +424,6 @@ msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.SAPTREE"
 msgid "Experiment 52B"
 msgstr "Эксперимент 52B"
 
-msgctxt "HighlightOverlay.Strings.MYSTRINGS.UI.OBJECTTYPE.RADBOLT"
-msgid "Radbolt"
-msgstr "Радболт"
-
 
 
 

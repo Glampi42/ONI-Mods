@@ -94,6 +94,7 @@ namespace HighlightOverlay {
          VerticalLayoutGroup layoutGroup = diagramPrefab.AddComponent<VerticalLayoutGroup>();
          layoutGroup.childControlHeight = true;
          layoutGroup.childControlWidth = true;
+         layoutGroup.childForceExpandWidth = true;
          layoutGroup.spacing = 12f;
 
          RectTransform rectTransform = diagramPrefab.rectTransform();
@@ -203,6 +204,8 @@ namespace HighlightOverlay {
 
          diagram.selectedObjectTypeLabel = Util.KInstantiateUI(Prefabs.LabelPrefab, diagramPrefab, true).GetComponent<LocText>();
          diagram.selectedObjectTypeLabel.gameObject.name = nameof(selectedObjectTypeLabel);
+         diagram.selectedObjectTypeLabel.GetComponent<LayoutElement>().minHeight = 30f;
+         diagram.selectedObjectTypeLabel.alignment = TMPro.TextAlignmentOptions.Center;
 
 
          GameObject highlightOptionsContainer = new GameObject(nameof(highlightOptionsContainer));
@@ -295,12 +298,13 @@ namespace HighlightOverlay {
          layoutGroup = diagram.filtersContainer.AddComponent<VerticalLayoutGroup>();
          layoutGroup.childControlHeight = true;
          layoutGroup.childControlWidth = true;
-         layoutGroup.childAlignment = TextAnchor.MiddleLeft;
+         layoutGroup.childAlignment = TextAnchor.UpperLeft;
          //----------------------------Highlight Filters----------------------------UP
       }
 
       public void ConfigureDiagramExceptOptions() {
-         trueColorCheckbox.transform.parent.gameObject.AddSimpleTooltip(Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.TRUECOLOR_TOOLTIP);
+         trueColorCheckbox.transform.parent.gameObject.AddFilterMenuTooltip(Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.TRUECOLOR_TOOLTIP,
+            OverlayLegend.Instance.scrollRectLayout.rectTransform(), wrapWidth: 300);
          trueColorCheckmark.enabled = Main.highlightInTrueColor;
          trueColorCheckbox.onClick += () => {
             Main.highlightInTrueColor = !Main.highlightInTrueColor;
@@ -309,7 +313,8 @@ namespace HighlightOverlay {
             Utils.UpdateHighlightColor();
          };
 
-         preservePreviousOptionsCheckbox.transform.parent.gameObject.AddSimpleTooltip(Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.PRESERVEPREVIOUSOPTIONS_TOOLTIP);
+         preservePreviousOptionsCheckbox.transform.parent.gameObject.AddFilterMenuTooltip(Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.EXTRAOPTIONS.PRESERVEPREVIOUSOPTIONS_TOOLTIP,
+            OverlayLegend.Instance.scrollRectLayout.rectTransform(), wrapWidth: 300);
          preservePreviousOptionsCheckmark.enabled = Main.preservePreviousHighlightOptions;
          preservePreviousOptionsCheckbox.onClick += () => {
             Main.preservePreviousHighlightOptions = !Main.preservePreviousHighlightOptions;
@@ -392,7 +397,7 @@ namespace HighlightOverlay {
          var highlightFiltersTree = new HighlightFiltersTreeFilterable();
 
          GameObject rootPanel = highlightFiltersTree.RootPanel;
-         rootPanel.transform.SetParent(filtersContainer.transform);
+         rootPanel.transform.SetParent(filtersContainer.transform, false);
          rootPanel.SetActive(true);
       }
 
@@ -435,7 +440,7 @@ namespace HighlightOverlay {
             noObjectSelectedContainer.SetActive(false);
             selectedObjectTypeLabel.gameObject.SetActive(true);
 
-            selectedObjectTypeLabel.text = Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.SELECTEDOBJECTTYPE_PREFIX + selectedObjProperties.StringRepresentation();
+            selectedObjectTypeLabel.text = "— " + Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS.SELECTEDOBJECTTYPE_PREFIX + selectedObjProperties.StringRepresentation() + " —";
 
 
             Type highlightOptionsStrings = typeof(Strings.MYSTRINGS.UI.OVERLAYS.HIGHLIGHTMODE.HIGHLIGHTOPTIONS);
@@ -468,7 +473,9 @@ namespace HighlightOverlay {
                      {
                         labelTooltip = Utils.GetMyString(highlightOptionsStrings, highlightOption.ToString() + "_TOOLTIP", "DEFAULTSTRINGS");
                      }
-                     highlightLabel.AddSimpleTooltip(labelTooltip);
+
+                     GameObject toggleEntry = highlightLabel.transform.parent.gameObject;
+                     toggleEntry?.AddFilterMenuTooltip(labelTooltip, OverlayLegend.Instance.scrollRectLayout.rectTransform(), wrapWidth: 300);
                   }
                }
                else

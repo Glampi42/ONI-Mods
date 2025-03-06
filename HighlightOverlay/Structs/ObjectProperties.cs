@@ -1,5 +1,6 @@
 ﻿using HighlightOverlay.Enums;
 using HighlightOverlay.Strings;
+using rail;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,10 +84,6 @@ namespace HighlightOverlay.Structs {
 
             case ObjectType.SAPTREE:
                CASE_SAPTREE(obj);
-               break;
-
-            case ObjectType.RADBOLT:
-               CASE_RADBOLT(obj);
                break;
 
             default:
@@ -192,15 +189,10 @@ namespace HighlightOverlay.Structs {
             building.GetComponent<SingleEntityReceptacle>() != null || building.GetComponent<Tinkerable>() != null ||
             building.GetComponent<SuitLocker>() != null || building.GetSMI<SpiceGrinder.StatesInstance>() != null ||
             building.GetComponent<TrapTrigger>() != null || building.GetDef<RanchStation.Def>() != null ||
-            building.GetComponent<RocketEngine>() != null || building.GetComponent<RocketEngineCluster>() != null ||
-
-            IsRadboltConsumer(building);
+            building.GetComponent<RocketEngine>() != null || building.GetComponent<RocketEngineCluster>() != null;
       }
       public static bool IsStorageBuilding(KPrefabID building) {// all buildings that have the TreeFilterable component(their prefab may not have it however)
          return building.TryGetComponent(out TreeFilterable _) || building.TryGetComponent(out StorageLocker _) || building.GetComponent<TinkerStation>() != null;
-      }
-      public static bool IsRadboltConsumer(KPrefabID building) {
-         return building.TryGetComponent(out HighEnergyParticlePort port) && port.particleInputEnabled && !building.TryGetComponent(out HighEnergyParticleRedirector _);
       }
       public static bool BuildingHasProduce(KPrefabID building) {
          return building.GetComponent<ComplexFabricator>() != null || building.GetComponent<ElementConverter>() != null ||
@@ -209,12 +201,7 @@ namespace HighlightOverlay.Structs {
             building.GetComponent<Toilet>() != null || building.GetComponent<FlushToilet>() != null ||
             building.GetComponent<RocketEngine>() != null || building.GetComponent<RocketEngineCluster>() != null ||
 
-            building.PrefabTag == SweepBotStationConfig.ID || building.PrefabTag == ScoutLanderConfig.ID || building.PrefabTag == ScoutModuleConfig.ID || building.PrefabTag == MorbRoverMakerConfig.ID ||
-
-            IsRadboltProducer(building);
-      }
-      public static bool IsRadboltProducer(KPrefabID building) {
-         return building.TryGetComponent(out HighEnergyParticlePort port) && port.particleOutputEnabled && !building.TryGetComponent(out HighEnergyParticleRedirector _);
+            building.PrefabTag == SweepBotStationConfig.ID || building.PrefabTag == ScoutLanderConfig.ID || building.PrefabTag == ScoutModuleConfig.ID || building.PrefabTag == MorbRoverMakerConfig.ID;
       }
       public static bool BuildingHasBuildingMaterial(GameObject building) {
          return building.GetComponent<BuildingComplete>()?.Def.ShowInBuildMenu ?? false;// otherwise this option is irrelevant
@@ -390,15 +377,6 @@ namespace HighlightOverlay.Structs {
          highlightOptions |= HighlightOptions.CONSUMABLES | HighlightOptions.PRODUCE;
       }
 
-      private void CASE_RADBOLT(KPrefabID obj) {
-         CaseRadbolt_HighlightOptions();
-
-         prefabID = obj.PrefabTag;
-      }
-      private void CaseRadbolt_HighlightOptions() {
-         highlightOptions |= HighlightOptions.CONSUMERS | HighlightOptions.PRODUCERS | HighlightOptions.COPIES;
-      }
-
 
 
 
@@ -421,8 +399,11 @@ namespace HighlightOverlay.Structs {
 
 
       public static ObjectType GetObjectType(KPrefabID obj) {
-         if(obj.TryGetComponent(out BuildingComplete _) ||
-            (obj.TryGetComponent(out Demolishable _) || obj.TryGetComponent(out LoreBearer _))/*<- Gravitas building*/)
+         if(obj.TryGetComponent(out BuildingComplete _))
+         {
+            return ObjectType.BUILDING;
+         }
+         if(obj.TryGetComponent(out Demolishable _) || obj.TryGetComponent(out LoreBearer _))// Gravitas building
          {
             return ObjectType.BUILDING;
          }
@@ -473,10 +454,7 @@ namespace HighlightOverlay.Structs {
          {
             return ObjectType.SAPTREE;
          }
-         if(obj.HasTag(GameTags.HighEnergyParticle))
-         {
-            return ObjectType.RADBOLT;
-         }
+
          return ObjectType.ELEMENT;// assuming that the object has the PrimaryElement component(which it should)
       }
 
