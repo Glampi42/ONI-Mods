@@ -1,0 +1,179 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
+"Last-Translator: Nubula\n"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.CHAIN.NAME"
+msgid "Chain"
+msgstr "체인"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME"
+msgid "Mopping"
+msgstr "닦기"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
+msgid "<style="KKeyword">Mopping</style> errands only"
+msgstr "<style="KKeyword">닦기</style> 용무만 대상"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
+msgid "Target <style="KKeyword">Empty Pipe</style> errands only"
+msgstr "<style="KKeyword">배관 비우기</style> 용무만 대상"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
+msgid "Target <style="KKeyword">Move To</style> errands only"
+msgstr "<style="KKeyword">옮기기</style> 용무만 대상"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLTIPS.CHAINBUTTON"
+msgid "Chain up errands to be executed in some specific order {Hotkey}"
+msgstr "특정 순서로 실행될 용무를 연결 {Hotkey}"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.TITLE"
+msgid "Chain Tools"
+msgstr "체인 도구"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATEBUTTON"
+msgid "Create"
+msgstr "생성"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETEBUTTON"
+msgid "Delete"
+msgstr "삭제"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN"
+msgid "Create Chain"
+msgstr "체인 생성"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN_TOOLTIP"
+msgid "Create the first link of a new chain"
+msgstr "새로운 체인의 첫번째 링크를 지정합니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK"
+msgid "Create/Expand Link"
+msgstr "링크 생성/확장"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK_TOOLTIP"
+msgid "Create a new link at the end/inside of an existing chain, or expand an existing link"
+msgstr "기존 체인의 마지막/중간 부분에 새 링크를 생성하거나 기존 링크를 확장합니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER"
+msgid "Chain ID:"
+msgstr "체인 ID："
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP"
+msgid "ID of the chain that should be modified"
+msgstr "수정할 체인의 ID입니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER"
+msgid "Link Nr.:"
+msgstr "링크 번호:"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
+msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
+msgstr "링크의 개수\n숫자가 정수이면 기존 링크가 확장됩니다.\n숫자가 소수면 새 링크가 그 사이에 삽입됩니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
+msgid "NO CHAINS"
+msgstr "체인 없음"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_NOTFOUND"
+msgid "NO LINKS"
+msgstr "링크 없음"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN"
+msgid "Delete Chain"
+msgstr "체인 삭제"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN_TOOLTIP"
+msgid "Delete an entire chain"
+msgstr "체인 전체를 삭제합니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK"
+msgid "Delete Errand"
+msgstr "용무 삭제"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK_TOOLTIP"
+msgid "Delete selected errands from the chain they are in"
+msgstr "선택한 용무를 해당 체인에서 삭제합니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_1"
+msgid "st"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_2"
+msgid "nd"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_3"
+msgid "rd"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_4"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_5"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_6"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_7"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_8"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_9"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_10"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_DEFAULT"
+msgid "th"
+msgstr ""
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK"
+msgid "Must be in the 1st link"
+msgstr "첫번째 링크에 속해 있어야 합니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_HEADER"
+msgid "Toggle Auto Chain"
+msgstr "자동 체인 전환"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINBUTTON.TOOLTIP_CONTENT"
+msgid "If enabled, all new errands (that can be added to a chain) will be chained up.\nSwitch off and on to create a new chain.\n\nErrands that were created simultaneously and building errands that were created with one stroke (without releasing the left mouse button) will be added to the same link."
+msgstr "이 기능을 활성화하면, 체인에 추가할 수 있는 모든 새로운 심부름이 체인으로 연결됩니다.\n새로운 체인을 만들려면 이 기능을 비활성화한 후 다시 활성화하십시오.\n\n동시에 생성된 용무와 한번의 왼쪽 마우스 버튼 드래그로 생성된 용무는 동일한 링크에 추가됩니다."
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME"
+msgid "Auto Chain Enabled"
+msgstr "자동 체인 활성화"
+
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP"
+msgid "All newly created errands will be chained up\n\nPress to disable"
+msgstr "새로 생성된 모든 용무가 체인으로 연결됩니다.\n\n비활성화하려면 누르십시오."
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
+msgid "Disable Auto Chain Vignette"
+msgstr "자동 체인 경보 비활성화"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
+msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its default state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
+msgstr "활성화 시 자동 체인이 적용될 때 화면 주변의 파란색 경보가 표시되지 않습니다.\n편의를 위해 이 설정을 기본 상태로 두는 것을 권장합니다.\n(경보가 없으면 자동 체인이 활성화 된 상태라는 것을 잊어버릴 수 있습니다)"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
+msgid "Disable UI Help"
+msgstr "UI 도움말 비활성화"
+
+msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP_TOOLTIP"
+msgid "If enabled, all UI help such as automatically switching from \"Create Chain\" to \"Create/Expand Link\"\nor automatically increasing the link number will be disabled."
+msgstr "활성화 시 \"체인 생성\"에서 \"링크 생성/확장\"으로 자동 전환 또는 링크 번호 자동 증가와 같은 모든 UI 도움말이 비활성화됩니다."
