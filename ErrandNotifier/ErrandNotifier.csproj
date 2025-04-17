@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- General Package Properties -->
+	<PropertyGroup>
+		<PackageId>ErrandNotifier</PackageId>
+		<Version>0.0.0.1</Version>
+		<Authors>Glampi</Authors>
+       <Copyright>$(AssemblyCopyright)</Copyright>
+		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>
+	</PropertyGroup>
+
+  
+	<!-- Build Properties -->
+	<PropertyGroup>
+		<TargetFramework>net48</TargetFramework>
+		<Configurations>Debug;Release</Configurations>
+    <LangVersion>preview</LangVersion>
+		<AssemblyName>Glampi.ErrandNotifier</AssemblyName>
+		<RootNamespace>ErrandNotifier</RootNamespace>
+		<IsMod>true</IsMod>
+		<GenerateMetadata>true</GenerateMetadata>
+		<IsPacked>true</IsPacked>
+	</PropertyGroup>
+
+
+	<!-- Mod Info -->
+	<PropertyGroup>
+		<ModName>Errand Notifier</ModName>
+		<ModDescription>This mod lets you create notifications that are triggered upon an errand's completion</ModDescription>
+		<SupportedContent>ALL</SupportedContent> <!-- Use "EXPANSION1_ID" for dlc only -->
+		<MinimumSupportedBuild>659901</MinimumSupportedBuild>
+		<APIVersion>2</APIVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'" />
+
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release2|AnyCPU'" />
+
+
+  <ItemGroup>
+    <PackageReference Include="Cairath.ONIMetadataFileGenerator" Version="1.0.0" />
+    <PackageReference Include="PLib" Version="4.17.1" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+	  <PackageReference Update="ILRepack.Lib.MSBuild.Task" Version="2.0.40">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <Folder Include="ModAssets\assets\" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\ChainErrand\ChainErrand.csproj" />
+	</ItemGroup>
+</Project>
