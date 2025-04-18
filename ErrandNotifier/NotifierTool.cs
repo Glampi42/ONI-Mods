@@ -112,9 +112,9 @@ namespace ErrandNotifier {
                break;
          }
 
-         if(Main.chainOverlay != default)
+         if(Main.notifierOverlay != default)
          {
-            Main.chainOverlay.UpdateAllChainNumbers();
+            Main.notifierOverlay.UpdateAllChainNumbers();
          }
       }
 
@@ -122,25 +122,25 @@ namespace ErrandNotifier {
          return selectedNotification;
       }
       public void SetSelectedNotification(int targetNum) {
-         if(ChainsContainer.ChainsCount > 0)
-         {
-            if(targetNum < 0)
-            {
-               selectedNotification = ChainsContainer.ChainsCount - 1;// for looping around
-            }
-            else if(targetNum >= ChainsContainer.ChainsCount)
-            {
-               selectedNotification = 0;// for looping around
-            }
-            else
-            {
-               selectedNotification = targetNum;
-            }
-         }
-         else
-         {
-            selectedNotification = 0;
-         }
+         //if(ChainsContainer.ChainsCount > 0)
+         //{
+         //   if(targetNum < 0)
+         //   {
+         //      selectedNotification = ChainsContainer.ChainsCount - 1;// for looping around
+         //   }
+         //   else if(targetNum >= ChainsContainer.ChainsCount)
+         //   {
+         //      selectedNotification = 0;// for looping around
+         //   }
+         //   else
+         //   {
+         //      selectedNotification = targetNum;
+         //   }
+         //}
+         //else
+         //{
+         //   selectedNotification = 0;
+         //}
       }
 
 
@@ -281,31 +281,31 @@ namespace ErrandNotifier {
 
          if(collectedErrands.Count > 0)
          {
-            switch(currentMode)
-            {
-               case NotifierToolMode.CREATE_NOTIFICATION:
-                  ChainToolUtils.CreateNewChain(collectedErrands);
-                  break;
+            //switch(currentMode)
+            //{
+            //   case NotifierToolMode.CREATE_NOTIFICATION:
+            //      ChainToolUtils.CreateNewChain(collectedErrands);
+            //      break;
 
-               case NotifierToolMode.ADD_ERRAND:
-                  ChainToolUtils.CreateOrExpandLink(collectedErrands);
-                  break;
+            //   case NotifierToolMode.ADD_ERRAND:
+            //      ChainToolUtils.CreateOrExpandLink(collectedErrands);
+            //      break;
 
-               case NotifierToolMode.DELETE_NOTIFICATION:
-                  ChainToolUtils.DeleteChains(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
-                  break;
+            //   case NotifierToolMode.DELETE_NOTIFICATION:
+            //      ChainToolUtils.DeleteChains(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
+            //      break;
 
-               case NotifierToolMode.REMOVE_ERRAND:
-                  ChainToolUtils.DeleteErrands(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
-                  break;
-            }
+            //   case NotifierToolMode.REMOVE_ERRAND:
+            //      ChainToolUtils.DeleteErrands(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
+            //      break;
+            //}
 
-            NotifierToolMenu.Instance?.UpdateNumberSelectionDisplay();
+            NotifierToolMenu.Instance?.UpdateNotificationConfigDisplay();
          }
       }
 
       public override void OnDragTool(int cell, int distFromOrigin) {
-         if(Main.chainOverlay == null)
+         if(Main.notifierOverlay == null)
             return;
 
          // Invoked when the tool drags over a cell

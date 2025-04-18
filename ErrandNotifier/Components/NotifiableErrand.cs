@@ -31,14 +31,14 @@ namespace ErrandNotifier.Components {
 
       [OnDeserialized]
       public void OnDeserialized() {
-         SerializationUtils.ReconstructChain(serializedNotificationID, serializedLinkNumber, this, serializedChainColor);
+         //SerializationUtils.ReconstructChain(serializedNotificationID, serializedLinkNumber, this, serializedChainColor);
       }
 
       [OnSerializing]
       public void OnSerializing() {
-         serializedNotificationID = parentLink?.parentChain?.chainID ?? -1;
-         serializedLinkNumber = parentLink?.linkNumber ?? -1;
-         serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
+         //serializedNotificationID = parentLink?.parentChain?.chainID ?? -1;
+         //serializedLinkNumber = parentLink?.linkNumber ?? -1;
+         //serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
       }
 
       public override void OnCleanUp() {
@@ -48,23 +48,23 @@ namespace ErrandNotifier.Components {
       }
 
       public void UpdateUISymbol() {
-         if(Main.chainOverlay != default && (!uiSymbolBearer?.Get()?.IsNullOrDestroyed() ?? false))
+         if(Main.notifierOverlay != default && (!uiSymbolBearer?.Get()?.IsNullOrDestroyed() ?? false))
          {
-            Main.chainOverlay.UpdateChainNumber(uiSymbolBearer.Get().gameObject, Errand, parentLink);
+            //Main.chainOverlay.UpdateChainNumber(uiSymbolBearer.Get().gameObject, Errand, parentLink);
          }
       }
 
       public void Remove(bool tryRemoveLink, bool isBeingDestroyed = false) {
-         if(tryRemoveLink && parentLink != null)
-         {
-            parentLink.errands.Remove(this);
-            if(parentLink.errands.Count == 0)
-            {
-               parentLink.Remove(true);
-            }
-         }
+         //if(tryRemoveLink && parentLink != null)
+         //{
+         //   parentLink.errands.Remove(this);
+         //   if(parentLink.errands.Count == 0)
+         //   {
+         //      parentLink.Remove(true);
+         //   }
+         //}
 
-         parentLink = null;
+         //parentLink = null;
          UpdateUISymbol();
 
          if(!isBeingDestroyed && !this.IsNullOrDestroyed())
@@ -72,9 +72,9 @@ namespace ErrandNotifier.Components {
             // disabling the chore precondition:
             if(chore != null)
             {
-               var precondition = chore.GetPreconditions().FirstOrDefault(precondition => precondition.condition.id == nameof(Main.NotifiableErrandPrecondition));
-               if(precondition.condition.id != default)
-                  precondition.data = false;
+               //var precondition = chore.GetPreconditions().FirstOrDefault(precondition => precondition.condition.id == nameof(Main.NotifiableErrandPrecondition));
+               //if(precondition.condition.id != default)
+               //   precondition.data = false;
             }
 
             chore = null;

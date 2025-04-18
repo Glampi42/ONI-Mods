@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ErrandNotifier {
+namespace ErrandNotifier.Notifications {
    public class Notification {
    }
 }

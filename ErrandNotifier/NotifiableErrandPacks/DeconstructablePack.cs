@@ -9,7 +9,7 @@ using System.Reflection;
 using ErrandNotifier.Components;
 using ErrandNotifier.Custom;
 
-namespace ErrandNotifier.ChainedErrandPacks {
+namespace ErrandNotifier.NotifiableErrandPacks {
    public class DeconstructablePack : ANotifiableErrandPack<Deconstructable, NotifiableErrand_Deconstructable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
          var targetMethod = typeof(Deconstructable).GetMethod("QueueDeconstruction", Utils.GeneralBindingFlags, null, [typeof(bool)], null);
@@ -19,7 +19,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
       private static void CreatePostfix(bool userTriggered, Deconstructable __instance) {
          if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
          {
-            chainedErrand.ConfigureChorePrecondition(__instance.chore);
+            //chainedErrand.ConfigureChorePrecondition(__instance.chore);
          }
       }
 
@@ -33,16 +33,6 @@ namespace ErrandNotifier.ChainedErrandPacks {
          {
             chainedErrand.Remove(true);
          }
-      }
-
-      public override List<GPatchInfo> OnAutoChain_Patch() {
-         var targetMethod = typeof(Deconstructable).GetMethod(nameof(Deconstructable.QueueDeconstruction), Utils.GeneralBindingFlags, null, []/*patching the overload without arguments*/, null);
-         var postfix = SymbolExtensions.GetMethodInfo(() => OnQueueDeconstruct(default));
-
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void OnQueueDeconstruct(Deconstructable __instance) {
-         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChainErrand.Strings {
+namespace ErrandNotifier.Strings {
    public class STRINGS : RegisterLocalizeStrings {
       public class GLAMPISTRINGS {
          public class MODCONFIG {

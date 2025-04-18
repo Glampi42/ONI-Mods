@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ErrandNotifier.ChainedErrandPacks {
+namespace ErrandNotifier.NotifiableErrandPacks {
    /// <summary>
    /// This interface contains methods that any ChainedErrandPack must include. Each ChainedErrandPack is responsible for one errand type
    /// and does (nearly) everything necessary so that all errands of that type can be added to a chain.
@@ -26,11 +26,6 @@ namespace ErrandNotifier.ChainedErrandPacks {
       /// The patches that should happen whenever a chore related to this errand is deleted.
       /// </summary>
       public abstract List<GPatchInfo> OnChoreDelete_Patch();
-
-      /// <summary>
-      /// The patches that add a newly created errand to a chain automatically.
-      /// </summary>
-      public abstract List<GPatchInfo> OnAutoChain_Patch();
 
       /// <summary>
       /// Collects errands of type ErrandType that may be added to a chain.
@@ -63,8 +58,6 @@ namespace ErrandNotifier.ChainedErrandPacks {
       public abstract List<GPatchInfo> OnChoreCreate_Patch();
 
       public abstract List<GPatchInfo> OnChoreDelete_Patch();
-
-      public abstract List<GPatchInfo> OnAutoChain_Patch();
 
       public abstract bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference);
 

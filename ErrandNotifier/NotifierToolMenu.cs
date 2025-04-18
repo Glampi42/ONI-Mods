@@ -17,6 +17,8 @@
  */
 
 using ErrandNotifier.Enums;
+using ErrandNotifier.Notifications;
+using ErrandNotifier.Strings;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.UI;
 using System;
@@ -85,24 +87,20 @@ namespace ErrandNotifier {
       private GameObject deleteButton;
 
       private GameObject createPanel;
-      private GameObject numberSelectorPanel;
-      private GameObject chainNumberLabel;
-      private GameObject chainNumDecrease;
-      private GameObject chainNumIncrease;
-      private GameObject linkNumberLabel;
-      private GameObject linkNumDecrease;
-      private GameObject linkNumIncrease;
+      private GameObject notificationConfigurationPanel;
+      private GameObject notificationIDLabel;
+      private GameObject IDDecrease;
+      private GameObject IDIncrease;
 
-      private TMP_InputField chainNumberField;
-      private TMP_InputField linkNumberField;
+      private TMP_InputField IDField;
 
       private GameObject deletePanel;
 
-      public Dictionary<ChainToolMode, MultiToggle> modeToggles = new Dictionary<ChainToolMode, MultiToggle>(Enum.GetNames(typeof(ChainToolMode)).Length);
+      public Dictionary<NotifierToolMode, MultiToggle> modeToggles = new Dictionary<NotifierToolMode, MultiToggle>(Enum.GetNames(typeof(NotifierToolMode)).Length);
 
 
       public NotifierToolMenu() {
-         options = new Dictionary<ChainToolFilter, NotifierToolMenuOption>();
+         options = new Dictionary<NotifierToolFilter, NotifierToolMenuOption>();
       }
 
       /// <summary>
@@ -115,25 +113,25 @@ namespace ErrandNotifier {
 
          if(create)
          {
-            if(Main.chainTool.GetToolMode() == ChainToolMode.DELETE_CHAIN)
+            if(Main.notifierTool.GetToolMode() == NotifierToolMode.DELETE_NOTIFICATION)
             {
-               Main.chainTool.SetToolMode(ChainToolMode.CREATE_CHAIN);
+               Main.notifierTool.SetToolMode(NotifierToolMode.CREATE_NOTIFICATION);
             }
-            else if(Main.chainTool.GetToolMode() == ChainToolMode.DELETE_LINK)
+            else if(Main.notifierTool.GetToolMode() == NotifierToolMode.REMOVE_ERRAND)
             {
-               Main.chainTool.SetToolMode(ChainToolMode.CREATE_LINK);
+               Main.notifierTool.SetToolMode(NotifierToolMode.ADD_ERRAND);
             }
             // else no actions required
          }
          else
          {
-            if(Main.chainTool.GetToolMode() == ChainToolMode.CREATE_CHAIN)
+            if(Main.notifierTool.GetToolMode() == NotifierToolMode.CREATE_NOTIFICATION)
             {
-               Main.chainTool.SetToolMode(ChainToolMode.DELETE_CHAIN);
+               Main.notifierTool.SetToolMode(NotifierToolMode.DELETE_NOTIFICATION);
             }
-            else if(Main.chainTool.GetToolMode() == ChainToolMode.CREATE_LINK)
+            else if(Main.notifierTool.GetToolMode() == NotifierToolMode.ADD_ERRAND)
             {
-               Main.chainTool.SetToolMode(ChainToolMode.DELETE_LINK);
+               Main.notifierTool.SetToolMode(NotifierToolMode.REMOVE_ERRAND);
             }
             // else no actions required
          }
@@ -142,15 +140,15 @@ namespace ErrandNotifier {
       }
 
       /// <summary>
-      /// Updates the visual elements of the menu that represent the selected chain tool mode.
+      /// Updates the visual elements of the menu that represent the selected notifier tool mode.
       /// </summary>
       public void UpdateToolModeSelectionDisplay() {
          if(this.content == null)
             return;
 
-         ChainToolMode currentMode = Main.chainTool.GetToolMode();
+         NotifierToolMode currentMode = Main.notifierTool.GetToolMode();
 
-         bool createPanelActive = currentMode == ChainToolMode.CREATE_CHAIN || currentMode == ChainToolMode.CREATE_LINK;
+         bool createPanelActive = currentMode == NotifierToolMode.CREATE_NOTIFICATION || currentMode == NotifierToolMode.ADD_ERRAND;
          PButton.SetButtonEnabled(createButton, !createPanelActive);
          PButton.SetButtonEnabled(deleteButton, createPanelActive);
          createPanel.SetActive(createPanelActive);
@@ -160,67 +158,37 @@ namespace ErrandNotifier {
          {
             modeToggles[toggleMode].ChangeState(toggleMode == currentMode ? 1 : 0);
 
-            if(toggleMode == ChainToolMode.CREATE_LINK)
+            if(toggleMode == NotifierToolMode.ADD_ERRAND)
             {
-               this.numberSelectorPanel.SetActive(toggleMode == currentMode);
+               this.notificationConfigurationPanel.SetActive(toggleMode == currentMode);
             }
          }
       }
 
       /// <summary>
-      /// Updates the visual elements of the menu that represent the selected chain ID and link number.
+      /// Updates the visual elements of the menu that represent the selected notification's ID and its properties.
       /// </summary>
-      public void UpdateNumberSelectionDisplay() {
+      public void UpdateNotificationConfigDisplay() {
          if(this.content == null)
             return;
 
-         if(ChainsContainer.ChainsCount > 1)
+         if(NotificationsContainer.NotificationsCount > 1)
          {
-            SetArrowButtonEnabled(chainNumDecrease, true);
-            SetArrowButtonEnabled(chainNumIncrease, true);
+            SetArrowButtonEnabled(IDDecrease, true);
+            SetArrowButtonEnabled(IDIncrease, true);
          }
-         else// there are no other chains to switch to
+         else// there are no other notifications to switch to
          {
-            SetArrowButtonEnabled(chainNumDecrease, false);
-            SetArrowButtonEnabled(chainNumIncrease, false);
+            SetArrowButtonEnabled(IDDecrease, false);
+            SetArrowButtonEnabled(IDIncrease, false);
          }
-         if(ChainsContainer.ChainsCount > 0)
+         if(NotificationsContainer.NotificationsCount > 0)
          {
-            SetTextFieldText(chainNumberField, Main.chainTool.GetSelectedChain().ToString());
-         }
-         else
-         {
-            SetTextFieldText(chainNumberField, MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND);
-         }
-
-         if(ChainsContainer.TryGetChain(Main.chainTool.GetSelectedChain(), out Chain chain))
-         {
-            SetArrowButtonEnabled(linkNumDecrease, Main.chainTool.GetSelectedLink() > 0 || !Main.chainTool.GetInsertNewLink());// true if previous link(s) exist
-            SetArrowButtonEnabled(linkNumIncrease, Main.chainTool.GetSelectedLink() <= chain.LastLinkNumber());// true if next link(s) exist
-
-            if(Main.chainTool.GetInsertNewLink() || Main.chainTool.GetSelectedLink() > chain.LastLinkNumber())
-            {
-               if(Main.chainTool.GetSelectedLink() > chain.LastLinkNumber())
-               {
-                  // appending link at the end of the chain won't show a fraction (3.5) but a whole number (4th)
-                  SetTextFieldText(linkNumberField, (Main.chainTool.GetSelectedLink() + 1/*0th link -> 1st link*/).ToString() + Utils.GetPostfixForLinkNumber(Main.chainTool.GetSelectedLink(), true));
-               }
-               else
-               {
-                  SetTextFieldText(linkNumberField, (Main.chainTool.GetSelectedLink()/*0th link -> 0.5 (because the link should be inserted before the selected link)*/).ToString() + ".5");
-               }
-            }
-            else
-            {
-               SetTextFieldText(linkNumberField, (Main.chainTool.GetSelectedLink() + 1/*0th link -> 1st link*/).ToString() + Utils.GetPostfixForLinkNumber(Main.chainTool.GetSelectedLink(), true));
-            }
+            SetTextFieldText(IDField, Main.notifierTool.GetSelectedNotification().ToString());
          }
          else
          {
-            SetArrowButtonEnabled(linkNumDecrease, false);
-            SetArrowButtonEnabled(linkNumIncrease, false);
-
-            SetTextFieldText(linkNumberField, MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_NOTFOUND);
+            SetTextFieldText(IDField, MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NOTFOUND);
          }
       }
       private void SetArrowButtonEnabled(GameObject button, bool enabled) {
@@ -284,9 +252,9 @@ namespace ErrandNotifier {
             }
          }
 
-         if(Main.chainOverlay != null && Main.chainOverlay.IsEnabled)
+         if(Main.notifierOverlay != null && Main.notifierOverlay.IsEnabled)
          {
-            Main.chainOverlay.UpdateOverlay();
+            Main.notifierOverlay.UpdateOverlay();
          }
       }
 
@@ -328,7 +296,7 @@ namespace ErrandNotifier {
          var filterMenuPrefab = baseMenu.content;
          var oldestParent = filterMenuPrefab.GetParent();
 
-         //------------------Creating chain tool menu------------------DOWN
+         //------------------Creating notifier tool menu------------------DOWN
          content = new GameObject("MainPanel");
          content.AddOrGet<RectTransform>();
          content.SetParent(oldestParent);
@@ -352,14 +320,14 @@ namespace ErrandNotifier {
          hlayoutGroup.childForceExpandHeight = false;
          hlayoutGroup.childForceExpandWidth = false;
          hlayoutGroup.spacing = 20f;
-         //------------------Setting Chain Tools menu------------------DOWN
-         PPanel chainToolsMenu = new PPanel("ChainToolsMenu") {
+         //------------------Setting Notifier Tool menu------------------DOWN
+         PPanel notifierToolMenu = new PPanel("NotifierToolMenu") {
             Alignment = TextAnchor.MiddleCenter,
             Direction = PanelDirection.Vertical,
             FlexSize = Vector2.zero,
          };
-         chainToolsMenu.AddOnRealize(menu => {
-            UpdateNumberSelectionDisplay();
+         notifierToolMenu.AddOnRealize(menu => {
+            UpdateNotificationConfigDisplay();
          });
 
          PPanel title = new PPanel("Title") {
@@ -375,7 +343,7 @@ namespace ErrandNotifier {
          });
 
          PLabel titleText = new PLabel("Text") {
-            Text = MYSTRINGS.UI.CHAINTOOLSMENU.TITLE,
+            Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.TITLE,
             TextStyle = PUITuning.Fonts.TextLightStyle,
             Margin = new RectOffset(25, 25, 3, 3),
          };
@@ -396,10 +364,8 @@ namespace ErrandNotifier {
             this.toolsPanel = go;
 
             // adding tooltips should be done here because the GameObject of toolsPanel is realized after the labels' GameObjects
-            this.chainNumberLabel.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
-            this.chainNumberField.gameObject.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
-            this.linkNumberLabel.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
-            this.linkNumberField.gameObject.AddFilterMenuToolTip(MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP, this.toolsPanel.rectTransform());
+            this.notificationIDLabel.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_TOOLTIP, this.toolsPanel.rectTransform());
+            this.IDField.gameObject.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_TOOLTIP, this.toolsPanel.rectTransform());
          });
 
          PRelativePanel createOrDelete = new PRelativePanel("CreateOrDeletePanel") {
@@ -413,7 +379,7 @@ namespace ErrandNotifier {
          createButton.Color.disabledColor = PUITuning.Colors.ButtonPinkStyle.activeColor;
          createButton.Color.disabledhoverColor = PUITuning.Colors.ButtonPinkStyle.hoverColor;
          createButton.Margin = new RectOffset(8, 8, 4, 4);
-         createButton.Text = MYSTRINGS.UI.CHAINTOOLSMENU.CREATEBUTTON;
+         createButton.Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATEBUTTON;
          createButton.AddOnRealize(go => this.createButton = go);
          createButton.AddOnRealize(realized => PButton.SetButtonEnabled(realized, false));
          createButton.OnClick = go => SwitchCreateOrDelete(true);
@@ -424,7 +390,7 @@ namespace ErrandNotifier {
          deleteButton.Color.disabledColor = PUITuning.Colors.ButtonPinkStyle.activeColor;
          deleteButton.Color.disabledhoverColor = PUITuning.Colors.ButtonPinkStyle.hoverColor;
          deleteButton.Margin = new RectOffset(8, 8, 4, 4);
-         deleteButton.Text = MYSTRINGS.UI.CHAINTOOLSMENU.DELETEBUTTON;
+         deleteButton.Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETEBUTTON;
          deleteButton.AddOnRealize(go => this.deleteButton = go);
          deleteButton.AddOnRealize(realized => PButton.SetButtonEnabled(realized, true));
          deleteButton.OnClick = go => SwitchCreateOrDelete(false);
@@ -443,191 +409,86 @@ namespace ErrandNotifier {
             this.createPanel = go;
 
             System.Action addCreateToggles = () => {
-               var createChain = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.createPanel, true);
-               ConfigureToggle(createChain, ChainToolMode.CREATE_CHAIN, MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN, MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN_TOOLTIP, true, () => {
+               var createNotification = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.createPanel, true);
+               ConfigureToggle(createNotification, NotifierToolMode.CREATE_NOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION_TOOLTIP, true, () => {
                   //onClick:
-                  Main.chainTool.SetToolMode(ChainToolMode.CREATE_CHAIN);
+                  Main.notifierTool.SetToolMode(NotifierToolMode.CREATE_NOTIFICATION);
                   UpdateToolModeSelectionDisplay();
                });
 
-               var createLink = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.createPanel, true);
-               ConfigureToggle(createLink, ChainToolMode.CREATE_LINK, MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK, MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK_TOOLTIP, false, () => {
+               var addErrand = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.createPanel, true);
+               ConfigureToggle(addErrand, NotifierToolMode.ADD_ERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_TOOLTIP, false, () => {
                   //onClick:
-                  Main.chainTool.SetToolMode(ChainToolMode.CREATE_LINK);
+                  Main.notifierTool.SetToolMode(NotifierToolMode.ADD_ERRAND);
                   UpdateToolModeSelectionDisplay();
                });
 
-               this.numberSelectorPanel.transform.SetAsLastSibling();// this panel should be below the toggles
+               this.notificationConfigurationPanel.transform.SetAsLastSibling();// this panel should be below the toggles
             };
             Prefabs.RunAfterPrefabsInit(addCreateToggles, nameof(Prefabs.FilterToggleReversedPrefab));
          });
 
-         PPanel numberSelectorPanel = new PPanel("ChainAndLinkNumbers") {
+         PPanel notificationConfigPanel = new PPanel("NotificationConfigurationPanel") {
             Alignment = TextAnchor.MiddleLeft,
             Direction = PanelDirection.Vertical,
             FlexSize = new Vector2(1f, 1f),
             Spacing = 3,
             Margin = new RectOffset(0, 0, 5, 1),
          };
-         numberSelectorPanel.AddOnRealize(go => {
-            this.numberSelectorPanel = go;
-            this.numberSelectorPanel.SetActive(false);
+         notificationConfigPanel.AddOnRealize(go => {
+            this.notificationConfigurationPanel = go;
+            this.notificationConfigurationPanel.SetActive(false);
          });
 
-         PLabel chainNumberLabel = new PLabel("ChainNumberLabel") {
+         PLabel notificationIDLabel = new PLabel("NotificationIDLabel") {
             TextAlignment = TextAnchor.MiddleLeft,
             TextStyle = PUITuning.Fonts.TextLightStyle,
-            Text = MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER,
+            Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID,
          };
-         chainNumberLabel.AddOnRealize(label => this.chainNumberLabel = label);
+         notificationIDLabel.AddOnRealize(label => this.notificationIDLabel = label);
 
-         PPanel chainNumberInput = new PPanel("ChainNumberInput") {
+         PPanel notificationIDInput = new PPanel("NotificationIDInput") {
             Alignment = TextAnchor.MiddleCenter,
             Direction = PanelDirection.Horizontal,
             FlexSize = new Vector2(1f, 1f),
             Spacing = 8,
          };
-         chainNumberInput.AddOnRealize(panel => {
-            chainNumDecrease = Util.KInstantiateUI(Prefabs.ArrowLeftButtonPrefab, panel);
-            chainNumDecrease.name = "ChainDecrease";
-            ConfigureArrowButton(chainNumDecrease, true, () => {
-               Main.chainTool.SetSelectedChain(Main.chainTool.GetSelectedChain() - 1);
-               UpdateNumberSelectionDisplay();
+         notificationIDInput.AddOnRealize(panel => {
+            IDDecrease = Util.KInstantiateUI(Prefabs.ArrowLeftButtonPrefab, panel);
+            IDDecrease.name = "IDDecrease";
+            ConfigureArrowButton(IDDecrease, true, () => {
+               Main.notifierTool.SetSelectedNotification(Main.notifierTool.GetSelectedNotification() - 1);
+               UpdateNotificationConfigDisplay();
             });
 
-            chainNumIncrease = Util.KInstantiateUI(Prefabs.ArrowRightButtonPrefab, panel);
-            chainNumIncrease.name = "ChainIncrease";
-            ConfigureArrowButton(chainNumIncrease, false, () => {
-               Main.chainTool.SetSelectedChain(Main.chainTool.GetSelectedChain() + 1);
-               UpdateNumberSelectionDisplay();
+            IDIncrease = Util.KInstantiateUI(Prefabs.ArrowRightButtonPrefab, panel);
+            IDIncrease.name = "IDIncrease";
+            ConfigureArrowButton(IDIncrease, false, () => {
+               Main.notifierTool.SetSelectedNotification(Main.notifierTool.GetSelectedNotification() + 1);
+               UpdateNotificationConfigDisplay();
             });
          });
 
-         PTextField chainField = new PTextField("ChainField") {
+         PTextField idField = new PTextField("IDField") {
             Type = PTextField.FieldType.Integer,
          };
-         chainField.AddOnRealize(field => {
-            chainNumberField = field.GetComponent<TMP_InputField>();
+         idField.AddOnRealize(field => {
+            IDField = field.GetComponent<TMP_InputField>();
 
             var layoutElem = field.AddOrGet<LayoutElement>();
             layoutElem.minHeight = 24f;
             layoutElem.minWidth = 100f;
          });
-         chainField.OnTextChanged = (GameObject textField, string text) => {
-            int chainNum = ChainToolUtils.InterpretChainNumber(text);
-            Main.chainTool.SetSelectedChain(chainNum);
-            UpdateNumberSelectionDisplay();
+         idField.OnTextChanged = (GameObject textField, string text) => {
+            int notificationID = NotifierToolUtils.InterpretNotificationID(text);
+            Main.notifierTool.SetSelectedNotification(notificationID);
+            UpdateNotificationConfigDisplay();
          };
 
-         chainNumberInput.AddChild(chainField);
+         notificationIDInput.AddChild(idField);
 
-         PLabel linkNumberLabel = new PLabel("LinkNumberLabel") {
-            TextAlignment = TextAnchor.MiddleLeft,
-            TextStyle = PUITuning.Fonts.TextLightStyle,
-            Text = MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER,
-         };
-         linkNumberLabel.AddOnRealize(label => this.linkNumberLabel = label);
-
-         PPanel linkNumberInput = new PPanel("LinkNumberInput") {
-            Alignment = TextAnchor.MiddleCenter,
-            Direction = PanelDirection.Horizontal,
-            FlexSize = new Vector2(1f, 1f),
-            Spacing = 8,
-         };
-         linkNumberInput.AddOnRealize(panel => {
-            linkNumDecrease = Util.KInstantiateUI(Prefabs.ArrowLeftButtonPrefab, panel);
-            linkNumDecrease.name = "LinkDecrease";
-            ConfigureArrowButton(linkNumDecrease, true, () => {
-               if(Main.chainTool.GetInsertNewLink())
-               {
-                  Main.chainTool.SetSelectedLink(Main.chainTool.GetSelectedLink() - 1, false);
-               }
-               else
-               {
-                  Main.chainTool.SetSelectedLink(Main.chainTool.GetSelectedLink(), true);
-               }
-               UpdateNumberSelectionDisplay();
-            });
-
-            linkNumIncrease = Util.KInstantiateUI(Prefabs.ArrowRightButtonPrefab, panel);
-            linkNumIncrease.name = "LinkIncrease";
-            ConfigureArrowButton(linkNumIncrease, false, () => {
-               if(Main.chainTool.GetInsertNewLink())
-               {
-                  Main.chainTool.SetSelectedLink(Main.chainTool.GetSelectedLink(), false);
-               }
-               else
-               {
-                  Main.chainTool.SetSelectedLink(Main.chainTool.GetSelectedLink() + 1, true);
-               }
-               UpdateNumberSelectionDisplay();
-            });
-         });
-
-         PTextField linkField = new PTextField("LinkField") {
-            Type = PTextField.FieldType.Float
-         };
-         linkField.AddOnRealize(field => {
-            linkNumberField = field.GetComponent<TMP_InputField>();
-
-            var layoutElem = field.AddOrGet<LayoutElement>();
-            layoutElem.minHeight = 24f;
-            layoutElem.minWidth = 100f;
-         });
-         linkField.OnTextChanged = (GameObject textField, string text) => {
-            var linkNum = ChainToolUtils.InterpretLinkNumber(text);
-            Main.chainTool.SetSelectedLink(linkNum.linkNumber, linkNum.insertNewLink);
-            UpdateNumberSelectionDisplay();
-         };
-
-         linkNumberInput.AddChild(linkField);
-
-         numberSelectorPanel.AddChild(chainNumberLabel).AddChild(chainNumberInput).AddChild(linkNumberLabel).AddChild(linkNumberInput);
-         createPanel.AddChild(numberSelectorPanel);
-
-         //PPanel createChain = new PPanel("CreateChain") {
-         //   Alignment = TextAnchor.MiddleLeft,
-         //   Direction = PanelDirection.Horizontal,
-         //   FlexSize = Vector2.right,
-         //   Spacing = 5
-         //};
-         //PCheckBox createChainToggle = new PCheckBox("CreateChainToggle");
-         //createChainToggle.InitialState = PCheckBox.STATE_PARTIAL;
-         //createChainToggle.CheckColor = PUITuning.Colors.ComponentDarkStyle;
-         //createChainToggle.AddOnRealize(toggle => {
-         //   var checkboxBorder = toggle.transform.GetChildSafe(0)?.GetChildSafe(0)?.GetComponent<Image>();
-         //   if(checkboxBorder != null)
-         //   {
-               
-         //   }
-         //});
-         //PLabel createChainLabel = new PLabel("CreateChainLabel");
-         //createChainLabel.Text = MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN;
-         //createChainLabel.ToolTip = MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN_TOOLTIP;
-         //createChainLabel.FlexSize = Vector2.right;
-         //createChainLabel.TextAlignment = TextAnchor.MiddleLeft;
-         //createChainLabel.TextStyle = PUITuning.Fonts.TextLightStyle;
-
-         //createChain.AddChild(createChainToggle).AddChild(createChainLabel);
-
-         //PPanel createLink = new PPanel("CreateLink") {
-         //   Alignment = TextAnchor.MiddleLeft,
-         //   Direction = PanelDirection.Horizontal,
-         //   FlexSize = Vector2.right,
-         //   Spacing = 5
-         //};
-         //PCheckBox createLinkToggle = new PCheckBox("CreateLinkToggle");
-         //createLinkToggle.InitialState = PCheckBox.STATE_UNCHECKED;
-         //PLabel createLinkLabel = new PLabel("CreateLinkLabel");
-         //createLinkLabel.Text = MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK;
-         //createLinkLabel.ToolTip = MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK_TOOLTIP;
-         //createLinkLabel.FlexSize = Vector2.right;
-         //createLinkLabel.TextAlignment = TextAnchor.MiddleLeft;
-         //createLinkLabel.TextStyle = PUITuning.Fonts.TextLightStyle;
-
-         //createLink.AddChild(createLinkToggle).AddChild(createLinkLabel);
-
-         //createPanel.AddChild(createChain).AddChild(createLink);
+         notificationConfigPanel.AddChild(notificationIDLabel).AddChild(notificationIDInput);
+         createPanel.AddChild(notificationConfigPanel);
          //------------------Setting create panel------------------UP
          //------------------Setting delete panel------------------DOWN
          PPanel deletePanel = new PPanel("DeletePanel") {
@@ -641,17 +502,17 @@ namespace ErrandNotifier {
             this.deletePanel.SetActive(false);
 
             System.Action addDeleteToggles = () => {
-               var deleteChain = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.deletePanel, true);
-               ConfigureToggle(deleteChain, ChainToolMode.DELETE_CHAIN, MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN, MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN_TOOLTIP, false, () => {
+               var deleteNotification = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.deletePanel, true);
+               ConfigureToggle(deleteNotification, NotifierToolMode.DELETE_NOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION_TOOLTIP, false, () => {
                   //onClick:
-                  Main.chainTool.SetToolMode(ChainToolMode.DELETE_CHAIN);
+                  Main.notifierTool.SetToolMode(NotifierToolMode.DELETE_NOTIFICATION);
                   UpdateToolModeSelectionDisplay();
                });
 
-               var deleteLink = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.deletePanel, true);
-               ConfigureToggle(deleteLink, ChainToolMode.DELETE_LINK, MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK, MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK_TOOLTIP, false, () => {
+               var removeErrand = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.deletePanel, true);
+               ConfigureToggle(removeErrand, NotifierToolMode.REMOVE_ERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND_TOOLTIP, false, () => {
                   //onClick:
-                  Main.chainTool.SetToolMode(ChainToolMode.DELETE_LINK);
+                  Main.notifierTool.SetToolMode(NotifierToolMode.REMOVE_ERRAND);
                   UpdateToolModeSelectionDisplay();
                });
             };
@@ -660,8 +521,8 @@ namespace ErrandNotifier {
          //------------------Setting delete panel------------------UP
          toolsPanel.AddChild(createOrDelete).AddChild(createPanel).AddChild(deletePanel);
 
-         chainToolsMenu.AddChild(title).AddChild(toolsPanel).AddTo(horizontal);
-         //------------------Setting Chain Tools menu------------------UP
+         notifierToolMenu.AddChild(title).AddChild(toolsPanel).AddTo(horizontal);
+         //------------------Setting Notifier Tool menu------------------UP
          //------------------Setting Tool Filter menu------------------DOWN
          // required for a correct filter menu display
          GameObject filterMenuContainer = new GameObject("FilterMenuContainer");
@@ -687,18 +548,18 @@ namespace ErrandNotifier {
          transform.offsetMax = new Vector2(0.0f, 400.0f);
          transform.SetAsFirstSibling();
          HideMenu();
-         //------------------Creating chain tool menu------------------UP
+         //------------------Creating notifier tool menu------------------UP
       }
       /// <summary>
-      /// Fixes up the toggle to look nice in the Chain Tools menu.
+      /// Fixes up the toggle to look nice in the Notifier Tools menu.
       /// </summary>
       /// <param name="toggle">The toggle's GameObject</param>
-      /// <param name="mode">ChainToolMode associated with this toggle</param>
+      /// <param name="mode">NotifierToolMode associated with this toggle</param>
       /// <param name="text">The text to show next to the toggle</param>
       /// <param name="tooltip">The tooltip to show when hovering over the text</param>
       /// <param name="initialState">The starting state: 1 is on, 0 is off</param>
       /// <param name="onClick">The action that should be done onClick</param>
-      private void ConfigureToggle(GameObject toggle, ChainToolMode mode, string text, string tooltip, bool initialState, System.Action onClick) {
+      private void ConfigureToggle(GameObject toggle, NotifierToolMode mode, string text, string tooltip, bool initialState, System.Action onClick) {
          toggle.AddFilterMenuToolTip(tooltip, toolsPanel.rectTransform());
 
          var toggleLabel = toggle.GetComponentInChildren<LocText>();
@@ -752,13 +613,13 @@ namespace ErrandNotifier {
       }
 
       /// <summary>
-      /// Populates the menu with the available destroy modes.
+      /// Populates the menu with the available modes.
       /// </summary>
       internal void PopulateMenu() {
          int i = 0;
          var prefab = ToolMenu.Instance.toolParameterMenu.widgetPrefab;
          ClearMenu();
-         foreach(ChainToolFilter filter in Enum.GetValues(typeof(ChainToolFilter)))
+         foreach(NotifierToolFilter filter in Enum.GetValues(typeof(NotifierToolFilter)))
          {
             // Create prefab based on existing Klei menu
             var widgetPrefab = Util.KInstantiateUI(prefab, choiceList, true);
@@ -783,6 +644,7 @@ namespace ErrandNotifier {
             }
             else
                PUtil.LogWarning(Main.debugPrefix + "Could not find tool menu checkbox!");
+
             i++;
          }
       }
@@ -810,7 +672,7 @@ namespace ErrandNotifier {
       public void ShowMenu() {
          content.SetActive(true);
          OnChange();
-         UpdateNumberSelectionDisplay();
+         UpdateNotificationConfigDisplay();
       }
 
       /// <summary>

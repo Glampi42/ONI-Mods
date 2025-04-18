@@ -27,40 +27,12 @@ namespace ErrandNotifier {
 
       public static readonly Color DefaultChainNumberColor = PUITuning.Colors.ButtonPinkStyle.activeColor;
 
-      public static readonly Chore.Precondition ChainedErrandPrecondition = new() {
-         id = nameof(ChainedErrandPrecondition),
-         description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK,
-         fn = (ref Chore.Precondition.Context context, object preconditionEnabled) => {
-            if(preconditionEnabled == null || !(bool)preconditionEnabled)
-               return true;
-
-            if(context.chore.masterPriority.priority_class == PriorityScreen.PriorityClass.topPriority)
-               return true;
-
-            GameObject go;
-            if(context.chore is MovePickupableChore moveChore)
-            {
-               go = moveChore.smi.sm.pickupablesource.Get(moveChore.smi);// MoveTo errand's prioritizable isn't attached to the GameObject that has the errand
-            }
-            else
-            {
-               go = context.chore.prioritizable.gameObject;
-            }
-            if(go != null && context.chore.TryGetCorrespondingChainedErrand(go, out ChainedErrand chainedErrand))
-            {
-               return chainedErrand.parentLink == null || chainedErrand.parentLink.linkNumber == 0;
-            }
-
-            return true;// this return shouldn't normally be reached, but if it is reached - no need to block the execution of the chore
-         }
-      };
-
       public static Notification autoChainNotification = null;
 
-      public static PAction chainTool_binding;
+      public static PAction notifierTool_binding;
 
-      public static ChainOverlay chainOverlay;
-      public static ChainTool chainTool;
+      public static NotifierOverlay notifierOverlay;
+      public static NotifierTool notifierTool;
 
       public static bool autoChainEnabled = false;
 

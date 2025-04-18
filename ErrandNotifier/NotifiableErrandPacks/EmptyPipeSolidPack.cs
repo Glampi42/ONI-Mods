@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ErrandNotifier.ChainedErrandPacks {
+namespace ErrandNotifier.NotifiableErrandPacks {
    public class EmptyPipeSolidPack : ANotifiableErrandPack<EmptySolidConduitWorkable, NotifiableErrand_EmptySolidConduitWorkable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
          var targetMethod = typeof(EmptySolidConduitWorkable).GetMethod(nameof(EmptySolidConduitWorkable.CreateWorkChore), Utils.GeneralBindingFlags);
@@ -18,7 +18,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
       private static void CreatePostfix(EmptySolidConduitWorkable __instance) {
          if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
          {
-            chainedErrand.ConfigureChorePrecondition(__instance.chore);
+            //chainedErrand.ConfigureChorePrecondition(__instance.chore);
          }
       }
 
@@ -46,21 +46,11 @@ namespace ErrandNotifier.ChainedErrandPacks {
             }
 
             // removing the old chore's ChainNumber (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
-            if(Main.chainOverlay != default && Main.chainOverlay.IsEnabled)
+            if(Main.notifierOverlay != default && Main.notifierOverlay.IsEnabled)
             {
-               Main.chainOverlay.RemoveChainNumber(__instance.gameObject, __instance);
+               //Main.notifierOverlay.RemoveChainNumber(__instance.gameObject, __instance);
             }
          }
-      }
-
-      public override List<GPatchInfo> OnAutoChain_Patch() {
-         var targetMethod = typeof(EmptySolidConduitWorkable).GetMethod(nameof(EmptySolidConduitWorkable.CreateWorkChore), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => OnMarkForEmpty(default));
-
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void OnMarkForEmpty(EmptySolidConduitWorkable __instance) {
-         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

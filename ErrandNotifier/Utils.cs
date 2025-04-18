@@ -1,13 +1,17 @@
-﻿using ErrandNotifier.Components;
+﻿using ErrandNotifier.NotifiableErrandPacks;
+using ErrandNotifier.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Reflection;
 
 namespace ErrandNotifier {
    public static class Utils {
+      public static readonly BindingFlags GeneralBindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
       public static HashSet<GameObject> CollectPrioritizableObjects(Extents extents) {
          HashSet<GameObject> collectedGOs = new();
 
@@ -56,7 +60,7 @@ namespace ErrandNotifier {
          if(errand.IsNullOrDestroyed())
             return false;
 
-         Type notifiableErrandType = ChainedErrandPackRegistry.GetChainedErrandPack(errand).GetChainedErrandType();
+         Type notifiableErrandType = NotifiableErrandPackRegistry.GetNotifiableErrandPack(errand).GetNotifiableErrandType();
          if(errand.TryGetComponent(notifiableErrandType, out Component ce) && (allowDisabled || ((KMonoBehaviour)ce).enabled))
          {
             notifiableErrand = ce as NotifiableErrand;
@@ -69,17 +73,17 @@ namespace ErrandNotifier {
       /// </summary>
       /// <param name="chore">The chore</param>
       /// <param name="go">The GameObject that potentially has the ChainedErrand component</param>
-      /// <param name="chainedErrand">The retrieved ChainedErrand</param>
+      /// <param name="notifiableErrand">The retrieved ChainedErrand</param>
       /// <returns>True if such ChainedErrand was found; false otherwise.</returns>
-      public static bool TryGetCorrespondingNotifiableErrand(this Chore chore, GameObject go, out ChainedErrand chainedErrand) {
-         chainedErrand = null;
+      public static bool TryGetCorrespondingNotifiableErrand(this Chore chore, GameObject go, out NotifiableErrand notifiableErrand) {
+         notifiableErrand = null;
 
-         if(go.TryGetComponents(out ChainedErrand[] cEs))
-         {
-            chainedErrand = cEs.FirstOrDefault(ce => ce.enabled && ce.chore == chore);
-         }
+         //if(go.TryGetComponents(out ChainedErrand[] cEs))
+         //{
+         //   notifiableErrand = cEs.FirstOrDefault(ce => ce.enabled && ce.chore == chore);
+         //}
 
-         return chainedErrand != null;
+         return notifiableErrand != null;
       }
 
       /// <summary>
@@ -97,6 +101,61 @@ namespace ErrandNotifier {
       public static bool IsTile(GameObject obj, out SimCellOccupier cellOccupier) {
          cellOccupier = null;
          return obj != null && obj.TryGetComponent(out cellOccupier);
+      }
+
+      public static ToolTip AddSimpleTooltip(this GameObject go, string tooltip, bool alignCenter = true, float wrapWidth = 0, bool onBottom = true) {
+         if(go == null)
+            return null;
+
+         var tooltipCmp = go.AddOrGet<ToolTip>();
+         tooltipCmp.UseFixedStringKey = false;
+         tooltipCmp.enabled = true;
+         tooltipCmp.tooltipPivot = alignCenter ? new Vector2(0.5f, onBottom ? 1f : 0f) : new Vector2(1f, onBottom ? 1f : 0f);
+         tooltipCmp.tooltipPositionOffset = onBottom ? new Vector2(0f, -20f) : new Vector2(0f, 20f);
+         tooltipCmp.parentPositionAnchor = new Vector2(0.5f, 0.5f);
+         if(wrapWidth > 0)
+         {
+            tooltipCmp.WrapWidth = wrapWidth;
+            tooltipCmp.SizingSetting = ToolTip.ToolTipSizeSetting.MaxWidthWrapContent;
+         }
+         //ToolTipScreen.Instance.SetToolTip(tooltipCmp);
+         tooltipCmp.SetSimpleTooltip(tooltip);
+         return tooltipCmp;
+      }
+      /// <summary>
+      /// Adds a ToolTip to the specified GameObject that mimics the style of tooltips in tool filter menu: the tooltip is located to the left of the panel and stays at the same location
+      /// even for different objects.
+      /// </summary>
+      /// <param name="go">The GameObject</param>
+      /// <param name="tooltip">The text that will be displayed in the tooltip</param>
+      /// <param name="parentOverride">The object that overrides the positioning of the tooltip (it will be positioned relative to it instead of the GameObject that is the owner of the tooltip)</param>
+      /// <param name="spacingToLeft">Distance between the tooltip and the parent object</param>
+      /// <param name="wrapWidth">The wrap width of the tooltip; if 0, the width will be dynamic to fit all contents without wrapping</param>
+      /// <returns>The created ToolTip component.</returns>
+      public static ToolTip AddFilterMenuToolTip(this GameObject go, string tooltip, RectTransform parentOverride, float spacingToLeft = 4f, float wrapWidth = 0f) {
+         if(go == null)
+            return null;
+
+         var tooltipCmp = go.AddOrGet<ToolTip>();
+         tooltipCmp.UseFixedStringKey = false;
+         tooltipCmp.enabled = true;
+         tooltipCmp.toolTipPosition = ToolTip.TooltipPosition.Custom;
+         tooltipCmp.overrideParentObject = parentOverride;
+         tooltipCmp.tooltipPivot = new Vector2(1f, 1f);
+         tooltipCmp.tooltipPositionOffset = new Vector2(-spacingToLeft, 0f);
+         tooltipCmp.parentPositionAnchor = new Vector2(0f, 1f);
+         if(wrapWidth > 0f)
+         {
+            tooltipCmp.WrapWidth = wrapWidth;
+            tooltipCmp.SizingSetting = ToolTip.ToolTipSizeSetting.MaxWidthWrapContent;
+         }
+         else
+         {
+            tooltipCmp.SizingSetting = ToolTip.ToolTipSizeSetting.DynamicWidthNoWrap;
+         }
+         //ToolTipScreen.Instance.SetToolTip(tooltipCmp);
+         tooltipCmp.SetSimpleTooltip(tooltip);
+         return tooltipCmp;
       }
 
       //---------------------Vectors etc.---------------------DOWN

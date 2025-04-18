@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ErrandNotifier.ChainedErrandPacks {
+namespace ErrandNotifier.NotifiableErrandPacks {
    public class MoppablePack : ANotifiableErrandPack<Moppable, NotifiableErrand_Moppable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
          var targetMethod = typeof(Moppable).GetMethod(nameof(Moppable.OnSpawn), Utils.GeneralBindingFlags);
@@ -20,22 +20,12 @@ namespace ErrandNotifier.ChainedErrandPacks {
       private static void CreatePostfix(Moppable __instance) {
          if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
          {
-            chainedErrand.ConfigureChorePrecondition();
+            //chainedErrand.ConfigureChorePrecondition();
          }
       }
 
       public override List<GPatchInfo> OnChoreDelete_Patch() {
          return null;// the GameObject gets destroyed in either case
-      }
-
-      public override List<GPatchInfo> OnAutoChain_Patch() {
-         var targetMethod = typeof(Moppable).GetMethod(nameof(Moppable.OnPrefabInit), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix2(default));
-
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void CreatePostfix2(Moppable __instance) {
-         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

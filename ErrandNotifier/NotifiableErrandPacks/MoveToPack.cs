@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ErrandNotifier.ChainedErrandPacks {
+namespace ErrandNotifier.NotifiableErrandPacks {
    public class MoveToPack : ANotifiableErrandPack<Movable, NotifiableErrand_Movable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
          var targetMethod = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnSpawn), Utils.GeneralBindingFlags);
@@ -38,7 +38,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
             GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
             if(movable_go != null && movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
             {
-               chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
+               //chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
             }
          }
       }
@@ -49,7 +49,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
             if(movable_go != null && movable.gameObject == movable_go/*the newly added Movable is the one this fetchChore is referencing*/ &&
                movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
             {
-               chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
+               //chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
             }
          }
       }
@@ -64,7 +64,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
                // adding the split chunk to the same chain & link its parent is/was in:
                Dictionary<GameObject, HashSet<Workable>> newErrands = new();
                newErrands.Add(parentMovable.StorageProxy.gameObject, new([newMovable]));
-               chainedErrand.parentLink.parentChain.CreateOrExpandLink(chainedErrand.parentLink.linkNumber, false, newErrands);
+               //chainedErrand.parentLink.parentChain.CreateOrExpandLink(chainedErrand.parentLink.linkNumber, false, newErrands);
             };
          }
       }
@@ -81,9 +81,9 @@ namespace ErrandNotifier.ChainedErrandPacks {
 
             if(movable.IsMarkedForMove)
             {
-               if(Main.chainOverlay != default && Main.chainOverlay.IsEnabled)
+               if(Main.notifierOverlay != default && Main.notifierOverlay.IsEnabled)
                {
-                  Main.chainOverlay.UpdateErrand(movable.StorageProxy?.GetComponent<CancellableMove>());
+                  Main.notifierOverlay.UpdateErrand(movable.StorageProxy?.GetComponent<CancellableMove>());
                }
             }
          }
@@ -95,7 +95,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
             GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
             if(movable_go != null && movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
             {
-               chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
+               //chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
             }
          }
       }
@@ -105,7 +105,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
             GameObject movable_go = smi.sm.pickupablesource.Get(smi);
             if(movable_go != null && movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
             {
-               chainedErrand.ConfigureChorePrecondition(smi.master);
+               //chainedErrand.ConfigureChorePrecondition(smi.master);
             }
          }
       }
@@ -145,20 +145,10 @@ namespace ErrandNotifier.ChainedErrandPacks {
          }
 
          // removing the old chore's ChainNumber (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
-         if(Main.chainOverlay != default && Main.chainOverlay.IsEnabled)
+         if(Main.notifierOverlay != default && Main.notifierOverlay.IsEnabled)
          {
-            Main.chainOverlay.RemoveChainNumber(__instance.StorageProxy?.gameObject, __instance);
+            //Main.notifierOverlay.RemoveChainNumber(__instance.StorageProxy?.gameObject, __instance);
          }
-      }
-
-      public override List<GPatchInfo> OnAutoChain_Patch() {
-         var targetMethod = typeof(Movable).GetMethod(nameof(Movable.MarkForMove), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => OnMarkForMove(default));
-
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void OnMarkForMove(Movable __instance) {
-         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
       }
 
 

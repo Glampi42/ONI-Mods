@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace ErrandNotifier.ChainedErrandPacks {
+namespace ErrandNotifier.NotifiableErrandPacks {
    public class DiggablePack : ANotifiableErrandPack<Diggable, NotifiableErrand_Diggable> {
       public override List<GPatchInfo> OnChoreCreate_Patch() {
          var targetMethod = typeof(Diggable).GetMethod("OnSpawn", Utils.GeneralBindingFlags);
@@ -20,25 +20,12 @@ namespace ErrandNotifier.ChainedErrandPacks {
       private static void CreatePostfix(Diggable __instance) {
          if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
          {
-            chainedErrand.ConfigureChorePrecondition(__instance.chore);
+            //chainedErrand.ConfigureChorePrecondition(__instance.chore);
          }
       }
 
       public override List<GPatchInfo> OnChoreDelete_Patch() {
          return null;// the GameObject gets destroyed in either case
-      }
-
-      public override List<GPatchInfo> OnAutoChain_Patch() {
-         var targetMethod = typeof(DigTool).GetMethod(nameof(DigTool.PlaceDig), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => OnPlaceDig(default, default, default));
-
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void OnPlaceDig(int cell, int animationDelay, GameObject __result) {
-         if(__result != null && __result.TryGetComponent(out Diggable diggable))
-         {
-            AutoChainUtils.TryAddToAutomaticChain(__result, diggable);
-         }
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

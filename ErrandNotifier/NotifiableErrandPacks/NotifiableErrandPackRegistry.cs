@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ErrandNotifier.ChainedErrandPacks {
+namespace ErrandNotifier.NotifiableErrandPacks {
    /// <summary>
    /// Interface to retrieve the corresponding NotifiableErrandPack from an errand.
    /// </summary>
@@ -37,7 +37,7 @@ namespace ErrandNotifier.ChainedErrandPacks {
          return _typeToPackMappings.Keys.Where(type => type.IsSubclassOf(typeof(Workable)));
       }
       /// <summary>
-      /// Retrieves all registered ChainedErrandPacks.
+      /// Retrieves all registered NotifiableErrandPacks.
       /// </summary>
       /// <returns>The packs.</returns>
       public static HashSet<INotifiableErrandPack> AllPacks() {

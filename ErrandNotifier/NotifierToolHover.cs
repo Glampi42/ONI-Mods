@@ -29,9 +29,9 @@ namespace ErrandNotifier {
          var drawer = hoverInstance.BeginDrawing();
 
          string textToDraw = "TOOL NOT FOUND";
-         if(Main.chainTool != default)
+         if(Main.notifierTool != default)
          {
-            switch(Main.chainTool.GetToolMode())
+            switch(Main.notifierTool.GetToolMode())
             {
                case Enums.ChainToolMode.CREATE_CHAIN:
                   textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN.text.ToUpper();
