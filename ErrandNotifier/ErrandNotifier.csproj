@@ -3,7 +3,7 @@
 	<!-- General Package Properties -->
 	<PropertyGroup>
 		<PackageId>ErrandNotifier</PackageId>
-		<Version>0.0.0.2</Version>
+		<Version>0.0.0.3</Version>
 		<Authors>Glampi</Authors>
        <Copyright>$(AssemblyCopyright)</Copyright>
 		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>
@@ -59,10 +59,5 @@
 
 	<ItemGroup>
 	  <Folder Include="ModAssets\assets\" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <ProjectReference Include="..\ChainErrand\ChainErrand.csproj" />
 	</ItemGroup>
 </Project>
