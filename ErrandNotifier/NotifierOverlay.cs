@@ -1,5 +1,6 @@
 ﻿using ErrandNotifier.Custom;
 using ErrandNotifier.Enums;
+using ErrandNotifier.NotificationsHierarchy;
 using ErrandNotifier.Structs;
 using PeterHan.PLib.UI;
 using System;
@@ -199,10 +200,10 @@ namespace ErrandNotifier {
             moveToIcon.transform.position = new Vector3(moveToIcon.transform.position.x, moveToIcon.transform.position.y, Grid.GetLayerZ(Grid.SceneLayer.FXFront));
          }
 
-         // creating the chain number(s):
+         // creating the ui symbols:
          foreach(var errand in collectedErrands)
          {
-            //CreateUISymbol(errandRef.gameObject, errand);
+            CreateUISymbol(errandRef.gameObject, errand);
          }
       }
 
@@ -278,7 +279,7 @@ namespace ErrandNotifier {
          else
          {
             ResetGhostTiles();
-            //OverlayTileRenderer.FreeResources();// updating normal tiles
+            OverlayTileRenderer.FreeResources();// updating normal tiles
          }
       }
       private void MoveGhostTilesToMaskedLayer() {
@@ -313,89 +314,88 @@ namespace ErrandNotifier {
             ghostTilesOnDefaultLayer = true;
          }
       }
-      //--------------------------Chain Numbers - UTILS--------------------------DOWN
-      public void CreateUISymbol(GameObject parentGO, Workable relatedErrand, NotificationType nType) {
+      //--------------------------UISymbols - UTILS--------------------------DOWN
+      public void CreateUISymbol(GameObject parentGO, Workable relatedErrand) {
          if(parentGO == null || relatedErrand == null)
             return;
 
-         UISymbol uiSymbol = new UISymbol(uiSymbolsPool.GetFreeElement(GameScreenManager.Instance.worldSpaceCanvas), parentGO, relatedErrand, nType);
+         UISymbol uiSymbol = new UISymbol(uiSymbolsPool.GetFreeElement(GameScreenManager.Instance.worldSpaceCanvas), parentGO, relatedErrand, GNotificationType.NONE);
          uiSymbols.Add(parentGO, uiSymbol);
 
-         //if(relatedErrand.TryGetCorrespondingNotifiableErrand(out ChainedErrand chainedErrand))
-         //{
-         //   UpdateUISymbol(uiSymbol, chainedErrand.parentLink);
-         //}
-         //else
-         //{
-         //   UpdateUISymbol(uiSymbol, null);
-         //}
+         if(relatedErrand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+         {
+            UpdateUISymbol(uiSymbol, notifiableErrand.parentNotification);
+         }
+         else
+         {
+            UpdateUISymbol(uiSymbol, null);
+         }
       }
 
       public void UpdateAllUISymbols() {
-         //foreach(var chainNumber in uiSymbols.GetAllChainNumbersFlattened())
-         //{
-         //   if(chainNumber.GetRelatedErrand().TryGetCorrespondingChainedErrand(out ChainedErrand chainedErrand))
-         //   {
-         //      UpdateChainNumber(chainNumber, chainedErrand.parentLink);
-         //   }
-         //   else
-         //   {
-         //      UpdateChainNumber(chainNumber, null);
-         //   }
-         //}
+         foreach(var uiSymbol in uiSymbols.GetAllUISymbolsFlattened())
+         {
+            if(uiSymbol.GetRelatedErrand().TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+            {
+               UpdateUISymbol(uiSymbol, notifiableErrand.parentNotification);
+            }
+            else
+            {
+               UpdateUISymbol(uiSymbol, null);
+            }
+         }
       }
 
-      //public void UpdateUISymbol(GameObject parentGO, Workable relatedErrand, Link link) {
-      //   if(parentGO.IsNullOrDestroyed() || relatedErrand.IsNullOrDestroyed())
-      //      return;
+      public void UpdateUISymbol(GameObject parentGO, Workable relatedErrand, GNotification n) {
+         if(parentGO.IsNullOrDestroyed() || relatedErrand.IsNullOrDestroyed())
+            return;
 
-      //   if(uiSymbols.TryGetChainNumber(parentGO, relatedErrand, out ChainNumber chainNumber))
-      //   {
-      //      UpdateUISymbol(chainNumber, link);
-      //   }
-      //}
-      //public void UpdateUISymbol(ChainNumber chainNumber, Link link) {
-      //   chainNumber.UpdateColor(link == null ? Main.DefaultChainNumberColor : link.parentChain.chainColor);
-      //   chainNumber.UpdateNumber(link == null ? 0 : link.linkNumber + 1/*0th link -> 1st link*/);
+         if(uiSymbols.TryGetUISymbol(parentGO, relatedErrand, out UISymbol uiSymbol))
+         {
+            UpdateUISymbol(uiSymbol, n);
+         }
+      }
+      public void UpdateUISymbol(UISymbol uiSymbol, GNotification n) {
+         uiSymbol.UpdateSymbol(n == null ? GNotificationType.NONE : n.type);
 
-      //   bool shouldBeVisible;
-      //   if(link == null)// if not in a chain
-      //   {
-      //      shouldBeVisible = Main.chainTool.GetToolMode() == Enums.ChainToolMode.CREATE_CHAIN || Main.chainTool.GetToolMode() == Enums.ChainToolMode.CREATE_LINK;
-      //   }
-      //   else// if in a chain
-      //   {
-      //      if(Main.chainTool.GetToolMode() == Enums.ChainToolMode.CREATE_LINK)
-      //      {
-      //         shouldBeVisible = (link.parentChain?.chainID ?? -1) == Main.chainTool.GetSelectedChain();
-      //      }
-      //      else// any other mode
-      //      {
-      //         shouldBeVisible = true;
-      //      }
-      //   }
-      //   chainNumber.UpdateVisibility(shouldBeVisible);
-      //}
+         bool shouldBeVisible;
+         if(n == null)// if not in a notification
+         {
+            shouldBeVisible = Main.notifierTool.GetToolMode() == NotifierToolMode.CREATE_NOTIFICATION || Main.notifierTool.GetToolMode() == NotifierToolMode.ADD_ERRAND;
+         }
+         else// if in a notification
+         {
+            if(Main.notifierTool.GetToolMode() == NotifierToolMode.ADD_ERRAND)
+            {
+               shouldBeVisible = n.notificationID == Main.notifierTool.GetSelectedNotification();
+            }
+            else// any other mode
+            {
+               shouldBeVisible = true;
+            }
+         }
+         uiSymbol.UpdateVisibility(shouldBeVisible);
+      }
 
       public void RemoveAttachedUISymbols(GameObject parentGO) {
-         //foreach(var chainNum in uiSymbols.GetAttachedChainNumbers(parentGO))
-         //{
-         //   uiSymbolsPool.ClearElement(chainNum.GetLocText());
-         //}
-         //uiSymbols.RemoveAttached(parentGO);
+         foreach(var uiSymbol in uiSymbols.GetAttachedUISymbols(parentGO))
+         {
+            uiSymbolsPool.ClearElement(uiSymbol.GetLocText());
+         }
+         uiSymbols.RemoveAttached(parentGO);
       }
 
       public void RemoveUISymbol(GameObject parentGO, Workable relatedErrand) {
-         //if(uiSymbols.TryGetChainNumber(parentGO, relatedErrand, out UISymbol uiSymbol))
-         //{
-         //   RemoveUISumbol(parentGO, uiSymbol);
-         //}
+         if(uiSymbols.TryGetUISymbol(parentGO, relatedErrand, out UISymbol uiSymbol))
+         {
+            RemoveUISymbol(parentGO, uiSymbol);
+         }
       }
       public void RemoveUISymbol(GameObject parentGO, UISymbol uiSymbol) {
          uiSymbolsPool.ClearElement(uiSymbol.GetLocText());
          uiSymbols.Remove(parentGO, uiSymbol);
       }
-      //--------------------------Chain Numbers - UTILS--------------------------UP
+      //--------------------------UISymbols - UTILS--------------------------UP
 
       /// <summary>
       /// Clears stored data and forces the overlay to get updated.
@@ -426,17 +426,17 @@ namespace ErrandNotifier {
       /// <param name="remove">If true, the tile's display will be disabled. Otherwise, the display will be added</param>
       /// <param name="cellOccupier">The tile's SimCellOccupier</param>
       public void UpdateTile(bool remove, SimCellOccupier cellOccupier) {
-         //foreach(int cell in cellOccupier.building.PlacementCells)
-         //{
-         //   if(remove)
-         //   {
-         //      OverlayTileRenderer.UnrenderTile(cell, cellOccupier.building.Def, false, cellOccupier.building.GetVisualizationElementID(cellOccupier.primaryElement));
-         //   }
-         //   else
-         //   {
-         //      OverlayTileRenderer.RenderTile(cell, cellOccupier.building.Def, false, cellOccupier.building.GetVisualizationElementID(cellOccupier.primaryElement));
-         //   }
-         //}
+         foreach(int cell in cellOccupier.building.PlacementCells)
+         {
+            if(remove)
+            {
+               OverlayTileRenderer.UnrenderTile(cell, cellOccupier.building.Def, false, cellOccupier.building.GetVisualizationElementID(cellOccupier.primaryElement));
+            }
+            else
+            {
+               OverlayTileRenderer.RenderTile(cell, cellOccupier.building.Def, false, cellOccupier.building.GetVisualizationElementID(cellOccupier.primaryElement));
+            }
+         }
       }
    }
 }

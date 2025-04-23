@@ -1,4 +1,5 @@
-﻿using KSerialization;
+﻿using ErrandNotifier.Enums;
+using KSerialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,10 +7,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ErrandNotifier.Components {
+namespace ErrandNotifier.NotificationsHierarchy {
    [SerializationConfig(MemberSerialization.OptIn)]
    public abstract class NotifiableErrand : KMonoBehaviour {
-      public Notification parentNotification;
+      public GNotification parentNotification;
 
       public abstract Workable Errand { get; }
       public Chore chore;
@@ -18,6 +19,8 @@ namespace ErrandNotifier.Components {
 
       [Serialize]
       private int serializedNotificationID;
+      [Serialize]
+      private GNotificationType serializedNType;
 
       public override void OnPrefabInit() {
          base.OnPrefabInit();
@@ -25,20 +28,23 @@ namespace ErrandNotifier.Components {
          if(Errand == null)
          {
             Debug.LogWarning(Main.debugPrefix + "This NotifiableErrand component doesn't have a referenced errand; destroying the component.");
-            UnityEngine.Object.Destroy(this);
+            Destroy(this);
          }
       }
 
       [OnDeserialized]
       public void OnDeserialized() {
-         //SerializationUtils.ReconstructChain(serializedNotificationID, serializedLinkNumber, this, serializedChainColor);
+         SerializationUtils.ReconstructNotification(serializedNotificationID, this, serializedNType);
       }
 
       [OnSerializing]
       public void OnSerializing() {
-         //serializedNotificationID = parentLink?.parentChain?.chainID ?? -1;
-         //serializedLinkNumber = parentLink?.linkNumber ?? -1;
-         //serializedChainColor = parentLink?.parentChain?.chainColor ?? Color.clear;
+         serializedNotificationID = parentNotification?.notificationID ?? -1;
+
+         if(parentNotification == null)// serializing other things isn't necessary
+            return;
+
+         serializedNType = parentNotification.type;
       }
 
       public override void OnCleanUp() {
@@ -50,21 +56,21 @@ namespace ErrandNotifier.Components {
       public void UpdateUISymbol() {
          if(Main.notifierOverlay != default && (!uiSymbolBearer?.Get()?.IsNullOrDestroyed() ?? false))
          {
-            //Main.chainOverlay.UpdateChainNumber(uiSymbolBearer.Get().gameObject, Errand, parentLink);
+            Main.notifierOverlay.UpdateUISymbol(uiSymbolBearer.Get().gameObject, Errand, parentNotification);
          }
       }
 
-      public void Remove(bool tryRemoveLink, bool isBeingDestroyed = false) {
-         //if(tryRemoveLink && parentLink != null)
-         //{
-         //   parentLink.errands.Remove(this);
-         //   if(parentLink.errands.Count == 0)
-         //   {
-         //      parentLink.Remove(true);
-         //   }
-         //}
+      public void Remove(bool tryRemoveNotification, bool isBeingDestroyed = false) {
+         if(tryRemoveNotification && parentNotification != null)
+         {
+            parentNotification.GetErrands().Remove(this);
+            if(parentNotification.GetErrands().Count == 0)
+            {
+               parentNotification.Remove(true);
+            }
+         }
 
-         //parentLink = null;
+         parentNotification = null;
          UpdateUISymbol();
 
          if(!isBeingDestroyed && !this.IsNullOrDestroyed())
@@ -80,7 +86,7 @@ namespace ErrandNotifier.Components {
             chore = null;
             uiSymbolBearer = null;
 
-            this.enabled = false;
+            enabled = false;
          }
       }
    }

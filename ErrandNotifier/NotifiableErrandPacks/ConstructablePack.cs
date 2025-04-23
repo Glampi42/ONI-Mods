@@ -1,5 +1,4 @@
 ﻿using ErrandNotifier.NotifiableErrandPacks;
-using ErrandNotifier.Components;
 using ErrandNotifier.Custom;
 using HarmonyLib;
 using Newtonsoft.Json.Bson;
@@ -11,6 +10,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using ErrandNotifier.NotificationsHierarchy;
 
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class ConstructablePack : ANotifiableErrandPack<Constructable, NotifiableErrand_Constructable> {
@@ -21,7 +21,7 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          return [new GPatchInfo(targetMethod, null, postfix)];
       }
       private static void OnPlaceDiggables(Constructable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
+         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand ne))
          {
             if(__instance.buildChore != null)
             {

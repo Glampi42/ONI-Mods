@@ -1,5 +1,5 @@
-﻿using ErrandNotifier.Components;
-using ErrandNotifier.Custom;
+﻿using ErrandNotifier.Custom;
+using ErrandNotifier.NotificationsHierarchy;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +10,8 @@ using UnityEngine;
 
 namespace ErrandNotifier.NotifiableErrandPacks {
    /// <summary>
-   /// This interface contains methods that any ChainedErrandPack must include. Each ChainedErrandPack is responsible for one errand type
-   /// and does (nearly) everything necessary so that all errands of that type can be added to a chain.
+   /// This interface contains methods that any NotifiableErrandPack must include. Each NotifiableErrandPack is responsible for one errand type
+   /// and does (nearly) everything necessary so that all errands of that type can be added to a notification.
    /// </summary>
    public interface INotifiableErrandPack {
       public Type GetErrandType();
@@ -28,11 +28,11 @@ namespace ErrandNotifier.NotifiableErrandPacks {
       public abstract List<GPatchInfo> OnChoreDelete_Patch();
 
       /// <summary>
-      /// Collects errands of type ErrandType that may be added to a chain.
+      /// Collects errands of type ErrandType that may be added to a notification.
       /// </summary>
       /// <param name="gameObject">The GameObject the errands will be collected from</param>
       /// <param name="errands">The HashSet containing the collected errands</param>
-      /// <param name="errandReference">Component attached to the GameObject that represents the errand (is used in ChainOverlay)</param>
+      /// <param name="errandReference">Component attached to the GameObject that represents the errand (is used in NotifierOverlay)</param>
       /// <returns>True if at least one errand was collected; false otherwise.</returns>
       public abstract bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference);
 

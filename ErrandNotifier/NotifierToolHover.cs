@@ -16,6 +16,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+using ErrandNotifier.Enums;
+using ErrandNotifier.Strings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,20 +35,20 @@ namespace ErrandNotifier {
          {
             switch(Main.notifierTool.GetToolMode())
             {
-               case Enums.ChainToolMode.CREATE_CHAIN:
-                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN.text.ToUpper();
+               case NotifierToolMode.CREATE_NOTIFICATION:
+                  textToDraw = MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION.text.ToUpper();
                   break;
 
-               case Enums.ChainToolMode.CREATE_LINK:
-                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK.text.ToUpper();
+               case NotifierToolMode.ADD_ERRAND:
+                  textToDraw = MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_HOVER.text.ToUpper();
                   break;
 
-               case Enums.ChainToolMode.DELETE_CHAIN:
-                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.DELETECHAIN.text.ToUpper();
+               case NotifierToolMode.DELETE_NOTIFICATION:
+                  textToDraw = MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION.text.ToUpper();
                   break;
 
-               case Enums.ChainToolMode.DELETE_LINK:
-                  textToDraw = MYSTRINGS.UI.CHAINTOOLSMENU.DELETELINK.text.ToUpper();
+               case NotifierToolMode.REMOVE_ERRAND:
+                  textToDraw = MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND.text.ToUpper();
                   break;
             }
          }

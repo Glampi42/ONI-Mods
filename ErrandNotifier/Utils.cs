@@ -1,5 +1,4 @@
 ﻿using ErrandNotifier.NotifiableErrandPacks;
-using ErrandNotifier.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +6,50 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Reflection;
+using ErrandNotifier.NotificationsHierarchy;
+using System.IO;
+using ErrandNotifier.Enums;
 
 namespace ErrandNotifier {
    public static class Utils {
       public static readonly BindingFlags GeneralBindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
+      public static HashSet<ObjectLayer> ObjectLayersFromNotifierToolFilter(NotifierToolFilter filter) {
+         HashSet<ObjectLayer> layers = new();
+
+         switch(filter)
+         {
+            case NotifierToolFilter.STANDARD_BUILDINGS:
+               layers.Add(ObjectLayer.Building, ObjectLayer.Gantry, ObjectLayer.FoundationTile, ObjectLayer.ReplacementTile, ObjectLayer.ReplacementLadder);
+               break;
+
+            case NotifierToolFilter.LIQUID_PIPES:
+               layers.Add(ObjectLayer.LiquidConduit, ObjectLayer.LiquidConduitConnection, ObjectLayer.ReplacementLiquidConduit);
+               break;
+
+            case NotifierToolFilter.GAS_PIPES:
+               layers.Add(ObjectLayer.GasConduit, ObjectLayer.GasConduitConnection, ObjectLayer.ReplacementGasConduit);
+               break;
+
+            case NotifierToolFilter.CONVEYOR_RAILS:
+               layers.Add(ObjectLayer.SolidConduit, ObjectLayer.SolidConduitConnection, ObjectLayer.ReplacementSolidConduit);
+               break;
+
+            case NotifierToolFilter.WIRES:
+               layers.Add(ObjectLayer.Wire, ObjectLayer.WireConnectors, ObjectLayer.ReplacementWire);
+               break;
+
+            case NotifierToolFilter.AUTOMATION:
+               layers.Add(ObjectLayer.LogicGate, ObjectLayer.LogicWire, ObjectLayer.ReplacementLogicWire);
+               break;
+
+            case NotifierToolFilter.BACKWALLS:
+               layers.Add(ObjectLayer.Backwall, ObjectLayer.ReplacementBackwall);
+               break;
+         }
+
+         return layers;
+      }
 
       public static HashSet<GameObject> CollectPrioritizableObjects(Extents extents) {
          HashSet<GameObject> collectedGOs = new();
@@ -48,12 +87,12 @@ namespace ErrandNotifier {
       }
 
       /// <summary>
-      /// Tries to retrieve the ChainedErrand component attached to the same GameObject that is related to the specified errand.
+      /// Tries to retrieve the NotifiableErrand component attached to the same GameObject that is related to the specified errand.
       /// </summary>
       /// <param name="errand">The errand</param>
-      /// <param name="notifiableErrand">The retrieved ChainedErrand</param>
-      /// <param name="allowDisabled">If true, the ChainedErrand component may be disabled</param>
-      /// <returns>True if such ChainedErrand was found; false otherwise.</returns>
+      /// <param name="notifiableErrand">The retrieved NotifiableErrand</param>
+      /// <param name="allowDisabled">If true, the NotifiableErrand component may be disabled</param>
+      /// <returns>True if such NotifiableErrand was found; false otherwise.</returns>
       public static bool TryGetCorrespondingNotifiableErrand(this Workable errand, out NotifiableErrand notifiableErrand, bool allowDisabled = false) {
          notifiableErrand = null;
 
@@ -69,19 +108,19 @@ namespace ErrandNotifier {
          return notifiableErrand != null;
       }
       /// <summary>
-      /// Tries to retrieve the ChainedErrand component that is related to the specified chore.
+      /// Tries to retrieve the NotifiableErrand component that is related to the specified chore.
       /// </summary>
       /// <param name="chore">The chore</param>
-      /// <param name="go">The GameObject that potentially has the ChainedErrand component</param>
-      /// <param name="notifiableErrand">The retrieved ChainedErrand</param>
-      /// <returns>True if such ChainedErrand was found; false otherwise.</returns>
+      /// <param name="go">The GameObject that potentially has the NotifiableErrand component</param>
+      /// <param name="notifiableErrand">The retrieved NotifiableErrand</param>
+      /// <returns>True if such NotifiableErrand was found; false otherwise.</returns>
       public static bool TryGetCorrespondingNotifiableErrand(this Chore chore, GameObject go, out NotifiableErrand notifiableErrand) {
          notifiableErrand = null;
 
-         //if(go.TryGetComponents(out ChainedErrand[] cEs))
-         //{
-         //   notifiableErrand = cEs.FirstOrDefault(ce => ce.enabled && ce.chore == chore);
-         //}
+         if(go.TryGetComponents(out NotifiableErrand[] cEs))
+         {
+            notifiableErrand = cEs.FirstOrDefault(ce => ce.enabled && ce.chore == chore);
+         }
 
          return notifiableErrand != null;
       }
@@ -156,6 +195,29 @@ namespace ErrandNotifier {
          //ToolTipScreen.Instance.SetToolTip(tooltipCmp);
          tooltipCmp.SetSimpleTooltip(tooltip);
          return tooltipCmp;
+      }
+
+      public static void SaveSpriteToAssets(string sprite_name, string additional_path = null) {
+         Texture2D texture = LoadTexture(sprite_name, additional_path);
+         Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector3.zero);
+         sprite.name = sprite_name;
+         Assets.Sprites.Add(sprite_name, sprite);
+      }
+      private static Texture2D LoadTexture(string name, string additional_path) {
+         Texture2D texture = null;
+         string path = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "assets" + (additional_path ?? "")), name + ".png");
+         try
+         {
+            byte[] data = File.ReadAllBytes(path);
+            texture = new Texture2D(1, 1);
+            texture.LoadImage(data);
+         }
+         catch(Exception ex)
+         {
+            Debug.LogError((object)(Main.debugPrefix + "Could not load texture at " + path));
+            Debug.LogException(ex);
+         }
+         return texture;
       }
 
       //---------------------Vectors etc.---------------------DOWN

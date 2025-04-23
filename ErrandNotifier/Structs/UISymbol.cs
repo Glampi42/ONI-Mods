@@ -1,4 +1,5 @@
-﻿using PeterHan.PLib.UI;
+﻿using ErrandNotifier.Enums;
+using PeterHan.PLib.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +13,12 @@ namespace ErrandNotifier.Structs {
       private LocText displayedLocText;
       private GameObject parent;
       private Workable relatedErrand;
-      private NotificationType notificationType;
+      private GNotificationType notificationType;
 
       private Vector3 positionOffset;
       private KAnimControllerBase kAnimControllerBase;
 
-      public UISymbol(LocText locText, GameObject parent, Workable relatedErrand, NotificationType nType) {
+      public UISymbol(LocText locText, GameObject parent, Workable relatedErrand, GNotificationType nType) {
          displayedLocText = locText;
          this.parent = parent;
          this.relatedErrand = relatedErrand;
@@ -47,20 +48,42 @@ namespace ErrandNotifier.Structs {
          }
       }
 
-      public void UpdateSymbol(NotificationType nType) {
+      public void UpdateSymbol(GNotificationType nType) {
          notificationType = nType;
 
-         if(num > 0)
+         string symbol = "";
+         Color color = Color.white;
+         float size = 0f;
+         switch(nType)
          {
-            displayedLocText.text = "<b>" + number.ToString() + "</b>" +
-               MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_STYLE_START + Utils.GetPostfixForLinkNumber(num - 1, false/*for technical reasons this can't be localized properly without looking weird(sad smiley)*/) + MYSTRINGS.UI.CHAINNUMBERS.POSTFIX_STYLE_END;
-         }
-         else
-         {
-            displayedLocText.text = MYSTRINGS.UI.CHAINNUMBERS.NO_CHAIN_NUMBER;
+            case GNotificationType.NONE:
+               symbol = "*";
+               color = PUITuning.Colors.ButtonPinkStyle.activeColor;
+               size = 21f;
+               break;
+
+            case GNotificationType.POP:
+               symbol = "•";
+               color = Color.blue;
+               size = 21f;
+               break;
+
+            case GNotificationType.BOING_BOING:
+               symbol = "!";
+               color = Color.red;
+               size = 21f;
+               break;
+
+            case GNotificationType.AHH:
+               symbol = "!!";
+               color = new Color(0.7f, 0f, 0f, 1f);
+               size = 21f;
+               break;
          }
 
-         //TODO set color
+         displayedLocText.text = symbol;
+         displayedLocText.color = color;
+         displayedLocText.fontSize = size;
       }
 
       public void UpdatePosition() {

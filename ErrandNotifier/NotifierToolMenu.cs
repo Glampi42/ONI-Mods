@@ -17,7 +17,7 @@
  */
 
 using ErrandNotifier.Enums;
-using ErrandNotifier.Notifications;
+using ErrandNotifier.NotificationsHierarchy;
 using ErrandNotifier.Strings;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.UI;
@@ -33,6 +33,8 @@ using VoronoiTree;
 
 namespace ErrandNotifier {
    public sealed class NotifierToolMenu : KMonoBehaviour {
+      private static readonly float panelWidth = 300f;
+
       /// <summary>
 		/// The singleton instance of this class.
 		/// </summary>
@@ -92,7 +94,15 @@ namespace ErrandNotifier {
       private GameObject IDDecrease;
       private GameObject IDIncrease;
 
+      private GameObject nameLabel;
+      private GameObject tooltipLabel;
+      private GameObject typeLabel;
+      private GameObject pauseLabel;
+      private GameObject zoomLabel;
+
       private TMP_InputField IDField;
+      private TMP_InputField nameField;
+      private TMP_InputField tooltipField;
 
       private GameObject deletePanel;
 
@@ -339,7 +349,7 @@ namespace ErrandNotifier {
          };
          title.AddOnRealize(go => {
             var layoutElem = go.AddOrGet<LayoutElement>();
-            layoutElem.minWidth = 200f;// same width as Tool Filter menu
+            layoutElem.minWidth = panelWidth;
          });
 
          PLabel titleText = new PLabel("Text") {
@@ -396,7 +406,7 @@ namespace ErrandNotifier {
          deleteButton.OnClick = go => SwitchCreateOrDelete(false);
 
          createOrDelete.AddChild(createButton).AddChild(new PSpacer()).AddChild(deleteButton);
-         createOrDelete.SetLeftEdge(createButton, 0f).SetRightEdge(createButton, 0.45f).SetLeftEdge(deleteButton, 0.55f).SetRightEdge(deleteButton, 1f);
+         createOrDelete.SetLeftEdge(createButton, 0.05f).SetRightEdge(createButton, 0.4f).SetLeftEdge(deleteButton, 0.6f).SetRightEdge(deleteButton, 0.95f);
          //------------------Setting create panel------------------DOWN
          PPanel createPanel = new PPanel("CreatePanel") {
             Alignment = TextAnchor.MiddleLeft,
@@ -428,11 +438,12 @@ namespace ErrandNotifier {
             Prefabs.RunAfterPrefabsInit(addCreateToggles, nameof(Prefabs.FilterToggleReversedPrefab));
          });
 
+         //------------------Setting notification configuration panel------------------DOWN
          PPanel notificationConfigPanel = new PPanel("NotificationConfigurationPanel") {
             Alignment = TextAnchor.MiddleLeft,
             Direction = PanelDirection.Vertical,
             FlexSize = new Vector2(1f, 1f),
-            Spacing = 3,
+            Spacing = 4,
             Margin = new RectOffset(0, 0, 5, 1),
          };
          notificationConfigPanel.AddOnRealize(go => {
@@ -487,7 +498,76 @@ namespace ErrandNotifier {
 
          notificationIDInput.AddChild(idField);
 
-         notificationConfigPanel.AddChild(notificationIDLabel).AddChild(notificationIDInput);
+         PLabel nameLabel = new PLabel("NameLabel") {
+            TextAlignment = TextAnchor.MiddleLeft,
+            TextStyle = PUITuning.Fonts.TextLightStyle,
+            Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME,
+         };
+         nameLabel.AddOnRealize(label => this.nameLabel = label);
+
+         PTextField nameField = new PTextField("NameField") {
+            Type = PTextField.FieldType.Text,
+         };
+         nameField.AddOnRealize(field => {
+            this.nameField = field.GetComponent<TMP_InputField>();
+
+            var layoutElem = field.AddOrGet<LayoutElement>();
+            layoutElem.minHeight = 24f;
+            layoutElem.preferredWidth = panelWidth;
+         });
+
+         PLabel tooltipLabel = new PLabel("TooltipLabel") {
+            TextAlignment = TextAnchor.MiddleLeft,
+            TextStyle = PUITuning.Fonts.TextLightStyle,
+            Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP,
+         };
+         nameLabel.AddOnRealize(label => this.tooltipLabel = label);
+
+         PTextField tooltipField = new PTextField("TooltipField") {
+            Type = PTextField.FieldType.Text,
+         };
+         tooltipField.AddOnRealize(field => {
+            this.tooltipField = field.GetComponent<TMP_InputField>();
+
+            var layoutElem = field.AddOrGet<LayoutElement>();
+            layoutElem.minHeight = 24f;
+            layoutElem.preferredWidth = panelWidth;
+         });
+
+         PPanel notificationTypePanel = new PPanel("NotificationTypePanel") {
+            Alignment = TextAnchor.MiddleLeft,
+            Direction = PanelDirection.Horizontal,
+            FlexSize = new Vector2(1f, 1f),
+            Spacing = 8,
+         };
+
+         PLabel typeLabel = new PLabel("TypeLabel") {
+            TextAlignment = TextAnchor.MiddleLeft,
+            TextStyle = PUITuning.Fonts.TextLightStyle,
+            Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE,
+         };
+         typeLabel.AddOnRealize(label => this.typeLabel = label);
+
+         notificationTypePanel.AddChild(typeLabel);
+
+         PLabel pauseLabel = new PLabel("PauseLabel") {
+            TextAlignment = TextAnchor.MiddleLeft,
+            TextStyle = PUITuning.Fonts.TextLightStyle,
+            Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE,
+         };
+         pauseLabel.AddOnRealize(label => this.pauseLabel = label);
+
+         PLabel zoomLabel = new PLabel("ZoomLabel") {
+            TextAlignment = TextAnchor.MiddleLeft,
+            TextStyle = PUITuning.Fonts.TextLightStyle,
+            Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM,
+         };
+         zoomLabel.AddOnRealize(label => this.zoomLabel = label);
+
+         notificationConfigPanel.AddChild(notificationIDLabel).AddChild(notificationIDInput).AddChild(new PSpacer() { PreferredSize = new Vector2(0f, 2f) })
+            .AddChild(nameLabel).AddChild(nameField).AddChild(tooltipLabel).AddChild(tooltipField)
+            .AddChild(notificationTypePanel).AddChild(pauseLabel).AddChild(zoomLabel);
+         //------------------Setting notification configuration panel------------------UP
          createPanel.AddChild(notificationConfigPanel);
          //------------------Setting create panel------------------UP
          //------------------Setting delete panel------------------DOWN

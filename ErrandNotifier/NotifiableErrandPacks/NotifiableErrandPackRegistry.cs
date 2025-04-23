@@ -1,4 +1,4 @@
-﻿using ErrandNotifier.Components;
+﻿using ErrandNotifier.NotificationsHierarchy;
 using PeterHan.PLib.Core;
 using System;
 using System.Collections.Generic;
@@ -17,8 +17,8 @@ namespace ErrandNotifier.NotifiableErrandPacks {
       public static INotifiableErrandPack GetNotifiableErrandPack(Workable errand) {
          return GetNotifiableErrandPack(errand?.GetType());
       }
-      public static INotifiableErrandPack GetNotifiableErrandPack(NotifiableErrand chainedErrand) {
-         return GetNotifiableErrandPack(chainedErrand?.GetType());
+      public static INotifiableErrandPack GetNotifiableErrandPack(NotifiableErrand notifiableErrand) {
+         return GetNotifiableErrandPack(notifiableErrand?.GetType());
       }
       public static INotifiableErrandPack GetNotifiableErrandPack(Type type) {
          if(_typeToPackMappings.TryGetValue(type, out var instance))
@@ -30,7 +30,7 @@ namespace ErrandNotifier.NotifiableErrandPacks {
       }
 
       /// <summary>
-      /// Retrieves all errand types that can/should have a ChainedErrandPack and can be added to a chain.
+      /// Retrieves all errand types that can/should have a NotifiableErrandPack and can be added to a notification.
       /// </summary>
       /// <returns>The types.</returns>
       public static IEnumerable<Type> AllErrandTypes() {

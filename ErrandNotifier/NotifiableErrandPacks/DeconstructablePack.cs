@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using System.Reflection;
-using ErrandNotifier.Components;
 using ErrandNotifier.Custom;
+using ErrandNotifier.NotificationsHierarchy;
 
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class DeconstructablePack : ANotifiableErrandPack<Deconstructable, NotifiableErrand_Deconstructable> {

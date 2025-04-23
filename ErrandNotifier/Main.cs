@@ -17,24 +17,12 @@ namespace ErrandNotifier {
       public static readonly Color grayBackgroundColor = new Color32(73, 73, 73, byte.MaxValue);
       public static readonly ColorStyleSetting whiteToggleSetting;// gets darker when hovering over it/activating it
 
-      public static readonly Color autoChainVignetteColor = new Color(0f, 0f, 1f, 0.4f);
-
-      public static readonly float noChainMarkerFontSize = 21f;
-      public static readonly float maxUISymbolFontSize = 28f;
-      public static readonly float minChainNumberFontSize = 13f;
-      public static readonly double chainNumberDecreaseRate = 0.16;// modifies how quickly the font size goes from max to min for increasing chain numbers
-      public static float outlineWidthMultiplier = 0.0127f;// used to get Chain Numbers' outline width from font size
-
-      public static readonly Color DefaultChainNumberColor = PUITuning.Colors.ButtonPinkStyle.activeColor;
-
-      public static Notification autoChainNotification = null;
+      public static float outlineWidthMultiplier = 0.0127f;// used to get UISymbols' outline width from font size
 
       public static PAction notifierTool_binding;
 
       public static NotifierOverlay notifierOverlay;
       public static NotifierTool notifierTool;
-
-      public static bool autoChainEnabled = false;
 
 
       static Main() {

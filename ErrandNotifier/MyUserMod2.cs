@@ -20,7 +20,7 @@ namespace ErrandNotifier {
 
          PUtil.InitLibrary();
 
-         Main.notifierTool_binding = new PActionManager().CreateAction("glampi.NotifierTool", (LocString)"NotifierTool", new PKeyBinding(KKeyCode.C, Modifier.Shift));
+         Main.notifierTool_binding = new PActionManager().CreateAction("glampi.NotifierTool", (LocString)"NotifierTool", new PKeyBinding(KKeyCode.N, Modifier.Shift));
 
          // patching the pathes defined in NotifiableErrandPacks:
          foreach(var pack in NotifiableErrandPackRegistry.AllPacks())

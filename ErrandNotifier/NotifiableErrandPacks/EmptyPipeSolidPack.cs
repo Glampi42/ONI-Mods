@@ -1,5 +1,5 @@
-﻿using ErrandNotifier.Components;
-using ErrandNotifier.Custom;
+﻿using ErrandNotifier.Custom;
+using ErrandNotifier.NotificationsHierarchy;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ErrandNotifier.Strings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,7 +50,7 @@ namespace ErrandNotifier.Enums {
             case NotifierToolFilter.DIG:
                return STRINGS.UI.TOOLS.FILTERLAYERS.DIG.NAME;
             case NotifierToolFilter.MOP:
-               //return MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME;
+               return MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME;
             case NotifierToolFilter.EMPTY_PIPE:
                return STRINGS.UI.TOOLS.EMPTY_PIPE.NAME;
             case NotifierToolFilter.MOVE_TO:
@@ -90,11 +91,11 @@ namespace ErrandNotifier.Enums {
             case NotifierToolFilter.DIG:
                return STRINGS.UI.TOOLS.FILTERLAYERS.DIG.TOOLTIP;
             case NotifierToolFilter.MOP:
-               //return MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP;
+               return MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP;
             case NotifierToolFilter.EMPTY_PIPE:
-               //return MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP;
+               return MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP;
             case NotifierToolFilter.MOVE_TO:
-               //return MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP;
+               return MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP;
 
             case NotifierToolFilter.STANDARD_BUILDINGS:
                return STRINGS.UI.TOOLS.FILTERLAYERS.BUILDINGS.TOOLTIP;

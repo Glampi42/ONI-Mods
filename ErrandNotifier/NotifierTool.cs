@@ -17,6 +17,7 @@
  */
 
 using ErrandNotifier.Enums;
+using ErrandNotifier.NotificationsHierarchy;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.UI;
 using System;
@@ -114,7 +115,7 @@ namespace ErrandNotifier {
 
          if(Main.notifierOverlay != default)
          {
-            Main.notifierOverlay.UpdateAllChainNumbers();
+            Main.notifierOverlay.UpdateAllUISymbols();
          }
       }
 
@@ -122,25 +123,30 @@ namespace ErrandNotifier {
          return selectedNotification;
       }
       public void SetSelectedNotification(int targetNum) {
-         //if(ChainsContainer.ChainsCount > 0)
-         //{
-         //   if(targetNum < 0)
-         //   {
-         //      selectedNotification = ChainsContainer.ChainsCount - 1;// for looping around
-         //   }
-         //   else if(targetNum >= ChainsContainer.ChainsCount)
-         //   {
-         //      selectedNotification = 0;// for looping around
-         //   }
-         //   else
-         //   {
-         //      selectedNotification = targetNum;
-         //   }
-         //}
-         //else
-         //{
-         //   selectedNotification = 0;
-         //}
+         if(NotificationsContainer.NotificationsCount > 0)
+         {
+            if(targetNum < 0)
+            {
+               selectedNotification = NotificationsContainer.NotificationsCount - 1;// for looping around
+            }
+            else if(targetNum >= NotificationsContainer.NotificationsCount)
+            {
+               selectedNotification = 0;// for looping around
+            }
+            else
+            {
+               selectedNotification = targetNum;
+            }
+         }
+         else
+         {
+            selectedNotification = 0;
+         }
+
+         if(Main.notifierOverlay != default)
+         {
+            Main.notifierOverlay.UpdateAllUISymbols();
+         }
       }
 
 
@@ -188,7 +194,7 @@ namespace ErrandNotifier {
       public override void OnDeactivateTool(InterfaceTool newTool) {
          base.OnDeactivateTool(newTool);
 
-         NotifierToolMenu.Instance.HideMenu();
+         NotifierToolMenu.Instance?.HideMenu();
          ToolMenu.Instance.PriorityScreen.Show(false);
          OverlayScreen.Instance.ToggleOverlay(OverlayModes.None.ID);
 
@@ -281,24 +287,24 @@ namespace ErrandNotifier {
 
          if(collectedErrands.Count > 0)
          {
-            //switch(currentMode)
-            //{
-            //   case NotifierToolMode.CREATE_NOTIFICATION:
-            //      ChainToolUtils.CreateNewChain(collectedErrands);
-            //      break;
+            switch(currentMode)
+            {
+               case NotifierToolMode.CREATE_NOTIFICATION:
+                  NotifierToolUtils.CreateNewNotification(collectedErrands);
+                  break;
 
-            //   case NotifierToolMode.ADD_ERRAND:
-            //      ChainToolUtils.CreateOrExpandLink(collectedErrands);
-            //      break;
+               case NotifierToolMode.ADD_ERRAND:
+                  NotifierToolUtils.AddErrands(collectedErrands);
+                  break;
 
-            //   case NotifierToolMode.DELETE_NOTIFICATION:
-            //      ChainToolUtils.DeleteChains(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
-            //      break;
+               case NotifierToolMode.DELETE_NOTIFICATION:
+                  NotifierToolUtils.DeleteNotifications(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
+                  break;
 
-            //   case NotifierToolMode.REMOVE_ERRAND:
-            //      ChainToolUtils.DeleteErrands(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
-            //      break;
-            //}
+               case NotifierToolMode.REMOVE_ERRAND:
+                  NotifierToolUtils.RemoveErrands(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
+                  break;
+            }
 
             NotifierToolMenu.Instance?.UpdateNotificationConfigDisplay();
          }

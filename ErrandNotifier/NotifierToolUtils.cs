@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using ErrandNotifier.Enums;
+using ErrandNotifier.NotifiableErrandPacks;
+using ErrandNotifier.NotificationsHierarchy;
 
 namespace ErrandNotifier {
    public static class NotifierToolUtils {
@@ -22,77 +24,77 @@ namespace ErrandNotifier {
          if(errand_go == null)
             return errands;
 
-         //foreach(NotifierToolFilter filter in Enum.GetValues(typeof(NotifierToolFilter)))
-         //{
-         //   if(filter.IsOn())
-         //   {
-         //      switch(filter)
-         //      {
-         //         case NotifierToolFilter.ALL:
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            // pipes can have multiple errands(deconstruct + empty)
+         foreach(NotifierToolFilter filter in Enum.GetValues(typeof(NotifierToolFilter)))
+         {
+            if(filter.IsOn())
+            {
+               switch(filter)
+               {
+                  case NotifierToolFilter.ALL:
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     // pipes can have multiple errands(deconstruct + empty)
 
-         //            if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
-         //               break;// buildings can't have other errands
+                     if(NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
+                        break;// buildings can't have other errands
 
-         //            if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference))
-         //               break;// digging markers can't have other errands
+                     if(NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference))
+                        break;// digging markers can't have other errands
 
-         //            if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference))
-         //               break;// mopping markers can't have other errands
+                     if(NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference))
+                        break;// mopping markers can't have other errands
 
-         //            if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference))
-         //               break;// moveto markers can't have other errands
-         //            break;
+                     if(NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference))
+                        break;// moveto markers can't have other errands
+                     break;
 
-         //         case NotifierToolFilter.CONSTRUCTION:
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            break;
+                  case NotifierToolFilter.CONSTRUCTION:
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     break;
 
-         //         case NotifierToolFilter.DIG:
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            break;
+                  case NotifierToolFilter.DIG:
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference);
+                     break;
 
-         //         case NotifierToolFilter.MOP:
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            break;
+                  case NotifierToolFilter.MOP:
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference);
+                     break;
 
-         //         case NotifierToolFilter.EMPTY_PIPE:
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            break;
+                  case NotifierToolFilter.EMPTY_PIPE:
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
+                     break;
 
-         //         case NotifierToolFilter.MOVE_TO:
-         //            ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference);
-         //            break;
+                  case NotifierToolFilter.MOVE_TO:
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference);
+                     break;
 
-         //         case NotifierToolFilter.STANDARD_BUILDINGS:
-         //         case NotifierToolFilter.LIQUID_PIPES:
-         //         case NotifierToolFilter.GAS_PIPES:
-         //         case NotifierToolFilter.CONVEYOR_RAILS:
-         //         case NotifierToolFilter.WIRES:
-         //         case NotifierToolFilter.AUTOMATION:
-         //         case NotifierToolFilter.BACKWALLS:
-         //            if(errand_go.TryGetComponent(out Building building))
-         //            {
-         //               ObjectLayer objLayer = building.Def.ObjectLayer;
-         //               if(Utils.ObjectLayersFromNotifierToolFilter(filter).Contains(objLayer))
-         //               {
-         //                  ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
-         //                  ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
-         //               }
-         //            }
-         //            break;
-         //      }
+                  case NotifierToolFilter.STANDARD_BUILDINGS:
+                  case NotifierToolFilter.LIQUID_PIPES:
+                  case NotifierToolFilter.GAS_PIPES:
+                  case NotifierToolFilter.CONVEYOR_RAILS:
+                  case NotifierToolFilter.WIRES:
+                  case NotifierToolFilter.AUTOMATION:
+                  case NotifierToolFilter.BACKWALLS:
+                     if(errand_go.TryGetComponent(out Building building))
+                     {
+                        ObjectLayer objLayer = building.Def.ObjectLayer;
+                        if(Utils.ObjectLayersFromNotifierToolFilter(filter).Contains(objLayer))
+                        {
+                           NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+                           NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
+                        }
+                     }
+                     break;
+               }
 
-         //      break;
-         //   }
-         //}
+               break;
+            }
+         }
 
          if(searchMode != ErrandsSearchMode.ALL_ERRANDS)
          {
-            // filtering out errands that are/aren't already chained up:
+            // filtering out errands that are/aren't already assigned to a notification:
             errands = new(errands.Where(errand => {
                if(errand.TryGetCorrespondingNotifiableErrand(out _))
                {
@@ -105,7 +107,68 @@ namespace ErrandNotifier {
          if(errandReference == default)
             errandReference = errands.FirstOrDefault();
 
+         Debug.Log("$$$Collected errands: " + errands.Count);
+
          return errands;
+      }
+
+      /// <summary>
+      /// Creates a new notification and assigns it to the specified errands.
+      /// </summary>
+      /// <param name="errands">The errands</param>
+      public static void CreateNewNotification(Dictionary<GameObject, HashSet<Workable>> errands) {
+         GNotification n = NotificationsContainer.CreateNewNotification();
+
+         n.AddErrands(errands);
+
+         Main.notifierTool.SetSelectedNotification(n.notificationID);
+
+         NotifierToolMenu.Instance?.modeToggles[NotifierToolMode.ADD_ERRAND].onClick();// switching to Add Errand
+      }
+
+      /// <summary>
+      /// Adds the errands to an already existing notification. The notification ID is taken from the Notifier Tool.
+      /// </summary>
+      /// <param name="errands">The errands to be added to the notification</param>
+      public static void AddErrands(Dictionary<GameObject, HashSet<Workable>> errands) {
+         if(NotificationsContainer.TryGetNotification(Main.notifierTool.GetSelectedNotification(), out GNotification n))
+         {
+            n.AddErrands(errands);
+         }
+      }
+
+      /// <summary>
+      /// Deletes all notifications that are assigned to the specified errands.
+      /// </summary>
+      /// <param name="errands">The errands</param>
+      public static void DeleteNotifications(HashSet<Workable> errands) {
+         HashSet<GNotification> nsToDelete = new();
+         foreach(var errand in errands)
+         {
+            if(errand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand nE))
+            {
+               nsToDelete.Add(nE.parentNotification);
+            }
+         }
+
+         foreach(var n in nsToDelete)
+         {
+            NotificationsContainer.RemoveNotification(n);
+         }
+      }
+
+      /// <summary>
+      /// Removes the specified errands from the notifications assigned to them. If the notification isn't assigned to any other errands, then it will be deleted.
+      /// </summary>
+      /// <param name="errands">The errands</param>
+      public static void RemoveErrands(HashSet<Workable> errands) {
+         foreach(var errand in errands)
+         {
+            if(errand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand nE))
+            {
+               nE.Remove(true);
+            }
+         }
       }
 
       /// <summary>

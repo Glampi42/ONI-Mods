@@ -37,12 +37,24 @@ namespace ErrandNotifier.Strings {
             public static LocString CREATENOTIFICATION = "Create Notification";
             public static LocString CREATENOTIFICATION_TOOLTIP = "Create a new notification assigned to the selected errands";
             public static LocString ADDERRAND = "Manage Notification";
+            public static LocString ADDERRAND_HOVER = "Add Errand";
             public static LocString ADDERRAND_TOOLTIP = "Add new errands to an already existing notification, or change the notification's settings";
 
             public static LocString NOTIFICATIONID = "Notification ID:";
             public static LocString NOTIFICATIONID_TOOLTIP = "ID of the notification that should be modified";
 
-            public static LocString NOTIFICATIONID_NOTFOUND = "NO NOTIFICATIONS";
+            public static LocString NOTIFICATIONID_NOTFOUND = "NONE";
+
+            public static LocString NAME = "Name:";
+            public static LocString NAME_TOOLTIP = "How the notification will appear";
+            public static LocString TOOLTIP = "Tooltip:";
+            public static LocString TOOLTIP_TOOLTIP = "What will be displayed when hovered over the notification";
+            public static LocString TYPE = "Type:";
+            public static LocString TYPE_TOOLTIP = "Type of the notification";
+            public static LocString PAUSE = "Pause:";
+            public static LocString PAUSE_TOOLTIP = "Whether the game should be paused upon the errands' completion";
+            public static LocString ZOOM = "Zoom:";
+            public static LocString ZOOM_TOOLTIP = "Whether the camera should zoom to the errands upon their completion";
 
             public static LocString DELETENOTIFICATION = "Delete Notification";
             public static LocString DELETENOTIFICATION_TOOLTIP = "Delete a notification";
