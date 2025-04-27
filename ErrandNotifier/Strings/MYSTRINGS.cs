@@ -46,6 +46,8 @@ namespace ErrandNotifier.Strings {
             public static LocString NOTIFICATIONID_NEW = "NEW";
             public static LocString NOTIFICATIONID_NOTFOUND = "NONE";
 
+            public static LocString GOTONOTIFICATION_TOOLTIP = "Go to this notification";
+
             public static LocString NAME = "Name:";
             public static LocString NAME_TOOLTIP = "How the notification will appear when it will be triggered";
             public static LocString NAME_DEFAULT = "Errand is completed";

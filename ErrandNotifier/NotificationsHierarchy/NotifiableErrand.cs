@@ -1,4 +1,5 @@
 ﻿using ErrandNotifier.Enums;
+using ErrandNotifier.NotifiableErrandPacks;
 using KSerialization;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,28 @@ namespace ErrandNotifier.NotificationsHierarchy {
       private bool serializedPause;
       [Serialize]
       private bool serializedZoom;
+
+      public void ConfigureChoreOnComplete(Chore chore = null) {
+         if(chore == null)
+            chore = NotifiableErrandPackRegistry.GetNotifiableErrandPack(this).GetChoreFromErrand(Errand);
+
+         this.chore = chore;
+
+         if(chore != null)
+         {
+            var list = chore.onComplete.GetInvocationList();
+            for(int i = 0; i < list.Length; i++)
+            {
+               if(list[i].Method == ((System.Action<Chore>)GenerateNotificationOnComplete).Method)
+                  return;// the chore's OnComplete already contains the required function
+            }
+
+            chore.onComplete += GenerateNotificationOnComplete;
+         }
+      }
+      private void GenerateNotificationOnComplete(Chore chore) {
+         Notification notification = new Notification(parentNotification.name, parentNotification.type.ToNotificationType(), (n, d) => parentNotification.tooltip, );
+      }
 
       public override void OnPrefabInit() {
          base.OnPrefabInit();

@@ -35,6 +35,7 @@ namespace ErrandNotifier {
    public sealed class NotifierToolMenu : KMonoBehaviour {
       private static readonly float panelWidth = 300f;
       private static readonly float labelsWidth = 80f;
+      private static readonly float gotoButtonSize = 24f;
 
       /// <summary>
 		/// The singleton instance of this class.
@@ -92,6 +93,7 @@ namespace ErrandNotifier {
       private GameObject createPanel;
       private GameObject notificationConfigurationPanel;
       private GameObject notificationIDLabel;
+      private GameObject gotoButtonGO;
       private GameObject IDDecrease;
       private GameObject IDIncrease;
 
@@ -189,6 +191,8 @@ namespace ErrandNotifier {
 
          if(displayNew)
          {
+            gotoButtonGO.SetActive(false);
+
             SetArrowButtonEnabled(IDDecrease, false);
             SetArrowButtonEnabled(IDIncrease, false);
 
@@ -209,10 +213,14 @@ namespace ErrandNotifier {
 
             if(NotificationsContainer.NotificationsCount > 0)
             {
+               gotoButtonGO.SetActive(true);
+
                SetTextFieldText(IDField, Main.notifierTool.GetSelectedNotification().ToString());
             }
             else
             {
+               gotoButtonGO.SetActive(false);
+
                SetTextFieldText(IDField, MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NOTFOUND);
 
                // blank fields (there are no notifications):
@@ -494,12 +502,50 @@ namespace ErrandNotifier {
          };
          notificationConfigPanel.AddOnRealize(go => this.notificationConfigurationPanel = go);
 
+         PPanel idLabelPanel = new PPanel("IDLabelPanel") {
+            Alignment = TextAnchor.MiddleLeft,
+            Direction = PanelDirection.Horizontal,
+            FlexSize = new Vector2(1f, 1f),
+            Spacing = 0,
+         };
+
          PLabel notificationIDLabel = new PLabel("NotificationIDLabel") {
             TextAlignment = TextAnchor.MiddleLeft,
             TextStyle = PUITuning.Fonts.TextLightStyle,
             Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID,
          };
          notificationIDLabel.AddOnRealize(label => this.notificationIDLabel = label);
+
+         PButton gotoButton = new PButton("GotoButton") {
+            Sprite = Assets.GetSprite("action_mirror"),// the "copy settings" icon
+            SpriteTransform = ImageTransform.FlipHorizontal,// to not confuse the icon with "copy settings" icon (it's different now lol)
+            SpriteSize = new Vector2(gotoButtonSize, gotoButtonSize),
+            ToolTip = MYSTRINGS.UI.NOTIFIERTOOLMENU.GOTONOTIFICATION_TOOLTIP,
+         };
+         gotoButton.SetKleiBlueStyle();
+         gotoButton.AddOnRealize(button => {
+            var layoutElem = button.AddOrGet<LayoutElement>();
+            layoutElem.minHeight = gotoButtonSize;
+            layoutElem.minWidth = gotoButtonSize;
+            layoutElem.preferredHeight = gotoButtonSize;
+            layoutElem.preferredWidth = gotoButtonSize;
+
+            this.gotoButtonGO = button;
+         });
+         gotoButton.OnClick = button => {
+            if(NotificationsContainer.TryGetNotification(Main.notifierTool.GetSelectedNotification(), out GNotification n))
+            {
+               NotifiableErrand nErrand = n.GetErrands()?.Last();
+               if(nErrand != null)
+               {
+                  int worldID = nErrand.gameObject.GetMyWorldId();
+                  if(worldID != -1)
+                     CameraController.Instance.ActiveWorldStarWipe(worldID, nErrand.transform.position);
+               }
+            }
+         };
+
+         idLabelPanel.AddChild(notificationIDLabel).AddChild(new PSpacer() { FlexSize = Vector2.one }).AddChild(gotoButton);
 
          PPanel notificationIDInput = new PPanel("NotificationIDInput") {
             Alignment = TextAnchor.MiddleCenter,
@@ -531,7 +577,9 @@ namespace ErrandNotifier {
 
             var layoutElem = field.AddOrGet<LayoutElement>();
             layoutElem.minHeight = 24f;
+            layoutElem.preferredHeight = 24f;
             layoutElem.minWidth = 100f;
+            layoutElem.preferredWidth = 100f;
          });
          idField.OnTextChanged = (GameObject textField, string text) => {
             int notificationID = NotifierToolUtils.InterpretNotificationID(text);
@@ -680,7 +728,7 @@ namespace ErrandNotifier {
             }, nameof(Prefabs.CheckboxPrefab));
          });
 
-         notificationConfigPanel.AddChild(notificationIDLabel).AddChild(notificationIDInput).AddChild(new PSpacer() { PreferredSize = new Vector2(0f, 2f) })
+         notificationConfigPanel.AddChild(idLabelPanel).AddChild(notificationIDInput).AddChild(new PSpacer() { PreferredSize = new Vector2(0f, 2f) })
             .AddChild(nameLabel).AddChild(nameField).AddChild(tooltipLabel).AddChild(tooltipField)
             .AddChild(notificationTypePanel).AddChild(pausePanel).AddChild(zoomPanel);
          //------------------Setting notification configuration panel------------------UP
