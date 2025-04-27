@@ -13,5 +13,19 @@ namespace ErrandNotifier.Patches {
             Prefabs.CreateFilterTogglePrefabs();
          }
       }
+
+      [HarmonyPatch(typeof(MainMenu), "OnPrefabInit")]
+      public static class CreatePrefabs2_Patch {
+         public static void Postfix() {
+            Prefabs.CreateCheckboxPrefab();
+         }
+      }
+
+      [HarmonyPatch(typeof(DetailsScreen), "OnPrefabInit")]
+      public static class CreatePrefabs3_Patch {
+         public static void Postfix() {
+            Prefabs.CreateOutlinedCheckboxPrefab();
+         }
+      }
    }
 }

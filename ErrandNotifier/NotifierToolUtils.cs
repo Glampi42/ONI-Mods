@@ -38,6 +38,9 @@ namespace ErrandNotifier {
                      if(NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// buildings can't have other errands
 
+                     if(NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
+                        break;// buildings can't have other errands
+
                      if(NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// digging markers can't have other errands
 
@@ -63,6 +66,7 @@ namespace ErrandNotifier {
 
                   case NotifierToolFilter.EMPTY_PIPE:
                      NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
+                     NotifiableErrandPackRegistry.GetNotifiableErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
                      break;
 
                   case NotifierToolFilter.MOVE_TO:
@@ -107,8 +111,6 @@ namespace ErrandNotifier {
          if(errandReference == default)
             errandReference = errands.FirstOrDefault();
 
-         Debug.Log("$$$Collected errands: " + errands.Count);
-
          return errands;
       }
 
@@ -117,13 +119,15 @@ namespace ErrandNotifier {
       /// </summary>
       /// <param name="errands">The errands</param>
       public static void CreateNewNotification(Dictionary<GameObject, HashSet<Workable>> errands) {
+         Debug.Log("CreateNewNotification");
          GNotification n = NotificationsContainer.CreateNewNotification();
-
          n.AddErrands(errands);
 
          Main.notifierTool.SetSelectedNotification(n.notificationID);
 
          NotifierToolMenu.Instance?.modeToggles[NotifierToolMode.ADD_ERRAND].onClick();// switching to Add Errand
+
+         Main.notifierTool.ResetNewNotification();// clear the new-notification settings after creating one
       }
 
       /// <summary>

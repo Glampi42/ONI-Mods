@@ -172,6 +172,44 @@ namespace ErrandNotifier {
          TryRunCode(nameof(ArrowLeftButtonPrefab));
       }
 
+      public static GameObject OutlinedCheckboxPrefab = null;
+      public static void CreateOutlinedCheckboxPrefab() {
+         if(OutlinedCheckboxPrefab != null)
+            return;
+
+         var sideScreen = DetailsScreen.Instance.sideScreens.Find(screen => screen.screenPrefab.GetType() == typeof(AlarmSideScreen)).screenPrefab as AlarmSideScreen;
+
+         OutlinedCheckboxPrefab = Util.KInstantiateUI(sideScreen.typeButtonPrefab);
+         UnityEngine.Object.DontDestroyOnLoad(OutlinedCheckboxPrefab);
+
+         if(OutlinedCheckboxPrefab?.GetComponent<MultiToggle>() == null)
+            throw new Exception(Main.debugPrefix + $"Could not create {nameof(OutlinedCheckboxPrefab)}");
+
+         TryRunCode(nameof(OutlinedCheckboxPrefab));
+      }
+
+      public static GameObject CheckboxPrefab = null;
+      public static void CreateCheckboxPrefab() {
+         if(CheckboxPrefab != null)
+            return;
+
+         var options = Util.KInstantiateUI<OptionsMenuScreen>(ScreenPrefabs.Instance.OptionsScreen?.gameObject);
+
+         CheckboxPrefab = Util.KInstantiateUI(options.gameOptionsScreenPrefab.defaultToCloudSaveToggle);
+         UnityEngine.Object.DontDestroyOnLoad(CheckboxPrefab);
+
+         UnityEngine.Object.Destroy(options.gameObject);
+
+         if(CheckboxPrefab?.GetComponent<KButton>() == null)
+            throw new Exception(Main.debugPrefix + $"Could not create {nameof(CheckboxPrefab)}");
+
+         if(CheckboxPrefab.TryGetComponent(out ToolTip tt))
+            UnityEngine.Object.Destroy(tt);
+
+         TryRunCode(nameof(CheckboxPrefab));
+      }
+
+
       private static void TryRunCode(string createdPrefabName) {
          List<System.Action> keys = requiredPrefabs.Keys.ToList();
          foreach(var code in keys)

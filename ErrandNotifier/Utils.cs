@@ -241,6 +241,10 @@ namespace ErrandNotifier {
 
          return parent.GetChild(index);
       }
+      public static bool TryGetChild(this GameObject parent, int index, out GameObject child) {
+         child = null;
+         return (child = GetChildSafe(parent, index)) != null;
+      }
 
       public static bool TryGetComponents<T>(this GameObject go, out T[] cmps) where T : Component {
          cmps = go.GetComponents<T>();

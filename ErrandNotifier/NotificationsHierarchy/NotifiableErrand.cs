@@ -20,7 +20,15 @@ namespace ErrandNotifier.NotificationsHierarchy {
       [Serialize]
       private int serializedNotificationID;
       [Serialize]
+      private string serializedName;
+      [Serialize]
+      private string serializedTooltip;
+      [Serialize]
       private GNotificationType serializedNType;
+      [Serialize]
+      private bool serializedPause;
+      [Serialize]
+      private bool serializedZoom;
 
       public override void OnPrefabInit() {
          base.OnPrefabInit();
@@ -34,7 +42,7 @@ namespace ErrandNotifier.NotificationsHierarchy {
 
       [OnDeserialized]
       public void OnDeserialized() {
-         SerializationUtils.ReconstructNotification(serializedNotificationID, this, serializedNType);
+         SerializationUtils.ReconstructNotification(serializedNotificationID, this, serializedName, serializedTooltip, serializedNType, serializedPause, serializedZoom);
       }
 
       [OnSerializing]
@@ -44,7 +52,11 @@ namespace ErrandNotifier.NotificationsHierarchy {
          if(parentNotification == null)// serializing other things isn't necessary
             return;
 
+         serializedName = parentNotification.name;
+         serializedTooltip = parentNotification.tooltip;
          serializedNType = parentNotification.type;
+         serializedPause = parentNotification.pause;
+         serializedZoom = parentNotification.zoom;
       }
 
       public override void OnCleanUp() {

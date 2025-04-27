@@ -23,18 +23,13 @@ namespace ErrandNotifier {
          UnityEngine.Object.Destroy(uiSymbolPrefab.transform.GetChildSafe(0)?.gameObject);
          uiSymbolPrefab.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
-         var font = Localization.GetFont("GRAYSTROKE OUTLINE SDF");
-         if(font == null)//TODO import own font
-         {
-            font = Localization.GetFont("GRAYSTROKE REGULAR SDF");// some localizations don't have the outline font for some reason (but it looks better than the regular because it doesn't have artifacts with big outlines)
-            Main.outlineWidthMultiplier = 0.0191f;// this font has a different scale for the outline
-         }
+         var font = Localization.GetFont("GRAYSTROKE REGULAR SDF");
 
          uiSymbolPrefab.font = font;
          uiSymbolPrefab.alignment = TextAlignmentOptions.Center;
-         uiSymbolPrefab.fontSize = 28f;
+         uiSymbolPrefab.fontSize = 28f;// font size gets overriden in UISymbol struct
          uiSymbolPrefab.outlineColor = Color.white;
-         uiSymbolPrefab.outlineWidth = Main.outlineWidthMultiplier * uiSymbolPrefab.fontSize;
+         uiSymbolPrefab.outlineWidth = 0.4f;
          uiSymbolPrefab.characterSpacing = -1f;
          uiSymbolPrefab.lineSpacing = -10f;
          uiSymbolPrefab.enableKerning = true;

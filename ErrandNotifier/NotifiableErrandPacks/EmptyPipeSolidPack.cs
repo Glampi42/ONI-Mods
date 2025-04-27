@@ -45,10 +45,10 @@ namespace ErrandNotifier.NotifiableErrandPacks {
                chainedErrand.Remove(true);
             }
 
-            // removing the old chore's ChainNumber (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
+            // removing the old chore's UISymbol (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
             if(Main.notifierOverlay != default && Main.notifierOverlay.IsEnabled)
             {
-               //Main.notifierOverlay.RemoveChainNumber(__instance.gameObject, __instance);
+               Main.notifierOverlay.RemoveUISymbol(__instance.gameObject, __instance);
             }
          }
       }

@@ -11,16 +11,33 @@ using UnityEngine;
 namespace ErrandNotifier.NotificationsHierarchy {
    public class GNotification {
       public int notificationID;
-      public GNotificationType type;
-      private HashSet<NotifiableErrand> errands;
+      public string name;
+      public string tooltip;
+      private GNotificationType _type;
+      public GNotificationType type {
+         get => _type;
+         set {
+            _type = value;
+            UpdateUISymbols();
+         }
+      }
+      public bool pause;
+      public bool zoom;
 
-      public GNotification(int notificationID, GNotificationType type) {
+      private HashSet<NotifiableErrand> errands = new();
+
+      public GNotification(int notificationID, string name, string tooltip, GNotificationType type, bool pause, bool zoom) {
+         Debug.Log("GNotification constructor");
          this.notificationID = notificationID;
+         this.name = name;
+         this.tooltip = tooltip;
          this.type = type;
-         errands = new();
+         this.pause = pause;
+         this.zoom = zoom;
       }
 
       public void AddErrands(Dictionary<GameObject, HashSet<Workable>> newErrands) {
+         Debug.Log("AddErrands");
          foreach(var pair in newErrands)
          {
             foreach(var errand in pair.Value)
@@ -50,12 +67,16 @@ namespace ErrandNotifier.NotificationsHierarchy {
             }
          }
       }
+      public void AddErrand(NotifiableErrand errand) {
+         errands.Add(errand);
+      }
 
       public HashSet<NotifiableErrand> GetErrands() {
          return errands;
       }
 
       public void UpdateUISymbols() {
+         Debug.Log("UpdateUISymbols");
          if(Main.notifierOverlay != default)
          {
             foreach(var errand in errands)

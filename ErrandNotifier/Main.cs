@@ -17,8 +17,6 @@ namespace ErrandNotifier {
       public static readonly Color grayBackgroundColor = new Color32(73, 73, 73, byte.MaxValue);
       public static readonly ColorStyleSetting whiteToggleSetting;// gets darker when hovering over it/activating it
 
-      public static float outlineWidthMultiplier = 0.0127f;// used to get UISymbols' outline width from font size
-
       public static PAction notifierTool_binding;
 
       public static NotifierOverlay notifierOverlay;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ErrandNotifier.Enums;
+using ErrandNotifier.Strings;
 
 namespace ErrandNotifier.NotificationsHierarchy {
    /// <summary>
@@ -15,14 +16,25 @@ namespace ErrandNotifier.NotificationsHierarchy {
 
       public static int NotificationsCount => notifications.Count;
 
+      /// <summary>
+      /// Creates a new notification with the settings specified in the NotifierTool and stores it in the NotificationsContainer.
+      /// </summary>
+      /// <returns></returns>
       public static GNotification CreateNewNotification() {
-         GNotification newN = new GNotification(NotificationsCount, GNotificationType.POP);
+         Debug.Log("NotificationsContainer.CreateNewNotification");
+         GNotification newN = new GNotification(NotificationsCount,
+            Main.notifierTool.GetName(),
+            Main.notifierTool.GetTooltip(),
+            Main.notifierTool.GetNotificationType(),
+            Main.notifierTool.GetShouldPause(),
+            Main.notifierTool.GetShouldZoom());
          StoreNotification(newN);
 
          return newN;
       }
 
       public static void StoreNotification(GNotification n, int atIndex = -1) {
+         Debug.Log("StoreNotification");
          if(atIndex == -1)
          {
             notifications.Add(n);

@@ -63,21 +63,21 @@ namespace ErrandNotifier.Structs {
                break;
 
             case GNotificationType.POP:
-               symbol = "•";
-               color = Color.blue;
-               size = 21f;
+               symbol = "<b>•</b>";
+               color = new Color(0.20f, 0.27f, 0.55f, 1f);
+               size = 32f;
                break;
 
             case GNotificationType.BOING_BOING:
-               symbol = "!";
-               color = Color.red;
-               size = 21f;
+               symbol = "<b>!</b>";
+               color = new Color(0.85f, 0.24f, 0.23f, 1f);
+               size = 32f;
                break;
 
             case GNotificationType.AHH:
-               symbol = "!!";
-               color = new Color(0.7f, 0f, 0f, 1f);
-               size = 21f;
+               symbol = "<b>!!</b>";
+               color = new Color(0.65f, 0.18f, 0.17f, 1f);
+               size = 32f;
                break;
          }
 

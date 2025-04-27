@@ -18,6 +18,7 @@
 
 using ErrandNotifier.Enums;
 using ErrandNotifier.NotificationsHierarchy;
+using ErrandNotifier.Strings;
 using PeterHan.PLib.Core;
 using PeterHan.PLib.UI;
 using System;
@@ -39,6 +40,13 @@ namespace ErrandNotifier {
 
 
       private int selectedNotification;
+      private GNotification selectedGNotification;
+      // settings of a new notification:
+      private string notificationName_new;
+      private string tooltip_new;
+      private GNotificationType type_new;
+      private bool pause_new;
+      private bool zoom_new;
 
       private SpriteRenderer visualizerRenderer;
       private NotifierToolMode currentMode;
@@ -140,8 +148,10 @@ namespace ErrandNotifier {
          }
          else
          {
-            selectedNotification = 0;
+            selectedNotification = -1;
          }
+
+         selectedGNotification = NotificationsContainer.GetNotification(selectedNotification);
 
          if(Main.notifierOverlay != default)
          {
@@ -149,10 +159,77 @@ namespace ErrandNotifier {
          }
       }
 
+      public string GetName() {
+         return currentMode == NotifierToolMode.CREATE_NOTIFICATION ? notificationName_new : selectedGNotification != null ? selectedGNotification.name : default;
+      }
+      public void SetName(string name) {
+         if(currentMode == NotifierToolMode.CREATE_NOTIFICATION)
+            notificationName_new = name;
+         else
+            if(selectedGNotification != null)
+            selectedGNotification.name = name;
+      }
+
+      public string GetTooltip() {
+         return currentMode == NotifierToolMode.CREATE_NOTIFICATION ? tooltip_new : selectedGNotification != null ? selectedGNotification.tooltip : default;
+      }
+      public void SetTooltip(string tooltip) {
+         if(currentMode == NotifierToolMode.CREATE_NOTIFICATION)
+            tooltip_new = tooltip;
+         else
+            if(selectedGNotification != null)
+            selectedGNotification.tooltip = tooltip;
+      }
+
+      public GNotificationType GetNotificationType() {
+         return currentMode == NotifierToolMode.CREATE_NOTIFICATION ? type_new : selectedGNotification != null ? selectedGNotification.type : default;
+      }
+      public void SetNotificationType(GNotificationType type) {
+         if(currentMode == NotifierToolMode.CREATE_NOTIFICATION)
+            type_new = type;
+         else
+            if(selectedGNotification != null)
+            selectedGNotification.type = type;
+      }
+
+      public bool GetShouldPause() {
+         return currentMode == NotifierToolMode.CREATE_NOTIFICATION ? pause_new : selectedGNotification != null ? selectedGNotification.pause : default;
+      }
+      public void SetShouldPause(bool pause) {
+         if(currentMode == NotifierToolMode.CREATE_NOTIFICATION)
+            pause_new = pause;
+         else
+            if(selectedGNotification != null)
+            selectedGNotification.pause = pause;
+      }
+
+      public bool GetShouldZoom() {
+         return currentMode == NotifierToolMode.CREATE_NOTIFICATION ? zoom_new : selectedGNotification != null ? selectedGNotification.zoom : default;
+      }
+      public void SetShouldZoom(bool zoom) {
+         if(currentMode == NotifierToolMode.CREATE_NOTIFICATION)
+            zoom_new = zoom;
+         else
+            if(selectedGNotification != null)
+            selectedGNotification.zoom = zoom;
+      }
+
+      /// <summary>
+      /// Resets the settings stored for the new notification to the default values.
+      /// </summary>
+      public void ResetNewNotification() {
+         notificationName_new = MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME_DEFAULT;
+         tooltip_new = MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP_DEFAULT;
+         type_new = GNotificationType.POP;
+         pause_new = false;
+         zoom_new = false;
+      }
+
 
 
       public NotifierTool() {
          selectedNotification = 0;
+         selectedGNotification = NotificationsContainer.GetNotification(selectedNotification);
       }
 
       public override string GetConfirmSound() {
@@ -202,7 +279,7 @@ namespace ErrandNotifier {
 
          if(NotifierToolMenu.Instance != default)
          {
-            NotifierToolMenu.Instance.UpdateToolModeSelectionDisplay();
+            NotifierToolMenu.Instance.UpdateNotifierMenuDisplay();
          }
       }
 
@@ -305,8 +382,6 @@ namespace ErrandNotifier {
                   NotifierToolUtils.RemoveErrands(new HashSet<Workable>(collectedErrands.Values.SelectMany(x => x)));
                   break;
             }
-
-            NotifierToolMenu.Instance?.UpdateNotificationConfigDisplay();
          }
       }
 

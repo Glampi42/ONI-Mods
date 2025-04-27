@@ -34,6 +34,7 @@ using VoronoiTree;
 namespace ErrandNotifier {
    public sealed class NotifierToolMenu : KMonoBehaviour {
       private static readonly float panelWidth = 300f;
+      private static readonly float labelsWidth = 80f;
 
       /// <summary>
 		/// The singleton instance of this class.
@@ -44,7 +45,7 @@ namespace ErrandNotifier {
       /// Initializes the instance of this class.
       /// </summary>
       public static void CreateInstance() {
-         var parameterMenu = new GameObject("SettingsChangeParams");
+         var parameterMenu = new GameObject("NotifierSettingsChangeParams");
          var originalMenu = ToolMenu.Instance.toolParameterMenu;
          if(originalMenu != null)
             parameterMenu.transform.SetParent(originalMenu.transform.parent);
@@ -97,12 +98,16 @@ namespace ErrandNotifier {
       private GameObject nameLabel;
       private GameObject tooltipLabel;
       private GameObject typeLabel;
+      private GameObject typeTogglesPanel;
       private GameObject pauseLabel;
       private GameObject zoomLabel;
 
       private TMP_InputField IDField;
       private TMP_InputField nameField;
       private TMP_InputField tooltipField;
+      private Dictionary<GNotificationType, MultiToggle> typeToggles = new(3);
+      private GameObject pauseCheckmark;
+      private GameObject zoomCheckmark;
 
       private GameObject deletePanel;
 
@@ -146,13 +151,13 @@ namespace ErrandNotifier {
             // else no actions required
          }
 
-         UpdateToolModeSelectionDisplay();
+         UpdateNotifierMenuDisplay();
       }
 
       /// <summary>
-      /// Updates the visual elements of the menu that represent the selected notifier tool mode.
+      /// Updates the entire Errand Notifier menu.
       /// </summary>
-      public void UpdateToolModeSelectionDisplay() {
+      public void UpdateNotifierMenuDisplay() {
          if(this.content == null)
             return;
 
@@ -167,39 +172,74 @@ namespace ErrandNotifier {
          foreach(var toggleMode in modeToggles.Keys)
          {
             modeToggles[toggleMode].ChangeState(toggleMode == currentMode ? 1 : 0);
-
-            if(toggleMode == NotifierToolMode.ADD_ERRAND)
-            {
-               this.notificationConfigurationPanel.SetActive(toggleMode == currentMode);
-            }
          }
+
+         UpdateNotificationConfigDisplay();
       }
 
       /// <summary>
-      /// Updates the visual elements of the menu that represent the selected notification's ID and its properties.
+      /// Updates the visual elements of the menu that display the selected notification's properties (ID, name, tooltip etc.).
       /// </summary>
       public void UpdateNotificationConfigDisplay() {
-         if(this.content == null)
+         if(this.content == null || Main.notifierTool == null)
             return;
 
-         if(NotificationsContainer.NotificationsCount > 1)
-         {
-            SetArrowButtonEnabled(IDDecrease, true);
-            SetArrowButtonEnabled(IDIncrease, true);
-         }
-         else// there are no other notifications to switch to
+         // whether the fields of the configuration menu should display the settings of the selected notification or the new (non-existent) one:
+         bool displayNew = Main.notifierTool.GetToolMode() == NotifierToolMode.CREATE_NOTIFICATION;
+
+         if(displayNew)
          {
             SetArrowButtonEnabled(IDDecrease, false);
             SetArrowButtonEnabled(IDIncrease, false);
-         }
-         if(NotificationsContainer.NotificationsCount > 0)
-         {
-            SetTextFieldText(IDField, Main.notifierTool.GetSelectedNotification().ToString());
+
+            SetTextFieldText(IDField, MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NEW);
          }
          else
          {
-            SetTextFieldText(IDField, MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NOTFOUND);
+            if(NotificationsContainer.NotificationsCount > 1)
+            {
+               SetArrowButtonEnabled(IDDecrease, true);
+               SetArrowButtonEnabled(IDIncrease, true);
+            }
+            else// there are no other notifications to switch to
+            {
+               SetArrowButtonEnabled(IDDecrease, false);
+               SetArrowButtonEnabled(IDIncrease, false);
+            }
+
+            if(NotificationsContainer.NotificationsCount > 0)
+            {
+               SetTextFieldText(IDField, Main.notifierTool.GetSelectedNotification().ToString());
+            }
+            else
+            {
+               SetTextFieldText(IDField, MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NOTFOUND);
+
+               // blank fields (there are no notifications):
+               SetTextFieldText(nameField, "");
+               SetTextFieldText(tooltipField, "");
+               foreach(var pair in this.typeToggles)
+               {
+                  pair.Value.ChangeState(1);
+               }
+               pauseCheckmark?.SetActive(false);
+               zoomCheckmark?.SetActive(false);
+
+               return;
+            }
          }
+
+         SetTextFieldText(nameField, Main.notifierTool.GetName());
+         SetTextFieldText(tooltipField, Main.notifierTool.GetTooltip());
+         foreach(var pair in this.typeToggles)
+         {
+            if(Main.notifierTool.GetNotificationType() == pair.Key)
+               pair.Value.ChangeState(0);
+            else
+               pair.Value.ChangeState(1);
+         }
+         pauseCheckmark?.SetActive(Main.notifierTool.GetShouldPause());
+         zoomCheckmark?.SetActive(Main.notifierTool.GetShouldZoom());
       }
       private void SetArrowButtonEnabled(GameObject button, bool enabled) {
          var disabled = button.GetChildSafe(1);
@@ -294,6 +334,7 @@ namespace ErrandNotifier {
          ClearMenu();
          if(content != null)
             Destroy(content);
+         content = null;
          base.OnCleanUp();
       }
 
@@ -373,9 +414,14 @@ namespace ErrandNotifier {
          toolsPanel.AddOnRealize(go => {
             this.toolsPanel = go;
 
-            // adding tooltips should be done here because the GameObject of toolsPanel is realized after the labels' GameObjects
+            // adding tooltips after all GOs were realized:
             this.notificationIDLabel.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_TOOLTIP, this.toolsPanel.rectTransform());
             this.IDField.gameObject.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_TOOLTIP, this.toolsPanel.rectTransform());
+            this.nameLabel.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME_TOOLTIP, this.toolsPanel.rectTransform());
+            this.tooltipLabel.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP_TOOLTIP, this.toolsPanel.rectTransform());
+            this.typeLabel.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE_TOOLTIP, this.toolsPanel.rectTransform());
+            this.pauseLabel.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE_TOOLTIP, this.toolsPanel.rectTransform());
+            this.zoomLabel.AddFilterMenuToolTip(MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM_TOOLTIP, this.toolsPanel.rectTransform());
          });
 
          PRelativePanel createOrDelete = new PRelativePanel("CreateOrDeletePanel") {
@@ -423,14 +469,14 @@ namespace ErrandNotifier {
                ConfigureToggle(createNotification, NotifierToolMode.CREATE_NOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION_TOOLTIP, true, () => {
                   //onClick:
                   Main.notifierTool.SetToolMode(NotifierToolMode.CREATE_NOTIFICATION);
-                  UpdateToolModeSelectionDisplay();
+                  UpdateNotifierMenuDisplay();
                });
 
                var addErrand = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.createPanel, true);
                ConfigureToggle(addErrand, NotifierToolMode.ADD_ERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_TOOLTIP, false, () => {
                   //onClick:
                   Main.notifierTool.SetToolMode(NotifierToolMode.ADD_ERRAND);
-                  UpdateToolModeSelectionDisplay();
+                  UpdateNotifierMenuDisplay();
                });
 
                this.notificationConfigurationPanel.transform.SetAsLastSibling();// this panel should be below the toggles
@@ -446,10 +492,7 @@ namespace ErrandNotifier {
             Spacing = 4,
             Margin = new RectOffset(0, 0, 5, 1),
          };
-         notificationConfigPanel.AddOnRealize(go => {
-            this.notificationConfigurationPanel = go;
-            this.notificationConfigurationPanel.SetActive(false);
-         });
+         notificationConfigPanel.AddOnRealize(go => this.notificationConfigurationPanel = go);
 
          PLabel notificationIDLabel = new PLabel("NotificationIDLabel") {
             TextAlignment = TextAnchor.MiddleLeft,
@@ -512,16 +555,20 @@ namespace ErrandNotifier {
             this.nameField = field.GetComponent<TMP_InputField>();
 
             var layoutElem = field.AddOrGet<LayoutElement>();
-            layoutElem.minHeight = 24f;
+            layoutElem.minHeight = 28f;
             layoutElem.preferredWidth = panelWidth;
          });
+         nameField.OnTextChanged = (GameObject source, string text) => {
+            Main.notifierTool.SetName(text);
+            UpdateNotificationConfigDisplay();
+         };
 
          PLabel tooltipLabel = new PLabel("TooltipLabel") {
             TextAlignment = TextAnchor.MiddleLeft,
             TextStyle = PUITuning.Fonts.TextLightStyle,
             Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP,
          };
-         nameLabel.AddOnRealize(label => this.tooltipLabel = label);
+         tooltipLabel.AddOnRealize(label => this.tooltipLabel = label);
 
          PTextField tooltipField = new PTextField("TooltipField") {
             Type = PTextField.FieldType.Text,
@@ -530,15 +577,19 @@ namespace ErrandNotifier {
             this.tooltipField = field.GetComponent<TMP_InputField>();
 
             var layoutElem = field.AddOrGet<LayoutElement>();
-            layoutElem.minHeight = 24f;
+            layoutElem.minHeight = 28f;
             layoutElem.preferredWidth = panelWidth;
          });
+         tooltipField.OnTextChanged = (GameObject source, string text) => {
+            Main.notifierTool.SetTooltip(text);
+            UpdateNotificationConfigDisplay();
+         };
 
          PPanel notificationTypePanel = new PPanel("NotificationTypePanel") {
             Alignment = TextAnchor.MiddleLeft,
             Direction = PanelDirection.Horizontal,
             FlexSize = new Vector2(1f, 1f),
-            Spacing = 8,
+            Spacing = 0,
          };
 
          PLabel typeLabel = new PLabel("TypeLabel") {
@@ -546,27 +597,92 @@ namespace ErrandNotifier {
             TextStyle = PUITuning.Fonts.TextLightStyle,
             Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE,
          };
-         typeLabel.AddOnRealize(label => this.typeLabel = label);
+         typeLabel.AddOnRealize(label => {
+            LayoutElement le = label.AddOrGet<LayoutElement>();
+            le.minWidth = labelsWidth;
 
-         notificationTypePanel.AddChild(typeLabel);
+            this.typeLabel = label;
+         });
+
+         PPanel typeTogglesPanel = new PPanel("TypeTogglesPanel") {
+            Alignment = TextAnchor.MiddleLeft,
+            Direction = PanelDirection.Horizontal,
+            FlexSize = new Vector2(1f, 1f),
+            Spacing = 8,
+         };
+         typeTogglesPanel.AddOnRealize(panel => this.typeTogglesPanel = panel);
+
+         notificationTypePanel.AddChild(typeLabel).AddChild(typeTogglesPanel);
+
+         PPanel pausePanel = new PPanel("PausePanel") {
+            Alignment = TextAnchor.MiddleLeft,
+            Direction = PanelDirection.Horizontal,
+            FlexSize = new Vector2(1f, 1f),
+            Spacing = 0,
+         };
 
          PLabel pauseLabel = new PLabel("PauseLabel") {
             TextAlignment = TextAnchor.MiddleLeft,
             TextStyle = PUITuning.Fonts.TextLightStyle,
             Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE,
          };
-         pauseLabel.AddOnRealize(label => this.pauseLabel = label);
+         pauseLabel.AddOnRealize(label => {
+            LayoutElement le = label.AddOrGet<LayoutElement>();
+            le.minWidth = labelsWidth;
+
+            this.pauseLabel = label;
+         });
+
+         pausePanel.AddChild(pauseLabel);
+
+         pausePanel.AddOnRealize(panel => {
+            Prefabs.RunAfterPrefabsInit(() => {
+               var pauseButton = Util.KInstantiateUI<KButton>(Prefabs.CheckboxPrefab, panel, true);
+               pauseButton.onClick += () => {
+                  Main.notifierTool.SetShouldPause(!Main.notifierTool.GetShouldPause());
+                  UpdateNotificationConfigDisplay();
+               };
+
+               this.pauseCheckmark = pauseButton.GetComponent<HierarchyReferences>().GetReference("Checkmark").gameObject;
+            }, nameof(Prefabs.CheckboxPrefab));
+         });
+
+         PPanel zoomPanel = new PPanel("ZoomPanel") {
+            Alignment = TextAnchor.MiddleLeft,
+            Direction = PanelDirection.Horizontal,
+            FlexSize = new Vector2(1f, 1f),
+            Spacing = 0,
+         };
 
          PLabel zoomLabel = new PLabel("ZoomLabel") {
             TextAlignment = TextAnchor.MiddleLeft,
             TextStyle = PUITuning.Fonts.TextLightStyle,
             Text = MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM,
          };
-         zoomLabel.AddOnRealize(label => this.zoomLabel = label);
+         zoomLabel.AddOnRealize(label => {
+            LayoutElement le = label.AddOrGet<LayoutElement>();
+            le.minWidth = labelsWidth;
+
+            this.zoomLabel = label;
+         });
+
+         zoomPanel.AddChild(zoomLabel);
+
+         zoomPanel.AddOnRealize(panel => {
+            Prefabs.RunAfterPrefabsInit(() => {
+               var zoomButton = Util.KInstantiateUI<KButton>(Prefabs.CheckboxPrefab, panel, true);
+               zoomButton.onClick += () => {
+                  Main.notifierTool.SetShouldZoom(!Main.notifierTool.GetShouldZoom());
+                  UpdateNotificationConfigDisplay();
+               };
+
+               this.zoomCheckmark = zoomButton.GetComponent<HierarchyReferences>().GetReference("Checkmark").gameObject;
+            }, nameof(Prefabs.CheckboxPrefab));
+         });
 
          notificationConfigPanel.AddChild(notificationIDLabel).AddChild(notificationIDInput).AddChild(new PSpacer() { PreferredSize = new Vector2(0f, 2f) })
             .AddChild(nameLabel).AddChild(nameField).AddChild(tooltipLabel).AddChild(tooltipField)
-            .AddChild(notificationTypePanel).AddChild(pauseLabel).AddChild(zoomLabel);
+            .AddChild(notificationTypePanel).AddChild(pausePanel).AddChild(zoomPanel);
          //------------------Setting notification configuration panel------------------UP
          createPanel.AddChild(notificationConfigPanel);
          //------------------Setting create panel------------------UP
@@ -586,14 +702,14 @@ namespace ErrandNotifier {
                ConfigureToggle(deleteNotification, NotifierToolMode.DELETE_NOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION, MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION_TOOLTIP, false, () => {
                   //onClick:
                   Main.notifierTool.SetToolMode(NotifierToolMode.DELETE_NOTIFICATION);
-                  UpdateToolModeSelectionDisplay();
+                  UpdateNotifierMenuDisplay();
                });
 
                var removeErrand = Util.KInstantiateUI(Prefabs.FilterToggleReversedPrefab, this.deletePanel, true);
                ConfigureToggle(removeErrand, NotifierToolMode.REMOVE_ERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND, MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND_TOOLTIP, false, () => {
                   //onClick:
                   Main.notifierTool.SetToolMode(NotifierToolMode.REMOVE_ERRAND);
-                  UpdateToolModeSelectionDisplay();
+                  UpdateNotifierMenuDisplay();
                });
             };
             Prefabs.RunAfterPrefabsInit(addDeleteToggles, nameof(Prefabs.FilterToggleReversedPrefab));
@@ -690,6 +806,58 @@ namespace ErrandNotifier {
          {
             mToggle.onClick += onClick;
          }
+      }
+
+      /// <summary>
+      /// This method adds the toggles that select the type of the notification. This should happen after OnPrefabInit(), because
+      /// at that moment the NotificationScreen.Instance is null (Klei also do it like this, alright!?).
+      /// </summary>
+      public void AddTypeSelectionButtons() {
+         // setup notification-type toggles:
+         foreach(GNotificationType gtype in Enum.GetValues(typeof(GNotificationType)))
+         {
+            if(gtype == GNotificationType.NONE)
+               continue;
+
+            NotificationType type = gtype.ToNotificationType();
+            GameObject toggle = Util.KInstantiateUI(Prefabs.OutlinedCheckboxPrefab, this.typeTogglesPanel, true);
+            toggle.name = "TypeButton: " + gtype.ToString();
+
+            Color notificationBgColour = NotificationScreen.Instance.GetNotificationBGColour(type);
+            Color notificationColour = NotificationScreen.Instance.GetNotificationColour(type);
+            notificationBgColour.a = 1f;
+            notificationColour.a = 1f;
+
+            var references = toggle.GetComponent<HierarchyReferences>();
+            references.GetReference<KImage>("bg").color = notificationBgColour;
+            references.GetReference<KImage>("icon").color = notificationColour;
+            references.GetReference<KImage>("icon").sprite = NotificationScreen.Instance.GetNotificationIcon(type);
+            ToolTip tooltip = toggle.GetComponent<ToolTip>();
+            switch(gtype)
+            {
+               case GNotificationType.POP:
+                  tooltip.SetSimpleTooltip((string)STRINGS.UI.UISIDESCREENS.LOGICALARMSIDESCREEN.TOOLTIPS.NEUTRAL);
+                  break;
+               case GNotificationType.BOING_BOING:
+                  tooltip.SetSimpleTooltip((string)STRINGS.UI.UISIDESCREENS.LOGICALARMSIDESCREEN.TOOLTIPS.BAD);
+                  break;
+               case GNotificationType.AHH:
+                  tooltip.SetSimpleTooltip((string)STRINGS.UI.UISIDESCREENS.LOGICALARMSIDESCREEN.TOOLTIPS.DUPLICANT_THREATENING);
+                  break;
+            }
+
+            if(!typeToggles.ContainsKey(gtype))
+               typeToggles.Add(gtype, toggle.GetComponent<MultiToggle>());
+
+            typeToggles[gtype].onClick = () => {
+               Main.notifierTool.SetNotificationType(gtype);
+               UpdateNotificationConfigDisplay();
+            };
+            for(int i = 0; i < typeToggles[gtype].states.Length; ++i)
+               typeToggles[gtype].states[i].on_click_override_sound_path = NotificationScreen.Instance.GetNotificationSound(type);
+         }
+
+         Main.notifierTool.ResetNewNotification();
       }
 
       /// <summary>
