@@ -1,5 +1,6 @@
 ﻿using ErrandNotifier.Enums;
 using ErrandNotifier.NotifiableErrandPacks;
+using ErrandNotifier.Structs;
 using KSerialization;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace ErrandNotifier.NotificationsHierarchy {
    [SerializationConfig(MemberSerialization.OptIn)]
@@ -14,7 +16,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       public GNotification parentNotification;
 
       public abstract Workable Errand { get; }
-      public Chore chore;
       [Serialize]
       public Ref<KPrefabID> uiSymbolBearer;// the GameObject that the UISymbol will be displayed on (isn't always the GameObject that has the errand component: f.e. MoveTo errand)
 
@@ -30,28 +31,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       private bool serializedPause;
       [Serialize]
       private bool serializedZoom;
-
-      public void ConfigureChoreOnComplete(Chore chore = null) {
-         if(chore == null)
-            chore = NotifiableErrandPackRegistry.GetNotifiableErrandPack(this).GetChoreFromErrand(Errand);
-
-         this.chore = chore;
-
-         if(chore != null)
-         {
-            var list = chore.onComplete.GetInvocationList();
-            for(int i = 0; i < list.Length; i++)
-            {
-               if(list[i].Method == ((System.Action<Chore>)GenerateNotificationOnComplete).Method)
-                  return;// the chore's OnComplete already contains the required function
-            }
-
-            chore.onComplete += GenerateNotificationOnComplete;
-         }
-      }
-      private void GenerateNotificationOnComplete(Chore chore) {
-         Notification notification = new Notification(parentNotification.name, parentNotification.type.ToNotificationType(), (n, d) => parentNotification.tooltip, );
-      }
 
       public override void OnPrefabInit() {
          base.OnPrefabInit();
@@ -85,7 +64,7 @@ namespace ErrandNotifier.NotificationsHierarchy {
       public override void OnCleanUp() {
          base.OnCleanUp();
 
-         Remove(true, true);
+         Remove(true, true, true);
       }
 
       public void UpdateUISymbol() {
@@ -95,13 +74,22 @@ namespace ErrandNotifier.NotificationsHierarchy {
          }
       }
 
-      public void Remove(bool tryRemoveNotification, bool isBeingDestroyed = false) {
+      /// <summary>
+      /// Disable this NotifiableErrand component.
+      /// </summary>
+      /// <param name="tryTriggerNotification">If true, the Notification will be attempted to be created (which will happen if the GNotification has no more errands)</param>
+      /// <param name="tryRemoveNotification">Shows the direction of the notification removal (is false if this NotifiableErrand is removed by the GNotification itself)</param>
+      /// <param name="isBeingDestroyed">True if the component is about to be UnityEngine.Object.Destroy()ed</param>
+      public void Remove(bool tryTriggerNotification, bool tryRemoveNotification = true, bool isBeingDestroyed = false) {
+         Debug.Log($"NotifiableErrand.Remove for {this.Errand?.GetType().ToString() ?? "NULL"}, {tryTriggerNotification}, {tryRemoveNotification}, {isBeingDestroyed}");
+
          if(tryRemoveNotification && parentNotification != null)
          {
             parentNotification.GetErrands().Remove(this);
             if(parentNotification.GetErrands().Count == 0)
             {
-               parentNotification.Remove(true);
+               Vector3 pos = uiSymbolBearer.Get()?.transform.position ?? this.transform.position;
+               parentNotification.Remove(tryTriggerNotification ? new WorldPosition() { worldID = this.GetMyWorldId(), position = pos } : Utils.InvalidLocation);
             }
          }
 
@@ -110,17 +98,7 @@ namespace ErrandNotifier.NotificationsHierarchy {
 
          if(!isBeingDestroyed && !this.IsNullOrDestroyed())
          {
-            // disabling the chore precondition:
-            if(chore != null)
-            {
-               //var precondition = chore.GetPreconditions().FirstOrDefault(precondition => precondition.condition.id == nameof(Main.NotifiableErrandPrecondition));
-               //if(precondition.condition.id != default)
-               //   precondition.data = false;
-            }
-
-            chore = null;
             uiSymbolBearer = null;
-
             enabled = false;
          }
       }

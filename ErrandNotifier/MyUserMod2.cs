@@ -21,19 +21,11 @@ namespace ErrandNotifier {
          PUtil.InitLibrary();
 
          Main.notifierTool_binding = new PActionManager().CreateAction("glampi.NotifierTool", (LocString)"NotifierTool", new PKeyBinding(KKeyCode.N, Modifier.Shift));
+         new POptions().RegisterOptions(this, typeof(ModConfig));
 
          // patching the pathes defined in NotifiableErrandPacks:
          foreach(var pack in NotifiableErrandPackRegistry.AllPacks())
          {
-            var createPatches = pack.OnChoreCreate_Patch();
-            if(createPatches != null)
-            {
-               foreach(var patch in createPatches)
-               {
-                  TryPatch(harmony, patch);
-               }
-            }
-
             var deletePatches = pack.OnChoreDelete_Patch();
             if(deletePatches != null)
             {

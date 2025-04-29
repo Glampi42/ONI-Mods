@@ -50,10 +50,8 @@ namespace ErrandNotifier.Strings {
 
             public static LocString NAME = "Name:";
             public static LocString NAME_TOOLTIP = "How the notification will appear when it will be triggered";
-            public static LocString NAME_DEFAULT = "Errand is completed";
             public static LocString TOOLTIP = "Tooltip:";
             public static LocString TOOLTIP_TOOLTIP = "What will be displayed when hovered over the notification";
-            public static LocString TOOLTIP_DEFAULT = "Press to zoom to the errand's location";
             public static LocString TYPE = "Type:";
             public static LocString TYPE_TOOLTIP = "Type of the notification";
             public static LocString PAUSE = "Pause:";
@@ -65,6 +63,16 @@ namespace ErrandNotifier.Strings {
             public static LocString DELETENOTIFICATION_TOOLTIP = "Delete a notification";
             public static LocString REMOVEERRAND = "Delete Errand";
             public static LocString REMOVEERRAND_TOOLTIP = "Delete selected errands from the notification assigned to them";
+
+            public class DEFAULTENTRIES {
+               public static LocString NAME_PREFIX = "";// could potentially be used by other localizations
+               public static LocString NAME_POSTFIX = " is completed";
+
+               public static LocString DEFAULT_ERRAND = "Errand";
+               public static LocString CONSTRUCTION_ERRAND_PREFIX = "Construction of ";// f.e. Construction of Liquid Pipes
+
+               public static LocString TOOLTIP = "Press to zoom to the errand's location";
+            }
          }
       }
    }

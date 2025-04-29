@@ -12,114 +12,19 @@ using UnityEngine;
 
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class MoveToPack : ANotifiableErrandPack<Movable, NotifiableErrand_Movable> {
-      public override List<GPatchInfo> OnChoreCreate_Patch() {
-         var targetMethod = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnSpawn), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => OnSpawnPostfix(default));
-
-         var targetMethod2 = typeof(CancellableMove).GetMethod(nameof(CancellableMove.SetMovable), Utils.GeneralBindingFlags);
-         var postfix2 = SymbolExtensions.GetMethodInfo(() => SetMovablePostfix(default, default));
-
-         var targetMethod3 = typeof(ElementSplitterComponents).GetMethod(nameof(ElementSplitterComponents.OnTake), Utils.GeneralBindingFlags, null, [typeof(Pickupable), typeof(HandleVector<int>.Handle), typeof(float)], null);
-         var prefix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePrefix(default, default, default, default, out InstancesLibrary.Action_Movable));
-         var postfix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePostfix(default, default, default, default, default, ref InstancesLibrary.Action_Movable));
-
-         var targetMethod4 = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnChoreEnd), Utils.GeneralBindingFlags);
-         var postfix4 = SymbolExtensions.GetMethodInfo(() => OnChoreEndPostfix(default, default));
-
-         var targetMethod5 = typeof(MovePickupableChore.States).GetMethod("<InitializeStates>b__16_4", Utils.GeneralBindingFlags);// inner lambda expression inside of success.Enter([...]) inside of InitializeStates()
-         var postfix5 = SymbolExtensions.GetMethodInfo(() => OnChoreSuccessPostfix(default));
-
-         return [new GPatchInfo(targetMethod, null, postfix), new GPatchInfo(targetMethod2, null, postfix2), new GPatchInfo(targetMethod3, prefix3, postfix3),
-         new GPatchInfo(targetMethod4, null, postfix4), new GPatchInfo(targetMethod5, null, postfix5)];
-      }
-      private static void OnSpawnPostfix(CancellableMove __instance) {
-         if(__instance.fetchChore != null)
-         {
-            GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
-            if(movable_go != null && movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
-            {
-               //chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
-            }
-         }
-      }
-      private static void SetMovablePostfix(Movable movable, CancellableMove __instance) {
-         if(__instance.fetchChore != null)
-         {
-            GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
-            if(movable_go != null && movable.gameObject == movable_go/*the newly added Movable is the one this fetchChore is referencing*/ &&
-               movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
-            {
-               //chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
-            }
-         }
-      }
-
-      private static void OnChunkTakePrefix(Pickupable pickupable, HandleVector<int>.Handle handle, float amount, ElementSplitterComponents __instance, out System.Action<Movable> __state) {// occurs when a material chunk or its portion gets picked up by a dupe
-         __state = null;
-
-         Movable parentMovable = pickupable?.GetComponent<Movable>();
-         if(parentMovable != null && parentMovable.IsMarkedForMove && parentMovable.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
-         {
-            __state = (newMovable) => {
-               // adding the split chunk to the same chain & link its parent is/was in:
-               Dictionary<GameObject, HashSet<Workable>> newErrands = new();
-               newErrands.Add(parentMovable.StorageProxy.gameObject, new([newMovable]));
-               //chainedErrand.parentLink.parentChain.CreateOrExpandLink(chainedErrand.parentLink.linkNumber, false, newErrands);
-            };
-         }
-      }
-      private static void OnChunkTakePostfix(Pickupable pickupable, HandleVector<int>.Handle handle, float amount, ElementSplitterComponents __instance, Pickupable __result,
-         ref System.Action<Movable> __state) {
-         Movable movable = __result?.GetComponent<Movable>();
-         if(movable != null)
-         {
-            if(__state != null)
-            {
-               // adding the split chunk to the same chain its parent is/was in:
-               __state(movable);
-            }
-
-            if(movable.IsMarkedForMove)
-            {
-               if(Main.notifierOverlay != default && Main.notifierOverlay.IsEnabled)
-               {
-                  Main.notifierOverlay.UpdateErrand(movable.StorageProxy?.GetComponent<CancellableMove>());
-               }
-            }
-         }
-      }
-
-      private static void OnChoreEndPostfix(Chore chore, CancellableMove __instance) {
-         if(__instance.fetchChore != null)// after a chore ends, a new one gets created if the MoveTo errand has more objects that need to be carried
-         {
-            GameObject movable_go = __instance.fetchChore.smi.sm.pickupablesource.Get(__instance.fetchChore.smi);
-            if(movable_go != null && movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
-            {
-               //chainedErrand.ConfigureChorePrecondition(__instance.fetchChore);
-            }
-         }
-      }
-      private static void OnChoreSuccessPostfix(MovePickupableChore.StatesInstance smi) {
-         if(smi != null && !smi.sm.IsDeliveryComplete(smi))// after a chore succeeds, a new one gets created if the MoveTo errand has more objects that need to be carried
-         {
-            GameObject movable_go = smi.sm.pickupablesource.Get(smi);
-            if(movable_go != null && movable_go.TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
-            {
-               //chainedErrand.ConfigureChorePrecondition(smi.master);
-            }
-         }
-      }
-
-
       public override List<GPatchInfo> OnChoreDelete_Patch() {
          var targetMethod = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnCancel), Utils.GeneralBindingFlags, null, [typeof(Movable)], null);
-         var prefix = SymbolExtensions.GetMethodInfo(() => OnCancelPrefix(default, default, out InstancesLibrary.List_Movable));
+         var prefix1 = SymbolExtensions.GetMethodInfo(() => OnCancelPrefix(default, default, out InstancesLibrary.List_Movable));
          var postfix1 = SymbolExtensions.GetMethodInfo(() => OnCancelPostfix(default, default, ref InstancesLibrary.List_Movable));
 
          var targetMethod2 = typeof(Movable).GetMethod(nameof(Movable.ClearMove), Utils.GeneralBindingFlags);
          var prefix2 = SymbolExtensions.GetMethodInfo(() => ClearMovePrefix(default));
 
-         return [new GPatchInfo(targetMethod, prefix, postfix1), new GPatchInfo(targetMethod2, prefix2, null)];
+         var targetMethod3 = typeof(ElementSplitterComponents).GetMethod(nameof(ElementSplitterComponents.OnTake), Utils.GeneralBindingFlags, null, [typeof(Pickupable), typeof(HandleVector<int>.Handle), typeof(float)], null);
+         var prefix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePrefix(default, default, default, default, out InstancesLibrary.Action_Movable));
+         var postfix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePostfix(default, default, default, default, default, ref InstancesLibrary.Action_Movable));
+
+         return [new GPatchInfo(targetMethod, prefix1, postfix1), new GPatchInfo(targetMethod2, prefix2, null), new GPatchInfo(targetMethod3, prefix3, postfix3)];
       }
       private static void OnCancelPrefix(Movable cancel_movable, CancellableMove __instance, out List<Ref<Movable>> __state) {
          __state = new();
@@ -131,23 +36,58 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          {
             if(movable?.Get() != null && !__instance.movables.Contains(movable))// if Movable was removed from the list
             {
-               if(movable.Get().TryGetComponent(out NotifiableErrand_Movable chainedErrand) && chainedErrand.enabled)
+               if(movable.Get().TryGetComponent(out NotifiableErrand_Movable notifiableErrand) && notifiableErrand.enabled)
                {
-                  chainedErrand.Remove(true);
+                  notifiableErrand.Remove(false);
                }
             }
          }
       }
       private static void ClearMovePrefix(Movable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
+         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
          {
-            chainedErrand.Remove(true);
+            notifiableErrand.Remove(true);
          }
 
-         // removing the old chore's ChainNumber (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
+         // removing the old chore's UISymbol (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
          if(Main.notifierOverlay != default && Main.notifierOverlay.IsEnabled)
          {
-            //Main.notifierOverlay.RemoveChainNumber(__instance.StorageProxy?.gameObject, __instance);
+            Main.notifierOverlay.RemoveUISymbol(__instance.StorageProxy?.gameObject, __instance);
+         }
+      }
+
+      private static void OnChunkTakePrefix(Pickupable pickupable, HandleVector<int>.Handle handle, float amount, ElementSplitterComponents __instance, out System.Action<Movable> __state) {// occurs when a material chunk or its portion gets picked up by a dupe
+         __state = null;
+
+         Movable parentMovable = pickupable?.GetComponent<Movable>();
+         if(parentMovable != null && parentMovable.IsMarkedForMove && parentMovable.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+         {
+            __state = (newMovable) => {
+               // adding the split chunk to the same notification its parent is/was in:
+               Dictionary<GameObject, HashSet<Workable>> newErrands = new();
+               newErrands.Add(parentMovable.StorageProxy.gameObject, new([newMovable]));
+               notifiableErrand.parentNotification.AddErrands(newErrands);
+            };
+         }
+      }
+      private static void OnChunkTakePostfix(Pickupable pickupable, HandleVector<int>.Handle handle, float amount, ElementSplitterComponents __instance, Pickupable __result,
+         ref System.Action<Movable> __state) {
+         Movable movable = __result?.GetComponent<Movable>();
+         if(movable != null)
+         {
+            if(__state != null)
+            {
+               // adding the split chunk to the same notification its parent is/was in:
+               __state(movable);
+            }
+
+            if(movable.IsMarkedForMove)
+            {
+               if(Main.notifierOverlay != default && Main.notifierOverlay.IsEnabled)
+               {
+                  Main.notifierOverlay.UpdateErrand(movable.StorageProxy?.GetComponent<CancellableMove>());
+               }
+            }
          }
       }
 
@@ -165,19 +105,6 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          }
 
          return false;
-      }
-
-      public override Chore GetChoreFromErrand(Movable errand) {
-         if(errand.StorageProxy?.TryGetComponent(out CancellableMove cancellableMove) ?? false)
-         {
-            GameObject movable_go = cancellableMove.fetchChore.smi.sm.pickupablesource.Get(cancellableMove.fetchChore.smi);
-            if(movable_go == errand.gameObject)
-            {
-               return cancellableMove.fetchChore;
-            }
-            // else the fetchChore doesn't relate to this errand
-         }
-         return null;
       }
    }
 }

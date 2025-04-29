@@ -9,10 +9,19 @@ using System.Reflection;
 using ErrandNotifier.NotificationsHierarchy;
 using System.IO;
 using ErrandNotifier.Enums;
+using ErrandNotifier.Structs;
+using PeterHan.PLib.Core;
 
 namespace ErrandNotifier {
    public static class Utils {
       public static readonly BindingFlags GeneralBindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
+      public static WorldPosition InvalidLocation = new WorldPosition() { worldID = -1, position = Vector3.zero };
+
+      public static void MoveCamera(WorldPosition to, bool showBackButton) {
+         if(to.worldID != -1)
+            GameUtil.FocusCameraOnWorld(to.worldID, to.position, show_back_button: showBackButton);
+      }
 
       public static HashSet<ObjectLayer> ObjectLayersFromNotifierToolFilter(NotifierToolFilter filter) {
          HashSet<ObjectLayer> layers = new();
@@ -103,23 +112,6 @@ namespace ErrandNotifier {
          if(errand.TryGetComponent(notifiableErrandType, out Component ce) && (allowDisabled || ((KMonoBehaviour)ce).enabled))
          {
             notifiableErrand = ce as NotifiableErrand;
-         }
-
-         return notifiableErrand != null;
-      }
-      /// <summary>
-      /// Tries to retrieve the NotifiableErrand component that is related to the specified chore.
-      /// </summary>
-      /// <param name="chore">The chore</param>
-      /// <param name="go">The GameObject that potentially has the NotifiableErrand component</param>
-      /// <param name="notifiableErrand">The retrieved NotifiableErrand</param>
-      /// <returns>True if such NotifiableErrand was found; false otherwise.</returns>
-      public static bool TryGetCorrespondingNotifiableErrand(this Chore chore, GameObject go, out NotifiableErrand notifiableErrand) {
-         notifiableErrand = null;
-
-         if(go.TryGetComponents(out NotifiableErrand[] cEs))
-         {
-            notifiableErrand = cEs.FirstOrDefault(ce => ce.enabled && ce.chore == chore);
          }
 
          return notifiableErrand != null;

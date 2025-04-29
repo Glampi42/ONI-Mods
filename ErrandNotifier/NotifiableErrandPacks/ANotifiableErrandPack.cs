@@ -18,12 +18,7 @@ namespace ErrandNotifier.NotifiableErrandPacks {
       public Type GetNotifiableErrandType();
 
       /// <summary>
-      /// The patches that should happen whenever a chore related to this errand is created.
-      /// </summary>
-      public abstract List<GPatchInfo> OnChoreCreate_Patch();
-
-      /// <summary>
-      /// The patches that should happen whenever a chore related to this errand is deleted.
+      /// The patches that should happen whenever a chore related to this errand is deleted/finished.
       /// </summary>
       public abstract List<GPatchInfo> OnChoreDelete_Patch();
 
@@ -35,13 +30,6 @@ namespace ErrandNotifier.NotifiableErrandPacks {
       /// <param name="errandReference">Component attached to the GameObject that represents the errand (is used in NotifierOverlay)</param>
       /// <returns>True if at least one errand was collected; false otherwise.</returns>
       public abstract bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference);
-
-      /// <summary>
-      /// Retrieves the chore related to the specified errand, or null if it couldn't be found.
-      /// </summary>
-      /// <param name="errand">The errand</param>
-      /// <returns>The chore.</returns>
-      public abstract Chore GetChoreFromErrand(object errand);
    }
 
    /// <summary>
@@ -55,13 +43,8 @@ namespace ErrandNotifier.NotifiableErrandPacks {
       public Type GetErrandType() => typeof(ErrandType);
       public Type GetNotifiableErrandType() => typeof(NotifiableErrandType);
 
-      public abstract List<GPatchInfo> OnChoreCreate_Patch();
-
       public abstract List<GPatchInfo> OnChoreDelete_Patch();
 
       public abstract bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference);
-
-      public abstract Chore GetChoreFromErrand(ErrandType errand);
-      public Chore GetChoreFromErrand(object errand) => GetChoreFromErrand(errand as ErrandType);
    }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using HarmonyLib;
 using static MathUtil;
 using UnityEngine;
+using ErrandNotifier.Structs;
 
 namespace ErrandNotifier.NotificationsHierarchy {
    public class GNotification {
@@ -50,7 +51,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
                      notifiableErrand.parentNotification = this;
                      notifiableErrand.uiSymbolBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
 
-                     //notifiableErrand.ConfigureChorePrecondition();
                      notifiableErrand.UpdateUISymbol();
 
                      errands.Add(notifiableErrand);
@@ -86,17 +86,21 @@ namespace ErrandNotifier.NotificationsHierarchy {
          }
       }
 
-      public void Remove(bool removeFromNotificationsContainer) {
+      /// <summary>
+      /// Deletes the GNotification. If the location argument is valid, a Notification will be created and shown in NotificationScreen.
+      /// </summary>
+      /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked. If this location is not valid, then the Notification won't be created.</param>
+      public void Remove(WorldPosition notificationLocation) {
          foreach(var errand in errands)
          {
-            errand.Remove(false);
+            errand.Remove(false, false);
          }
          errands.Clear();
 
 
-         if(removeFromNotificationsContainer)
+         if(notificationLocation.worldID != -1)
          {
-            NotificationsContainer.RemoveNotification(this, false);
+            NotificationsContainer.RemoveAndTriggerNotification(this, notificationLocation);
          }
       }
    }

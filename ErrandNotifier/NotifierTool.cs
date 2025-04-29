@@ -17,6 +17,7 @@
  */
 
 using ErrandNotifier.Enums;
+using ErrandNotifier.NotifiableErrandPacks;
 using ErrandNotifier.NotificationsHierarchy;
 using ErrandNotifier.Strings;
 using PeterHan.PLib.Core;
@@ -218,11 +219,105 @@ namespace ErrandNotifier {
       /// Resets the settings stored for the new notification to the default values.
       /// </summary>
       public void ResetNewNotification() {
-         notificationName_new = MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME_DEFAULT;
-         tooltip_new = MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP_DEFAULT;
+         notificationName_new = DefaultNotificationName();
+         tooltip_new = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.TOOLTIP;
          type_new = GNotificationType.POP;
          pause_new = false;
          zoom_new = false;
+      }
+      /// <summary>
+      /// Updates the default name of the new notification in case it wasn't changed by the player.
+      /// </summary>
+      /// <param name="previousFilter">The filter that was previously active</param>
+      public void UpdateNewNotificationName(NotifierToolFilter previousFilter) {
+         string previousDefaultName = DefaultNotificationName(true, previousFilter);
+         if(notificationName_new == "" || notificationName_new  == previousDefaultName)// if the player didn't rename the notification himself
+         {
+            notificationName_new = DefaultNotificationName();
+         }
+      }
+      /// <summary>
+      /// Constructs a default notification name based on the currently chosen tool filter. For instance, default notification name with dig errands filter turned on
+      /// is "Dig is completed".
+      /// </summary>
+      /// <param name="overrideFilter">Whether the filter from the next argument should be used instead of the one currently active</param>
+      /// <param name="filter">The filter to use instead of the currently active</param>
+      /// <returns>The default name.</returns>
+      private static string DefaultNotificationName(bool overrideFilter = false, NotifierToolFilter filter = NotifierToolFilter.ALL) {
+         string name = "";
+
+         foreach(NotifierToolFilter flt in Enum.GetValues(typeof(NotifierToolFilter)))
+         {
+            if(overrideFilter || flt.IsOn())
+            {
+               switch(overrideFilter ? filter : flt)
+               {
+                  case NotifierToolFilter.ALL:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.DEFAULT_ERRAND;
+                     break;
+
+                  case NotifierToolFilter.CONSTRUCTION:
+                     name = STRINGS.UI.TOOLS.FILTERLAYERS.CONSTRUCTION.NAME;
+                     break;
+
+                  case NotifierToolFilter.DIG:
+                     name = STRINGS.UI.TOOLS.FILTERLAYERS.DIG.NAME;
+                     break;
+
+                  case NotifierToolFilter.MOP:
+                     name = MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME;
+                     break;
+
+                  case NotifierToolFilter.EMPTY_PIPE:
+                     name = STRINGS.UI.TOOLS.EMPTY_PIPE.NAME;
+                     break;
+
+                  case NotifierToolFilter.MOVE_TO:
+                     name = STRINGS.UI.USERMENUACTIONS.PICKUPABLEMOVE.NAME;
+                     break;
+
+                  case NotifierToolFilter.STANDARD_BUILDINGS:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX + STRINGS.UI.TOOLS.FILTERLAYERS.BUILDINGS.NAME;
+                     break;
+
+                  case NotifierToolFilter.WIRES:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX + STRINGS.UI.TOOLS.FILTERLAYERS.WIRES.NAME;
+                     break;
+
+                  case NotifierToolFilter.LIQUID_PIPES:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX + STRINGS.UI.TOOLS.FILTERLAYERS.LIQUIDPIPES.NAME;
+                     break;
+
+                  case NotifierToolFilter.GAS_PIPES:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX + STRINGS.UI.TOOLS.FILTERLAYERS.GASPIPES.NAME;
+                     break;
+
+                  case NotifierToolFilter.CONVEYOR_RAILS:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX + STRINGS.UI.TOOLS.FILTERLAYERS.SOLIDCONDUITS.NAME;
+                     break;
+
+                  case NotifierToolFilter.AUTOMATION:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX + STRINGS.UI.TOOLS.FILTERLAYERS.LOGIC.NAME;
+                     break;
+
+                  case NotifierToolFilter.BACKWALLS:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX + STRINGS.UI.TOOLS.FILTERLAYERS.BACKWALL.NAME;
+                     break;
+
+                  default:
+                     name = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.DEFAULT_ERRAND;
+                     break;
+               }
+
+               break;
+            }
+         }
+
+         if(name == "")
+         {
+            return name;// this is necessary
+         }
+         return MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_PREFIX + name + MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_POSTFIX;
       }
 
 

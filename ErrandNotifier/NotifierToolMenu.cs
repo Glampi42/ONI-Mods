@@ -289,9 +289,10 @@ namespace ErrandNotifier {
       }
 
       /// <summary>
-      /// Updates the visible checkboxes to correspond with the layer settings and runs other filter-related logic.
+      /// Updates the checkboxes to correspond with the active filter, updates the NotifierOverlay and the default notification name.
       /// </summary>
-      private void OnChange() {
+      /// <param name="previousFilter">The filter that was active before this one</param>
+      private void OnFilterChange(NotifierToolFilter previousFilter = NotifierToolFilter.ALL) {
          foreach(var option in options.Values)
          {
             var checkbox = option.Checkbox;
@@ -310,18 +311,28 @@ namespace ErrandNotifier {
             }
          }
 
+         // update overlay:
          if(Main.notifierOverlay != null && Main.notifierOverlay.IsEnabled)
          {
             Main.notifierOverlay.UpdateOverlay();
          }
+
+         // update default notification name:
+         if(Main.notifierTool != null)
+         {
+            Main.notifierTool.UpdateNewNotificationName(previousFilter);
+         }
+         UpdateNotificationConfigDisplay();
       }
 
       /// <summary>
-      /// When an option is selected, updates the state of other options if necessary and
+      /// When a filter is selected, updates the state of other filters if necessary and
       /// refreshes the UI.
       /// </summary>
-      /// <param name="target">The option check box that was clicked.</param>
-      private void OnClick(GameObject target) {
+      /// <param name="target">The filter check box that was clicked</param>
+      private void OnFilterClick(GameObject target) {
+         var previousFilter = NotifierToolUtils.GetCurrentFilter();
+
          foreach(var option in options.Values)
             if(option.Checkbox == target)
             {
@@ -331,8 +342,10 @@ namespace ErrandNotifier {
                   foreach(var disableOption in options.Values)
                      if(disableOption != option)
                         disableOption.State = ToolParameterMenu.ToggleState.Off;
+
                   option.State = ToolParameterMenu.ToggleState.On;
-                  OnChange();
+
+                  OnFilterChange(previousFilter);
                }
                break;
             }
@@ -539,8 +552,7 @@ namespace ErrandNotifier {
                if(nErrand != null)
                {
                   int worldID = nErrand.gameObject.GetMyWorldId();
-                  if(worldID != -1)
-                     CameraController.Instance.ActiveWorldStarWipe(worldID, nErrand.transform.position);
+                  Utils.MoveCamera(new Structs.WorldPosition() { worldID = worldID, position = nErrand.uiSymbolBearer?.Get()?.transform.position ?? nErrand.transform.position }, false);
                }
             }
          };
@@ -936,23 +948,13 @@ namespace ErrandNotifier {
                   option.State = ToolParameterMenu.ToggleState.On;
                }
                options.Add(filter, option);
-               toggle.onClick += () => OnClick(checkbox);
+               toggle.onClick += () => OnFilterClick(checkbox);
             }
             else
                PUtil.LogWarning(Main.debugPrefix + "Could not find tool menu checkbox!");
 
             i++;
          }
-      }
-
-      /// <summary>
-      /// Sets all check boxes to the same value.
-      /// </summary>
-      /// <param name="toggleState">The toggle state to set.</param>
-      public void SetAll(ToolParameterMenu.ToggleState toggleState) {
-         foreach(var option in options)
-            option.Value.State = toggleState;
-         OnChange();
       }
 
       public ToolParameterMenu.ToggleState GetToggleState(NotifierToolFilter filter) {
@@ -967,7 +969,7 @@ namespace ErrandNotifier {
       /// </summary>
       public void ShowMenu() {
          content.SetActive(true);
-         OnChange();
+         OnFilterChange();
          UpdateNotificationConfigDisplay();
       }
 

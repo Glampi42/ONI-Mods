@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ErrandNotifier.Enums;
 using ErrandNotifier.Strings;
+using ErrandNotifier.Structs;
+using UnityEngine;
 
 namespace ErrandNotifier.NotificationsHierarchy {
    /// <summary>
@@ -59,15 +61,41 @@ namespace ErrandNotifier.NotificationsHierarchy {
          NotifierToolMenu.Instance?.UpdateNotificationConfigDisplay();
       }
 
-      public static void RemoveNotification(GNotification n, bool callRemoveNotification = true) {
+      /// <summary>
+      /// Removes the GNotification from the container and triggers the actual Notification displayed on the NotificationScreen.
+      /// </summary>
+      /// <param name="n">The GNotification to remove and to use when constructing the Notification</param>
+      /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked. If this location is not valid, then the Notification won't be created.</param>
+      public static void RemoveAndTriggerNotification(GNotification n, WorldPosition notificationLocation) {
          if(n == null)
             return;
 
+         if(notificationLocation.worldID != -1)// location is valid -> create a Notification pointing to that location
+         {
+            Notification notification = new Notification(n.name, n.type.ToNotificationType(), (l, o) => n.tooltip, expires: !ModConfig.Instance.PersistentNotifications,
+               show_dismiss_button: ModConfig.Instance.PersistentNotifications, custom_click_callback: location => {
+                  WorldPosition pos = (WorldPosition)location;
+                  Utils.MoveCamera(pos, true);
+               }, custom_click_data: notificationLocation);
+
+            NotificationScreen.Instance.AddNotification(notification);
+            notification.GameTime = Time.time;
+            notification.Time = KTime.Instance.UnscaledGameTime;
+
+            // pause the game:
+            if(n.pause && !SpeedControlScreen.Instance.IsPaused)
+               SpeedControlScreen.Instance.Pause(false);
+
+            // zoom the camera:
+            if(n.zoom)
+               Utils.MoveCamera(notificationLocation, false);
+         }
+
          int ID = n.notificationID;
 
-         if(callRemoveNotification)
+         if(notificationLocation.worldID == -1)// location is invalid -> the GNotification should be removed without creating the Notification
          {
-            n.Remove(false);
+            n.Remove(Utils.InvalidLocation);
          }
 
          notifications.Remove(n);

@@ -11,21 +11,16 @@ using UnityEngine;
 
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class DiggablePack : ANotifiableErrandPack<Diggable, NotifiableErrand_Diggable> {
-      public override List<GPatchInfo> OnChoreCreate_Patch() {
-         var targetMethod = typeof(Diggable).GetMethod("OnSpawn", Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix(default));
-
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void CreatePostfix(Diggable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
-         {
-            //chainedErrand.ConfigureChorePrecondition(__instance.chore);
-         }
-      }
-
       public override List<GPatchInfo> OnChoreDelete_Patch() {
-         return null;// the GameObject gets destroyed in either case
+         var targetMethod = typeof(Diggable).GetMethod(nameof(Diggable.OnCancel), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnCancelPostfix(default));
+         return new([new GPatchInfo(targetMethod, null, postfix)]);
+      }
+      private static void OnCancelPostfix(Diggable __instance) {
+         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+         {
+            notifiableErrand.Remove(false);
+         }
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {
@@ -36,10 +31,6 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          }
 
          return false;
-      }
-
-      public override Chore GetChoreFromErrand(Diggable errand) {
-         return errand.chore;
       }
    }
 }

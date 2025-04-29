@@ -11,21 +11,16 @@ using UnityEngine;
 
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class MoppablePack : ANotifiableErrandPack<Moppable, NotifiableErrand_Moppable> {
-      public override List<GPatchInfo> OnChoreCreate_Patch() {
-         var targetMethod = typeof(Moppable).GetMethod(nameof(Moppable.OnSpawn), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix(default));
-
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void CreatePostfix(Moppable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
-         {
-            //chainedErrand.ConfigureChorePrecondition();
-         }
-      }
-
       public override List<GPatchInfo> OnChoreDelete_Patch() {
-         return null;// the GameObject gets destroyed in either case
+         var targetMethod = typeof(Moppable).GetMethod(nameof(Moppable.OnCancel), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnCancelPostfix(default));
+         return new([new GPatchInfo(targetMethod, null, postfix)]);
+      }
+      private static void OnCancelPostfix(Moppable __instance) {
+         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+         {
+            notifiableErrand.Remove(false);
+         }
       }
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {
@@ -36,15 +31,6 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          }
 
          return false;
-      }
-
-      public override Chore GetChoreFromErrand(Moppable errand) {
-         if(errand.TryGetComponent(out StateMachineController controller))
-         {
-            var workChore = (WorkChore<Moppable>.StatesInstance)controller.stateMachines.FirstOrDefault(sm => sm.GetType() == typeof(WorkChore<Moppable>.StatesInstance));
-            return (Chore)workChore?.master;
-         }
-         return null;
       }
    }
 }

@@ -10,18 +10,6 @@ using UnityEngine;
 
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class EmptyPipeSolidPack : ANotifiableErrandPack<EmptySolidConduitWorkable, NotifiableErrand_EmptySolidConduitWorkable> {
-      public override List<GPatchInfo> OnChoreCreate_Patch() {
-         var targetMethod = typeof(EmptySolidConduitWorkable).GetMethod(nameof(EmptySolidConduitWorkable.CreateWorkChore), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => CreatePostfix(default));
-         return [new GPatchInfo(targetMethod, null, postfix)];
-      }
-      private static void CreatePostfix(EmptySolidConduitWorkable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
-         {
-            //chainedErrand.ConfigureChorePrecondition(__instance.chore);
-         }
-      }
-
       public override List<GPatchInfo> OnChoreDelete_Patch() {
          var targetMethod = typeof(EmptySolidConduitWorkable).GetMethod(nameof(EmptySolidConduitWorkable.CancelEmptying), Utils.GeneralBindingFlags);
          var postfix = SymbolExtensions.GetMethodInfo(() => CancelEmptyingPostfix(default));
@@ -32,17 +20,17 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          return new([new GPatchInfo(targetMethod, null, postfix), new GPatchInfo(targetMethod2, null, postfix2)]);
       }
       private static void CancelEmptyingPostfix(EmptySolidConduitWorkable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
+         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
          {
-            chainedErrand.Remove(true);
+            notifiableErrand.Remove(false);
          }
       }
       private static void OnWorkTickPostfix(WorkerBase worker, float dt, EmptySolidConduitWorkable __instance) {
          if(__instance.chore == null)
          {
-            if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand chainedErrand))
+            if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
             {
-               chainedErrand.Remove(true);
+               notifiableErrand.Remove(true);
             }
 
             // removing the old chore's UISymbol (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):
@@ -62,10 +50,6 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          }
 
          return false;
-      }
-
-      public override Chore GetChoreFromErrand(EmptySolidConduitWorkable errand) {
-         return errand.chore;
       }
    }
 }

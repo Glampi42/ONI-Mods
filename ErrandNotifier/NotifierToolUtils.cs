@@ -115,6 +115,22 @@ namespace ErrandNotifier {
       }
 
       /// <summary>
+      /// Returns the currently active NotifierToolFilter selected in the NotifierToolMenu.
+      /// </summary>
+      /// <returns>The filter.</returns>
+      public static NotifierToolFilter GetCurrentFilter() {
+         foreach(NotifierToolFilter filter in Enum.GetValues(typeof(NotifierToolFilter)))
+         {
+            if(filter.IsOn())
+            {
+               return filter;
+            }
+         }
+
+         return NotifierToolFilter.ALL;
+      }
+
+      /// <summary>
       /// Creates a new notification and assigns it to the specified errands.
       /// </summary>
       /// <param name="errands">The errands</param>
@@ -157,7 +173,7 @@ namespace ErrandNotifier {
 
          foreach(var n in nsToDelete)
          {
-            NotificationsContainer.RemoveNotification(n);
+            NotificationsContainer.RemoveAndTriggerNotification(n, Utils.InvalidLocation);// the notification was deleted manually -> shouldn't be triggered
          }
       }
 
@@ -170,7 +186,7 @@ namespace ErrandNotifier {
          {
             if(errand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand nE))
             {
-               nE.Remove(true);
+               nE.Remove(false);
             }
          }
       }
