@@ -24,7 +24,7 @@ namespace ChainErrand {
          chainNumberPrefab.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
          var font = Localization.GetFont("GRAYSTROKE OUTLINE SDF");
-         if(font == null)
+         if(font == null)// TODO include the font in the mod
          {
             font = Localization.GetFont("GRAYSTROKE REGULAR SDF");// some localizations don't have the outline font for some reason (but it looks better than the regular because it doesn't have artifacts with big outlines)
             Main.outlineWidthMultiplier = 0.0191f;// this font has other scale for the outline

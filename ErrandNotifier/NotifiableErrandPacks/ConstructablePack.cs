@@ -15,16 +15,19 @@ using ErrandNotifier.NotificationsHierarchy;
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class ConstructablePack : ANotifiableErrandPack<Constructable, NotifiableErrand_Constructable> {
       public override List<GPatchInfo> OnChoreDelete_Patch() {
-         var targetMethod = typeof(Constructable).GetMethod(nameof(Constructable.OnCancel), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => OnCancelPostfix(default, default));
+         var targetMethod = typeof(Constructable).GetMethod(nameof(Constructable.OnSpawn), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnSpawnPostfix(default));
          return new([new GPatchInfo(targetMethod, null, postfix)]);
       }
-      private static void OnCancelPostfix(object data, Constructable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+      private static void OnSpawnPostfix(Constructable __instance) {
+         __instance.Subscribe((int)GameHashes.Cancel, OnErrandCancelDelegate);
+      }
+      private static readonly EventSystem.IntraObjectHandler<Constructable> OnErrandCancelDelegate = new EventSystem.IntraObjectHandler<Constructable>((errand, data) => {
+         if(errand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand, true))
          {
             notifiableErrand.Remove(false);
          }
-      }
+      });
 
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {

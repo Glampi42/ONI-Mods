@@ -28,7 +28,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       private HashSet<NotifiableErrand> errands = new();
 
       public GNotification(int notificationID, string name, string tooltip, GNotificationType type, bool pause, bool zoom) {
-         Debug.Log("GNotification constructor");
          this.notificationID = notificationID;
          this.name = name;
          this.tooltip = tooltip;
@@ -38,26 +37,32 @@ namespace ErrandNotifier.NotificationsHierarchy {
       }
 
       public void AddErrands(Dictionary<GameObject, HashSet<Workable>> newErrands) {
-         Debug.Log("AddErrands");
          foreach(var pair in newErrands)
          {
             foreach(var errand in pair.Value)
             {
                if(errand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand, true))
                {
-                  if(!notifiableErrand.enabled)
+                  if(notifiableErrand.IsNullOrDestroyed())
                   {
-                     notifiableErrand.enabled = true;
-                     notifiableErrand.parentNotification = this;
-                     notifiableErrand.uiSymbolBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
-
-                     notifiableErrand.UpdateUISymbol();
-
-                     errands.Add(notifiableErrand);
+                     Debug.LogWarning(Main.debugPrefix + $"Tried to add errand of type {errand.GetType()} of the GameObject {pair.Key.name} to a notification, but the corresponding NotifiableErrand is destroyed");
                   }
                   else
                   {
-                     Debug.LogWarning(Main.debugPrefix + $"Tried to add errand of type {errand.GetType()} of the GameObject {pair.Key.name} to a notification, but it is already in a notification");
+                     if(!notifiableErrand.enabled)
+                     {
+                        notifiableErrand.enabled = true;
+                        notifiableErrand.parentNotification = this;
+                        notifiableErrand.uiSymbolBearer = new Ref<KPrefabID>(pair.Key.GetComponent<KPrefabID>());
+
+                        notifiableErrand.UpdateUISymbol();
+
+                        errands.Add(notifiableErrand);
+                     }
+                     else
+                     {
+                        Debug.LogWarning(Main.debugPrefix + $"Tried to add errand of type {errand.GetType()} of the GameObject {pair.Key.name} to a notification, but it is already in a notification");
+                     }
                   }
                }
                else
@@ -76,7 +81,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       }
 
       public void UpdateUISymbols() {
-         Debug.Log("UpdateUISymbols");
          if(Main.notifierOverlay != default)
          {
             foreach(var errand in errands)
@@ -87,20 +91,22 @@ namespace ErrandNotifier.NotificationsHierarchy {
       }
 
       /// <summary>
-      /// Deletes the GNotification. If the location argument is valid, a Notification will be created and shown in NotificationScreen.
+      /// Deletes the GNotification. If tryTriggerNotification is true (and the notificationLocation is valid), a Notification will be created and shown in NotificationScreen.
       /// </summary>
-      /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked. If this location is not valid, then the Notification won't be created.</param>
-      public void Remove(WorldPosition notificationLocation) {
+      /// <param name="tryTriggerNotification">If true, the Notification will be attempted to be created</param>
+      /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked</param>
+      /// <param name="removeUp">Shows the direction of the notification removal (is false if this GNotification is removed by the NotificationsContainer itself)</param>
+      public void Remove(bool tryTriggerNotification, WorldPosition notificationLocation, bool removeUp = true) {
+         Debug.Log("GNotification Remove");
          foreach(var errand in errands)
          {
             errand.Remove(false, false);
          }
          errands.Clear();
 
-
-         if(notificationLocation.worldID != -1)
+         if(removeUp)
          {
-            NotificationsContainer.RemoveAndTriggerNotification(this, notificationLocation);
+            NotificationsContainer.RemoveAndTriggerNotification(this, tryTriggerNotification, notificationLocation);
          }
       }
    }

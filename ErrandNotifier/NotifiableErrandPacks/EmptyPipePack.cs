@@ -12,20 +12,23 @@ using UnityEngine;
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class EmptyPipePack : ANotifiableErrandPack<EmptyConduitWorkable, NotifiableErrand_EmptyConduitWorkable> {
       public override List<GPatchInfo> OnChoreDelete_Patch() {
-         var targetMethod = typeof(EmptyConduitWorkable).GetMethod(nameof(EmptyConduitWorkable.CancelEmptying), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => CancelEmptyingPostfix(default));
+         var targetMethod = typeof(EmptyConduitWorkable).GetMethod(nameof(EmptyConduitWorkable.OnSpawn), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnSpawnPostfix(default));
 
          var targetMethod2 = typeof(EmptyConduitWorkable).GetMethod(nameof(EmptyConduitWorkable.OnWorkTick), Utils.GeneralBindingFlags);
          var postfix2 = SymbolExtensions.GetMethodInfo(() => OnWorkTickPostfix(default, default, default));
 
          return new([new GPatchInfo(targetMethod, null, postfix), new GPatchInfo(targetMethod2, null, postfix2)]);
       }
-      private static void CancelEmptyingPostfix(EmptyConduitWorkable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+      private static void OnSpawnPostfix(EmptyConduitWorkable __instance) {
+         __instance.Subscribe((int)GameHashes.Cancel, OnErrandCancelDelegate);
+      }
+      private static readonly EventSystem.IntraObjectHandler<EmptyConduitWorkable> OnErrandCancelDelegate = new EventSystem.IntraObjectHandler<EmptyConduitWorkable>((errand, data) => {
+         if(errand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand, true))
          {
             notifiableErrand.Remove(false);
          }
-      }
+      });
       private static void OnWorkTickPostfix(WorkerBase worker, float dt, EmptyConduitWorkable __instance) {
          if(__instance.chore == null)
          {

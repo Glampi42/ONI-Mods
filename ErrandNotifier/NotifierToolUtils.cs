@@ -135,7 +135,6 @@ namespace ErrandNotifier {
       /// </summary>
       /// <param name="errands">The errands</param>
       public static void CreateNewNotification(Dictionary<GameObject, HashSet<Workable>> errands) {
-         Debug.Log("CreateNewNotification");
          GNotification n = NotificationsContainer.CreateNewNotification();
          n.AddErrands(errands);
 
@@ -173,7 +172,7 @@ namespace ErrandNotifier {
 
          foreach(var n in nsToDelete)
          {
-            NotificationsContainer.RemoveAndTriggerNotification(n, Utils.InvalidLocation);// the notification was deleted manually -> shouldn't be triggered
+            NotificationsContainer.RemoveAndTriggerNotification(n, false, Utils.InvalidLocation);// the notification was deleted manually -> shouldn't be triggered
          }
       }
 

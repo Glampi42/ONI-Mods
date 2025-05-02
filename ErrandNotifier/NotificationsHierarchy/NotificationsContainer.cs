@@ -23,7 +23,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       /// </summary>
       /// <returns></returns>
       public static GNotification CreateNewNotification() {
-         Debug.Log("NotificationsContainer.CreateNewNotification");
          GNotification newN = new GNotification(NotificationsCount,
             Main.notifierTool.GetName(),
             Main.notifierTool.GetTooltip(),
@@ -36,7 +35,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       }
 
       public static void StoreNotification(GNotification n, int atIndex = -1) {
-         Debug.Log("StoreNotification");
          if(atIndex == -1)
          {
             notifications.Add(n);
@@ -65,12 +63,14 @@ namespace ErrandNotifier.NotificationsHierarchy {
       /// Removes the GNotification from the container and triggers the actual Notification displayed on the NotificationScreen.
       /// </summary>
       /// <param name="n">The GNotification to remove and to use when constructing the Notification</param>
-      /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked. If this location is not valid, then the Notification won't be created.</param>
-      public static void RemoveAndTriggerNotification(GNotification n, WorldPosition notificationLocation) {
+      /// <param name="tryTriggerNotification">Whether the Notification should be created</param>
+      /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked</param>
+      public static void RemoveAndTriggerNotification(GNotification n, bool tryTriggerNotification, WorldPosition notificationLocation) {
+         Debug.Log("RemoveAndTriggerNotification");
          if(n == null)
             return;
 
-         if(notificationLocation.worldID != -1)// location is valid -> create a Notification pointing to that location
+         if(tryTriggerNotification && notificationLocation.worldID != -1)// location is valid -> create a Notification pointing to that location
          {
             Notification notification = new Notification(n.name, n.type.ToNotificationType(), (l, o) => n.tooltip, expires: !ModConfig.Instance.PersistentNotifications,
                show_dismiss_button: ModConfig.Instance.PersistentNotifications, custom_click_callback: location => {
@@ -93,10 +93,7 @@ namespace ErrandNotifier.NotificationsHierarchy {
 
          int ID = n.notificationID;
 
-         if(notificationLocation.worldID == -1)// location is invalid -> the GNotification should be removed without creating the Notification
-         {
-            n.Remove(Utils.InvalidLocation);
-         }
+         n.Remove(false, Utils.InvalidLocation, false);
 
          notifications.Remove(n);
          UpdateAllNotificationIDs();

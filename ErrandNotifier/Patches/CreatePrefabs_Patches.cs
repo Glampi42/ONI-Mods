@@ -14,7 +14,7 @@ namespace ErrandNotifier.Patches {
          }
       }
 
-      [HarmonyPatch(typeof(MainMenu), "OnPrefabInit")]
+      [HarmonyPatch(typeof(Game), "OnPrefabInit")]
       public static class CreatePrefabs2_Patch {
          public static void Postfix() {
             Prefabs.CreateCheckboxPrefab();

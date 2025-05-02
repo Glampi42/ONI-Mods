@@ -78,18 +78,18 @@ namespace ErrandNotifier.NotificationsHierarchy {
       /// Disable this NotifiableErrand component.
       /// </summary>
       /// <param name="tryTriggerNotification">If true, the Notification will be attempted to be created (which will happen if the GNotification has no more errands)</param>
-      /// <param name="tryRemoveNotification">Shows the direction of the notification removal (is false if this NotifiableErrand is removed by the GNotification itself)</param>
+      /// <param name="removeUp">Shows the direction of the notification removal (is false if this NotifiableErrand is removed by the GNotification itself)</param>
       /// <param name="isBeingDestroyed">True if the component is about to be UnityEngine.Object.Destroy()ed</param>
-      public void Remove(bool tryTriggerNotification, bool tryRemoveNotification = true, bool isBeingDestroyed = false) {
-         Debug.Log($"NotifiableErrand.Remove for {this.Errand?.GetType().ToString() ?? "NULL"}, {tryTriggerNotification}, {tryRemoveNotification}, {isBeingDestroyed}");
+      public void Remove(bool tryTriggerNotification, bool removeUp = true, bool isBeingDestroyed = false) {
+         Debug.Log($"NotifiableErrand.Remove for {this.Errand?.GetType().ToString() ?? "NULL"}, {tryTriggerNotification}, {removeUp}, {isBeingDestroyed}");
 
-         if(tryRemoveNotification && parentNotification != null)
+         if(removeUp && parentNotification != null)
          {
             parentNotification.GetErrands().Remove(this);
             if(parentNotification.GetErrands().Count == 0)
             {
                Vector3 pos = uiSymbolBearer.Get()?.transform.position ?? this.transform.position;
-               parentNotification.Remove(tryTriggerNotification ? new WorldPosition() { worldID = this.GetMyWorldId(), position = pos } : Utils.InvalidLocation);
+               parentNotification.Remove(tryTriggerNotification, tryTriggerNotification ? new WorldPosition() { worldID = this.GetMyWorldId(), position = pos } : Utils.InvalidLocation);
             }
          }
 

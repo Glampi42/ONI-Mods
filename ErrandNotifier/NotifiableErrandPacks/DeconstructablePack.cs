@@ -12,16 +12,19 @@ using ErrandNotifier.NotificationsHierarchy;
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class DeconstructablePack : ANotifiableErrandPack<Deconstructable, NotifiableErrand_Deconstructable> {
       public override List<GPatchInfo> OnChoreDelete_Patch() {
-         var targetMethod = typeof(Deconstructable).GetMethod(nameof(Deconstructable.CancelDeconstruction), Utils.GeneralBindingFlags);
-         var postfix = SymbolExtensions.GetMethodInfo(() => DeletePostfix(default));
+         var targetMethod = typeof(Deconstructable).GetMethod(nameof(Deconstructable.OnSpawn), Utils.GeneralBindingFlags);
+         var postfix = SymbolExtensions.GetMethodInfo(() => OnSpawnPostfix(default));
          return new([new GPatchInfo(targetMethod, null, postfix)]);
       }
-      private static void DeletePostfix(Deconstructable __instance) {
-         if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
+      private static void OnSpawnPostfix(Deconstructable __instance) {
+         __instance.Subscribe((int)GameHashes.Cancel, OnErrandCancelDelegate);
+      }
+      private static readonly EventSystem.IntraObjectHandler<Deconstructable> OnErrandCancelDelegate = new EventSystem.IntraObjectHandler<Deconstructable>((errand, data) => {
+         if(errand.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand, true))
          {
             notifiableErrand.Remove(false);
          }
-      }
+      });
 
       public override bool CollectErrands(GameObject gameObject, HashSet<Workable> errands, ref KMonoBehaviour errandReference) {
          if(gameObject.TryGetComponent(out Deconstructable deconstructable) &&

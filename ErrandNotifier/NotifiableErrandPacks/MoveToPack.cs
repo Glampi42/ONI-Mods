@@ -13,40 +13,19 @@ using UnityEngine;
 namespace ErrandNotifier.NotifiableErrandPacks {
    public class MoveToPack : ANotifiableErrandPack<Movable, NotifiableErrand_Movable> {
       public override List<GPatchInfo> OnChoreDelete_Patch() {
-         var targetMethod = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnCancel), Utils.GeneralBindingFlags, null, [typeof(Movable)], null);
-         var prefix1 = SymbolExtensions.GetMethodInfo(() => OnCancelPrefix(default, default, out InstancesLibrary.List_Movable));
-         var postfix1 = SymbolExtensions.GetMethodInfo(() => OnCancelPostfix(default, default, ref InstancesLibrary.List_Movable));
+         var targetMethod = typeof(Movable).GetMethod(nameof(Movable.ClearMove), Utils.GeneralBindingFlags);
+         var prefix = SymbolExtensions.GetMethodInfo(() => ClearMovePrefix(default));
 
-         var targetMethod2 = typeof(Movable).GetMethod(nameof(Movable.ClearMove), Utils.GeneralBindingFlags);
-         var prefix2 = SymbolExtensions.GetMethodInfo(() => ClearMovePrefix(default));
+         var targetMethod2 = typeof(ElementSplitterComponents).GetMethod(nameof(ElementSplitterComponents.OnTake), Utils.GeneralBindingFlags, null, [typeof(Pickupable), typeof(HandleVector<int>.Handle), typeof(float)], null);
+         var prefix2 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePrefix(default, default, default, default, out InstancesLibrary.Action_Movable));
+         var postfix2 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePostfix(default, default, default, default, default, ref InstancesLibrary.Action_Movable));
 
-         var targetMethod3 = typeof(ElementSplitterComponents).GetMethod(nameof(ElementSplitterComponents.OnTake), Utils.GeneralBindingFlags, null, [typeof(Pickupable), typeof(HandleVector<int>.Handle), typeof(float)], null);
-         var prefix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePrefix(default, default, default, default, out InstancesLibrary.Action_Movable));
-         var postfix3 = SymbolExtensions.GetMethodInfo(() => OnChunkTakePostfix(default, default, default, default, default, ref InstancesLibrary.Action_Movable));
-
-         return [new GPatchInfo(targetMethod, prefix1, postfix1), new GPatchInfo(targetMethod2, prefix2, null), new GPatchInfo(targetMethod3, prefix3, postfix3)];
-      }
-      private static void OnCancelPrefix(Movable cancel_movable, CancellableMove __instance, out List<Ref<Movable>> __state) {
-         __state = new();
-         foreach(var movable in __instance.movables)
-            __state.Add(movable);
-      }
-      private static void OnCancelPostfix(Movable cancel_movable, CancellableMove __instance, ref List<Ref<Movable>> __state) {
-         foreach(var movable in __state)
-         {
-            if(movable?.Get() != null && !__instance.movables.Contains(movable))// if Movable was removed from the list
-            {
-               if(movable.Get().TryGetComponent(out NotifiableErrand_Movable notifiableErrand) && notifiableErrand.enabled)
-               {
-                  notifiableErrand.Remove(false);
-               }
-            }
-         }
+         return [new GPatchInfo(targetMethod, prefix, null), new GPatchInfo(targetMethod2, prefix2, postfix2)];
       }
       private static void ClearMovePrefix(Movable __instance) {
          if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
          {
-            notifiableErrand.Remove(true);
+            notifiableErrand.Remove(false);
          }
 
          // removing the old chore's UISymbol (it doesn't happen automatically because the GameObject with the errand doesn't get destroyed):

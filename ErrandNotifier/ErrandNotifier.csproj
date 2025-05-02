@@ -3,7 +3,7 @@
 	<!-- General Package Properties -->
 	<PropertyGroup>
 		<PackageId>ErrandNotifier</PackageId>
-		<Version>0.0.0.7</Version>
+		<Version>0.0.0.8</Version>
 		<Authors>Glampi</Authors>
        <Copyright>$(AssemblyCopyright)</Copyright>
 		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>

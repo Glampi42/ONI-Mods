@@ -100,18 +100,20 @@ namespace ErrandNotifier {
       /// </summary>
       /// <param name="errand">The errand</param>
       /// <param name="notifiableErrand">The retrieved NotifiableErrand</param>
-      /// <param name="allowDisabled">If true, the NotifiableErrand component may be disabled</param>
+      /// <param name="allowDisabled">If true, the NotifiableErrand component may be disabled and destroyed</param>
       /// <returns>True if such NotifiableErrand was found; false otherwise.</returns>
       public static bool TryGetCorrespondingNotifiableErrand(this Workable errand, out NotifiableErrand notifiableErrand, bool allowDisabled = false) {
          notifiableErrand = null;
+         if(errand == null)
+            return false;
 
-         if(errand.IsNullOrDestroyed())
+         if(!allowDisabled && errand.IsNullOrDestroyed())
             return false;
 
          Type notifiableErrandType = NotifiableErrandPackRegistry.GetNotifiableErrandPack(errand).GetNotifiableErrandType();
-         if(errand.TryGetComponent(notifiableErrandType, out Component ce) && (allowDisabled || ((KMonoBehaviour)ce).enabled))
+         if(errand.TryGetComponent(notifiableErrandType, out Component ne) && (allowDisabled || ((KMonoBehaviour)ne).enabled))
          {
-            notifiableErrand = ce as NotifiableErrand;
+            notifiableErrand = ne as NotifiableErrand;
          }
 
          return notifiableErrand != null;
