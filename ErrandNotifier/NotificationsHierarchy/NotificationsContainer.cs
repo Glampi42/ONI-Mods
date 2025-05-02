@@ -66,7 +66,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       /// <param name="tryTriggerNotification">Whether the Notification should be created</param>
       /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked</param>
       public static void RemoveAndTriggerNotification(GNotification n, bool tryTriggerNotification, WorldPosition notificationLocation) {
-         Debug.Log("RemoveAndTriggerNotification");
          if(n == null)
             return;
 

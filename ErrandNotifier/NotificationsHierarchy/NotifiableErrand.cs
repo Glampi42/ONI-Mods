@@ -81,8 +81,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       /// <param name="removeUp">Shows the direction of the notification removal (is false if this NotifiableErrand is removed by the GNotification itself)</param>
       /// <param name="isBeingDestroyed">True if the component is about to be UnityEngine.Object.Destroy()ed</param>
       public void Remove(bool tryTriggerNotification, bool removeUp = true, bool isBeingDestroyed = false) {
-         Debug.Log($"NotifiableErrand.Remove for {this.Errand?.GetType().ToString() ?? "NULL"}, {tryTriggerNotification}, {removeUp}, {isBeingDestroyed}");
-
          if(removeUp && parentNotification != null)
          {
             parentNotification.GetErrands().Remove(this);

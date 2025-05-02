@@ -97,7 +97,6 @@ namespace ErrandNotifier.NotificationsHierarchy {
       /// <param name="notificationLocation">The location to which the camera will zoom when the Notification will be clicked</param>
       /// <param name="removeUp">Shows the direction of the notification removal (is false if this GNotification is removed by the NotificationsContainer itself)</param>
       public void Remove(bool tryTriggerNotification, WorldPosition notificationLocation, bool removeUp = true) {
-         Debug.Log("GNotification Remove");
          foreach(var errand in errands)
          {
             errand.Remove(false, false);

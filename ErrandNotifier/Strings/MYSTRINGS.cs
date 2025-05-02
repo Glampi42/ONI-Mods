@@ -66,10 +66,10 @@ namespace ErrandNotifier.Strings {
 
             public class DEFAULTENTRIES {
                public static LocString NAME_PREFIX = "";// could potentially be used by other localizations
-               public static LocString NAME_POSTFIX = " is completed";
+               public static LocString NAME_POSTFIX = " is completed";// Errand is completed; Digging is completed etc.
 
                public static LocString DEFAULT_ERRAND = "Errand";
-               public static LocString CONSTRUCTION_ERRAND_PREFIX = "Construction of ";// f.e. Construction of Liquid Pipes
+               public static LocString CONSTRUCTION_ERRAND_PREFIX = "Construction of ";// Construction of Liquid Pipes; Construction of Power Wires etc.
 
                public static LocString TOOLTIP = "Press to zoom to the errand's location";
             }
