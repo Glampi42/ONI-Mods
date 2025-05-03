@@ -1,6 +1,7 @@
 ﻿using ChainErrand.ChainedErrandPacks;
 using ChainErrand.ChainHierarchy;
 using ChainErrand.Strings;
+using ChainErrand.Structs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +10,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using static KSnap;
 
@@ -17,6 +19,11 @@ namespace ChainErrand {
       public static readonly BindingFlags GeneralBindingFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
       public static Color RandomChainColor() => UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 0.9f, 0.6f, 0.9f);
+
+      public static void MoveCamera(WorldPosition to, bool showBackButton) {
+         if(to.worldID != -1)
+            GameUtil.FocusCameraOnWorld(to.worldID, to.position, show_back_button: showBackButton);
+      }
 
       public static HashSet<ObjectLayer> ObjectLayersFromChainToolFilter(ChainToolFilter filter) {
          HashSet<ObjectLayer> layers = new();
@@ -292,10 +299,28 @@ namespace ChainErrand {
          }
          catch(Exception ex)
          {
-            Debug.LogError((object)(Main.debugPrefix + "Could not load texture at " + path));
+            Debug.LogError(Main.debugPrefix + "Could not load texture at " + path);
             Debug.LogException(ex);
          }
          return texture;
+      }
+
+      /// <summary>
+      /// Imports the custom fonts as TMP_FontAsset files to be used in this mod.
+      /// </summary>
+      public static TMP_FontAsset[] ImportFontsFromModAssets() {
+         string path = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "assets"), "customfonts");
+         try
+         {
+            return AssetBundle.LoadFromFile(path).LoadAllAssets<TMP_FontAsset>();
+         }
+         catch(Exception ex)
+         {
+            Debug.LogError(Main.debugPrefix + "Could not load custom fonts at " + path);
+            Debug.LogException(ex);
+         }
+
+         return null;
       }
       //---------------------Vectors etc.---------------------DOWN
       public static Vector3 InverseLocalScale(this RectTransform rectTransform) {

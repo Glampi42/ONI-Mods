@@ -49,6 +49,8 @@ namespace ChainErrand.Strings {
             public static LocString LINKNUMBER_TOOLTIP = "Number of the link\nIf the number is whole, an existing link will be expanded\n" +
                "If the number is a fraction, a new link will be inserted inbetween";
 
+            public static LocString GOTOLINK_TOOLTIP = "Go to this chain link";
+
             public static LocString CHAINNUMBER_NOTFOUND = "NO CHAINS";
             public static LocString LINKNUMBER_NOTFOUND = "NO LINKS";
 

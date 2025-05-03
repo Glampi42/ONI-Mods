@@ -39,6 +39,9 @@ namespace ChainErrand {
                      if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// buildings can't have other errands
 
+                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
+                        break;// buildings can't have other errands
+
                      if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference))
                         break;// digging markers can't have other errands
 
@@ -64,6 +67,7 @@ namespace ChainErrand {
 
                   case ChainToolFilter.EMPTY_PIPE:
                      ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
                      break;
 
                   case ChainToolFilter.MOVE_TO:
