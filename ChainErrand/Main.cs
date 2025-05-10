@@ -31,7 +31,7 @@ namespace ChainErrand {
 
       public static readonly Color DefaultChainNumberColor = PUITuning.Colors.ButtonPinkStyle.activeColor;
 
-      public static readonly Chore.Precondition ChainedErrandPrecondition = new() {
+      public static Chore.Precondition ChainedErrandPrecondition = new() {
          id = nameof(ChainedErrandPrecondition),
          description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK,
          fn = (ref Chore.Precondition.Context context, object preconditionEnabled) => {

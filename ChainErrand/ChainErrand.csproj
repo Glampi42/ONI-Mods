@@ -3,7 +3,7 @@
 	<!-- General Package Properties -->
 	<PropertyGroup>
 		<PackageId>ChainErrand</PackageId>
-		<Version>1.1.6.3</Version>
+		<Version>1.1.7.0</Version>
 		<Authors>Glampi</Authors>
 		<Copyright>$(AssemblyCopyright)</Copyright>
 		<RepositoryUrl>https://github.com/Glampi42/ONI-Mods</RepositoryUrl>

@@ -29,6 +29,8 @@ namespace ChainErrand.Patches {
             MYSPRITES.SaveSprite("ce_delete_chain");
             MYSPRITES.SaveSprite("ce_delete_link");
 
+            Main.ChainedErrandPrecondition.description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK;// updating the field for localization
+
             Main.autoChainNotification = new(MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME, NotificationType.Neutral,
                (List<Notification> List, object data) => MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP, expires: false,
                custom_click_callback: new Notification.ClickCallback((object data) => AutoChainUtils.ToggleAutoChain()));
