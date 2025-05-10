@@ -74,6 +74,10 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
 msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
 msgstr "Nummer des Kettenglieds\nWenn die Zahl ganz ist, wird ein bestehender Kettenglied erweitert\nWenn die Zahl eine Bruchzahl ist, wird dazwischen ein neuer Kettenglied eingefügt"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.GOTOLINK_TOOLTIP"
+msgid "Go to this chain link"
+msgstr "Zu diesem Kettenglied springen"
+
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
 msgid "NO CHAINS"
 msgstr "KEINE KETTEN"

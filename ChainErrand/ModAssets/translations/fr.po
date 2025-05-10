@@ -92,6 +92,10 @@ msgstr ""
 "Si le numéro est entier, un lien existant sera étendu  \n"
 "Si le numéro est une fraction, un nouveau lien sera inséré entre les deux"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.GOTOLINK_TOOLTIP"
+msgid "Go to this chain link"
+msgstr "Aller à ce maillon de la chaîne"
+
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
 msgid "NO CHAINS"
 msgstr "PAS DE CHAÎNE"

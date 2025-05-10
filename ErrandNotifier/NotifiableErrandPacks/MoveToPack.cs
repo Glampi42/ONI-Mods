@@ -26,10 +26,8 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          return [new GPatchInfo(targetMethod, prefix, null), new GPatchInfo(targetMethod2, prefix2, null), new GPatchInfo(targetMethod3, prefix3, postfix3)];
       }
       private static void ClearMovePrefix(Movable __instance) {
-         Debug.Log("$$$ClearMove1");
          if(__instance.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
          {
-            Debug.Log("$$$ClearMove2");
             notifiableErrand.Remove(false);
          }
 
@@ -39,52 +37,12 @@ namespace ErrandNotifier.NotifiableErrandPacks {
             Main.notifierOverlay.RemoveUISymbol(__instance.StorageProxy?.gameObject, __instance);
          }
       }
-      //private static IEnumerable<CodeInstruction> OnDeliveryCompleteTranspiler(IEnumerable<CodeInstruction> instructions, ILGenerator generator) {
-      //   List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-
-      //   int clearMoveIndex = -1;
-      //   for(int i = 0; i < codes.Count; i++)
-      //   {
-      //      if(codes[i].Calls(SymbolExtensions.GetMethodInfo(() => ((Movable)default).ClearMove())))
-      //      {
-      //         clearMoveIndex = i - 1;// compensating for ldloc (loading the Movable onto stack)
-
-      //         break;
-      //      }
-      //   }
-      //   if(clearMoveIndex == -1)
-      //      throw new Exception(Main.debugPrefix + "The ClearMove() method could not be found");
-
-      //   List<CodeInstruction> codesCluster = new List<CodeInstruction>();
-
-      //   // redirecting the labels to the new instructions (last I checked there are no labels that should be redirected, but just for safety):
-      //   List<Label> labels = codes[clearMoveIndex].labels;
-      //   codes[clearMoveIndex].labels.Clear();
-
-      //   codesCluster.Add(new CodeInstruction(OpCodes.Ldloc_S, 1).WithLabels(labels));// load Movable
-      //   codesCluster.Add(new CodeInstruction(OpCodes.Call, SymbolExtensions.GetMethodInfo(() => OnDeliveryComplete(default))));
-
-      //   codes.InsertRange(clearMoveIndex, codesCluster);
-
-      //   return codes.AsEnumerable();
-      //}
-      //private static void OnDeliveryComplete(Movable movable) {
-      //   Debug.Log("$$$OnDeliveryComplete1");
-      //   if(movable.TryGetCorrespondingNotifiableErrand(out NotifiableErrand notifiableErrand))
-      //   {
-      //      Debug.Log("$$$OnDeliveryComplete2");
-      //      notifiableErrand.Remove(true);// triggering the notification since the errand was successfully completed (doesn't happen automatically because the Movable's GO doesn't get destroyed)
-      //   }
-      //}
       private static void OnChoreSuccessPrefix(MovePickupableChore.StatesInstance smi) {
-         Debug.Log("OnChoreSuccessPostfix1");
          if(smi != null)
          {
-            Debug.Log("OnChoreSuccessPostfix2");
             GameObject movable_go = smi.sm.pickup.Get(smi);
             if(movable_go != null && movable_go.TryGetComponent(out NotifiableErrand_Movable notifiableErrand) && notifiableErrand.enabled)
             {
-               Debug.Log("OnChoreSuccessPostfix3");
                notifiableErrand.Remove(true);// trying to trigger the notification (doesn't happen automatically because the Movable's GO doesn't get destroyed)
             }
          }
