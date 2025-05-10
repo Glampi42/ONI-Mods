@@ -9,9 +9,6 @@ using UnityEngine;
 
 namespace ChainErrand {
    public static class ChainNumberPrefab {
-      public static TMP_FontAsset graystroke_outline;// font that supports big outlines because of big padding between the glyphs
-      public static TMP_FontAsset graystroke_outline_italic;
-
       private static LocText chainNumberPrefab = null;
 
       public static LocText GetChainNumberPrefab() {
@@ -26,11 +23,18 @@ namespace ChainErrand {
          UnityEngine.Object.Destroy(chainNumberPrefab.transform.GetChildSafe(0)?.gameObject);
          chainNumberPrefab.GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.5f);
 
-         chainNumberPrefab.font = graystroke_outline;// I had to import custom font because the default in-game one looks bad when applying big outlines
+         var font = Localization.GetFont("GRAYSTROKE OUTLINE SDF");
+         if(font == null)
+         {
+            font = Localization.GetFont("GRAYSTROKE REGULAR SDF");// some localizations don't have the outline font for some reason (but it looks better than the regular because it doesn't have artifacts with big outlines)
+            Main.outlineWidth = 0.53f;// this font has other scale for the outline
+         }
+
+         chainNumberPrefab.font = font;
          chainNumberPrefab.alignment = TextAlignmentOptions.Center;
          chainNumberPrefab.fontSize = Main.maxChainNumberFontSize;
          chainNumberPrefab.outlineColor = Color.white;
-         chainNumberPrefab.outlineWidth = Main.outlineWidthMultiplier * chainNumberPrefab.fontSize;
+         chainNumberPrefab.outlineWidth = Main.outlineWidth;
          chainNumberPrefab.characterSpacing = -1f;
          chainNumberPrefab.lineSpacing = -10f;
          chainNumberPrefab.enableKerning = true;

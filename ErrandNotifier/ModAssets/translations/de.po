@@ -1,0 +1,171 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.NOTIFIER.NAME"
+msgid "Notifier"
+msgstr "Benachrichtiger"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME"
+msgid "Mopping"
+msgstr "Wischen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Mopping</style> errands only"
+msgstr "Nur <style="KKeyword">Wischen</style>-Aufträge anvisieren"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Empty Pipe</style> errands only"
+msgstr "Nur <style="KKeyword">Rohr-Lehrung</style>-Aufträge anvisieren"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Relocate To</style> errands only"
+msgstr "Nur <style="KKeyword">Verlagerung</style>-Aufträge anvisieren"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLTIPS.NOTIFIERBUTTON"
+msgid "Assign a notification to an errand that will be triggered upon the errand's completion {Hotkey}"
+msgstr "Weise einem Auftrag eine Benachrichtigung zu, die bei Abschluss ausgelöst wird {Hotkey}"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TITLE"
+msgid "Errand Notifier"
+msgstr "Auftragsbenachrichtigung"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATEBUTTON"
+msgid "Create"
+msgstr "Erstellen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETEBUTTON"
+msgid "Delete"
+msgstr "Löschen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION"
+msgid "Create Notification"
+msgstr "Benachrichtigung Erstellen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION_TOOLTIP"
+msgid "Create a new notification assigned to the selected errands.\n You can configure the new notification before creating it."
+msgstr "Erstelle eine neue Benachrichtigung für die ausgewählten Aufträge.\nDie neue Benachrichtigung kann vorher konfiguriert werden."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND"
+msgid "Manage Notification"
+msgstr "Benachrichtigung Verwalten"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_HOVER"
+msgid "Add Errand"
+msgstr "Auftrag Hinzufügen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_TOOLTIP"
+msgid "Add new errands to an already existing notification, or change the notification's settings."
+msgstr "Neue Aufträge zu einer bestehenden Benachrichtigung hinzufügen oder deren Einstellungen ändern."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID"
+msgid "Notification ID:"
+msgstr "Benachrichtigungs-ID:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_TOOLTIP"
+msgid "ID of the notification that will be modified.\n\"NEW\" means that you configure a new notification.\n\"NONE\" means that there are no notifications to modify."
+msgstr "ID der Benachrichtigung, die bearbeitet wird.\n\"NEU\" bedeutet, dass eine neue Benachrichtigung erstellt wird.\n\"KEINE\" bedeutet, dass es keine Benachrichtigungen zum Bearbeiten gibt."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NEW"
+msgid "NEW"
+msgstr "NEU"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NOTFOUND"
+msgid "NONE"
+msgstr "KEINE"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.GOTONOTIFICATION_TOOLTIP"
+msgid "Go to this notification"
+msgstr "Zu dieser Benachrichtigung springen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME"
+msgid "Name:"
+msgstr "Name:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME_TOOLTIP"
+msgid "How the notification will appear when it will be triggered."
+msgstr "Wie die Benachrichtigung beim Auslösen erscheint."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP"
+msgid "Tooltip:"
+msgstr "Kurzinfo:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP_TOOLTIP"
+msgid "What will be displayed when hovered over the notification."
+msgstr "Wird angezeigt, wenn mit der Maus über die Benachrichtigung gefahren wird."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE"
+msgid "Type:"
+msgstr "Typ:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE_TOOLTIP"
+msgid "Type of the notification."
+msgstr "Typ der Benachrichtigung."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE"
+msgid "Pause:"
+msgstr "Pause:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE_TOOLTIP"
+msgid "Whether the game should be paused upon the errands' completion."
+msgstr "Soll das Spiel beim Abschluss des Auftrags pausiert werden?"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM"
+msgid "Zoom:"
+msgstr "Zoom:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM_TOOLTIP"
+msgid "Whether the camera should zoom to the errands upon their completion."
+msgstr "Soll die Kamera nach Abschluss des Auftrags darauf zoomen?"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION"
+msgid "Delete Notification"
+msgstr "Benachrichtigung Löschen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION_TOOLTIP"
+msgid "Delete a notification."
+msgstr "Eine Benachrichtigung löschen."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND"
+msgid "Delete Errand"
+msgstr "Auftrag Löschen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND_TOOLTIP"
+msgid "Delete selected errands from the notification assigned to them."
+msgstr "Ausgewählte Aufträge aus der zugewiesenen Benachrichtigung entfernen."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_PREFIX"
+msgid ""
+msgstr ""
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_POSTFIX"
+msgid " is completed"
+msgstr " ist abgeschlossen"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.DEFAULT_ERRAND"
+msgid "Errand"
+msgstr "Auftrag"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX"
+msgid "Construction of "
+msgstr "Bau von "
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_POSTFIX"
+msgid ""
+msgstr ""
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.TOOLTIP"
+msgid "Press to zoom to the errand's location"
+msgstr "Klicken, um zur Position des Auftrags zu springen"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS"
+msgid "Persistent Notifications"
+msgstr "Beständige Benachrichtigungen"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS_TOOLTIP"
+msgid "If enabled, the notifications will stay on screen until the player dismisses them."
+msgstr "Wenn aktiviert, bleiben die Benachrichtigungen auf dem Bildschirm, bis der Spieler sie verwirft."

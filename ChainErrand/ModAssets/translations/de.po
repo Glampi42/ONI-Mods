@@ -16,15 +16,15 @@ msgstr "Wischen"
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
 msgid "Target <style="KKeyword">Mopping</style> errands only"
-msgstr "Nur <style="KKeyword">Wischen</style>saufträge anvisieren"
+msgstr "Nur <style="KKeyword">Wischen</style>-Aufträge anvisieren"
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
 msgid "Target <style="KKeyword">Empty Pipe</style> errands only"
-msgstr "Nur <style="KKeyword">Rohr-Lehrung</style>saufträge anvisieren"
+msgstr "Nur <style="KKeyword">Rohr-Lehrung</style>-Aufträge anvisieren"
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
 msgid "Target <style="KKeyword">Move To</style> errands only"
-msgstr "Nur <style="KKeyword">Verlagerung</style>saufträge anvisieren"
+msgstr "Nur <style="KKeyword">Verlagerung</style>-Aufträge anvisieren"
 
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.TOOLTIPS.CHAINBUTTON"
 msgid "Chain up errands to be executed in some specific order {Hotkey}"

@@ -304,24 +304,6 @@ namespace ChainErrand {
          }
          return texture;
       }
-
-      /// <summary>
-      /// Imports the custom fonts as TMP_FontAsset files to be used in this mod.
-      /// </summary>
-      public static TMP_FontAsset[] ImportFontsFromModAssets() {
-         string path = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "assets"), "customfonts");
-         try
-         {
-            return AssetBundle.LoadFromFile(path).LoadAllAssets<TMP_FontAsset>();
-         }
-         catch(Exception ex)
-         {
-            Debug.LogError(Main.debugPrefix + "Could not load custom fonts at " + path);
-            Debug.LogException(ex);
-         }
-
-         return null;
-      }
       //---------------------Vectors etc.---------------------DOWN
       public static Vector3 InverseLocalScale(this RectTransform rectTransform) {
          Vector3 localScale = rectTransform.localScale;

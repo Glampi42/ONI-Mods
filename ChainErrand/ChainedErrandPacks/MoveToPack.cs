@@ -26,7 +26,7 @@ namespace ChainErrand.ChainedErrandPacks {
          var targetMethod4 = typeof(CancellableMove).GetMethod(nameof(CancellableMove.OnChoreEnd), Utils.GeneralBindingFlags);
          var postfix4 = SymbolExtensions.GetMethodInfo(() => OnChoreEndPostfix(default, default));
 
-         var targetMethod5 = typeof(MovePickupableChore.States).GetMethod("<InitializeStates>b__16_4", Utils.GeneralBindingFlags);// inner lambda expression inside of success.Enter([...]) inside of InitializeStates()
+         var targetMethod5 = typeof(MovePickupableChore.States).GetMethod("<InitializeStates>b__16_5", Utils.GeneralBindingFlags);// inner lambda expression inside of success.Enter([...]) inside of InitializeStates()
          var postfix5 = SymbolExtensions.GetMethodInfo(() => OnChoreSuccessPostfix(default));
 
          return [new GPatchInfo(targetMethod, null, postfix), new GPatchInfo(targetMethod2, null, postfix2), new GPatchInfo(targetMethod3, prefix3, postfix3),

@@ -65,11 +65,12 @@ namespace ErrandNotifier.Strings {
             public static LocString REMOVEERRAND_TOOLTIP = "Delete selected errands from the notification assigned to them.";
 
             public class DEFAULTENTRIES {
-               public static LocString NAME_PREFIX = "";// could potentially be used by other localizations
-               public static LocString NAME_POSTFIX = " is completed";// Errand is completed; Digging is completed etc.
+               public static LocString NAME_PREFIX = "";// could be used by other localizations
+               public static LocString NAME_POSTFIX = " is completed";// Errand is completed; Digging is completed; Construction of Liquid Pipes is completed etc.
 
                public static LocString DEFAULT_ERRAND = "Errand";
                public static LocString CONSTRUCTION_ERRAND_PREFIX = "Construction of ";// Construction of Liquid Pipes; Construction of Power Wires etc.
+               public static LocString CONSTRUCTION_ERRAND_POSTFIX = "";// could be used by other localizations
 
                public static LocString TOOLTIP = "Press to zoom to the errand's location";
             }

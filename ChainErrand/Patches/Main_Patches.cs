@@ -21,10 +21,6 @@ namespace ChainErrand.Patches {
       [HarmonyPatch(typeof(Assets), "OnPrefabInit")]
       public static class Assets_OnPrefabInit_Patch {
          public static void Postfix() {
-            var fonts = Utils.ImportFontsFromModAssets();
-            ChainNumberPrefab.graystroke_outline = fonts.FirstOrDefault(font => font.name == "Glampi Graystroke");
-            ChainNumberPrefab.graystroke_outline_italic = fonts.FirstOrDefault(font => font.name == "Glampi Graystroke Italic");
-
             Utils.SaveSpriteToAssets("ce_icon_action_chain");
             Utils.SaveSpriteToAssets("ce_auto_chain");
 
@@ -105,59 +101,6 @@ namespace ChainErrand.Patches {
             ChainsContainer.Clear();
             ChainNumberPrefab.DestroyPrefab();
             Main.autoChainEnabled = false;
-         }
-      }
-
-      [HarmonyPatch(typeof(Game), "OnSpawn")]
-      public static class DebugPatch1_Patch {
-         public static void Postfix() {
-            TMP_FontAsset outline = Localization.GetFont("GRAYSTROKE OUTLINE SDF");
-            DumpFontInfo(outline);
-
-            TMP_FontAsset normal = Localization.GetFont("GRAYSTROKE REGULAR SDF");
-            DumpFontInfo(normal);
-         }
-         private static void DumpFontInfo(TMP_FontAsset origFont) {
-            var sb = new StringBuilder();
-            sb.AppendLine("==== TMP_FontAsset Dump ====");
-            sb.AppendLine($"Name: {origFont.name}");
-
-            sb.AppendLine("---- Face Info ----");
-            sb.AppendLine($"Scale: {origFont.fontInfo.Scale}");
-            sb.AppendLine($"Line Height: {origFont.fontInfo.LineHeight}");
-            sb.AppendLine($"Ascent Line: {origFont.fontInfo.Ascender}");
-            sb.AppendLine($"Cap Line: {origFont.fontInfo.CapHeight}");
-            sb.AppendLine($"Mean Line: {origFont.fontInfo.CenterLine}");
-            sb.AppendLine($"Baseline: {origFont.fontInfo.Baseline}");
-            sb.AppendLine($"Descent Line: {origFont.fontInfo.Descender}");
-            sb.AppendLine($"Underline Offset: {origFont.fontInfo.Underline}");
-            sb.AppendLine($"Underline Thickness: {origFont.fontInfo.UnderlineThickness}");
-            sb.AppendLine($"Strikethrough Offset: {origFont.fontInfo.strikethrough}");
-            sb.AppendLine($"Superscript Offset: {origFont.fontInfo.SuperscriptOffset}");
-            sb.AppendLine($"Superscript Size: {origFont.fontInfo.SubSize}");
-            sb.AppendLine($"Subscript Offset: {origFont.fontInfo.SubscriptOffset}");
-            sb.AppendLine($"Subscript Size: {origFont.fontInfo.SubSize}");
-            sb.AppendLine($"Tab Width: {origFont.fontInfo.TabWidth}");
-
-            sb.AppendLine("---- Generation Settings ----");
-            sb.AppendLine($"Sampling Point Size: {origFont.fontInfo.PointSize}");
-            sb.AppendLine($"Padding: {origFont.fontInfo.Padding}");
-            sb.AppendLine($"Atlas width: {origFont.atlas.width}");
-            sb.AppendLine($"Atlas height: {origFont.atlas.height}");
-
-            sb.AppendLine("---- Font Weights ----");
-            for(int i = 0; i < origFont.fontWeights.Length; i++)
-            {
-               sb.AppendLine($"Regular Typeface: {origFont.fontWeights[i].regularTypeface?.name}");
-               sb.AppendLine($"Italic Typeface: {origFont.fontWeights[i].italicTypeface?.name}");
-            }
-            sb.AppendLine($"Spacing Offset: {origFont.normalSpacingOffset}");
-            sb.AppendLine($"Bold Spacing: {origFont.boldSpacing}");
-            sb.AppendLine($"Tab Multiple: {origFont.tabSize}");
-
-            sb.AppendLine("====== End Dump ======");
-
-            Debug.Log(sb.ToString());
          }
       }
    }
