@@ -74,6 +74,10 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
 msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
 msgstr "链接的编号（序号ID）\n如果编号是整数，则会新增同级序号任务；\n如果编号是小数，则会在中间插入新的序号任务。"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.GOTOLINK_TOOLTIP"
+msgid "Go to this chain link"
+msgstr "前往此链条链接"
+
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
 msgid "NO CHAINS"
 msgstr "NONE"

@@ -74,6 +74,10 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
 msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
 msgstr "링크의 개수\n숫자가 정수이면 기존 링크가 확장됩니다.\n숫자가 소수면 새 링크가 그 사이에 삽입됩니다."
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.GOTOLINK_TOOLTIP"
+msgid "Go to this chain link"
+msgstr "이 체인 링크로 이동"
+
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
 msgid "NO CHAINS"
 msgstr "체인 없음"

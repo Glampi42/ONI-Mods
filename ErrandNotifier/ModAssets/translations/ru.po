@@ -1,0 +1,171 @@
+msgid ""
+msgstr ""
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"Language-Team: GLaMPI\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.NOTIFIER.NAME"
+msgid "Notifier"
+msgstr "Уведомитель"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME"
+msgid "Mopping"
+msgstr "Вытирание"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Mopping</style> errands only"
+msgstr "Выбрать только поручения на <style="KKeyword">Вытирание</style>"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Empty Pipe</style> errands only"
+msgstr "Выбрать только поручения на <style="KKeyword">Опустошение Трубы</style>"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Relocate To</style> errands only"
+msgstr "Выбрать только поручения на <style="KKeyword">Перемещение</style>"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLTIPS.NOTIFIERBUTTON"
+msgid "Assign a notification to an errand that will be triggered upon the errand's completion {Hotkey}"
+msgstr "Назначить уведомление для поручения, которое сработает при завершении поручения {Hotkey}"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TITLE"
+msgid "Errand Notifier"
+msgstr "Уведомитель Поручений"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATEBUTTON"
+msgid "Create"
+msgstr "Создать"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETEBUTTON"
+msgid "Delete"
+msgstr "Удалить"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION"
+msgid "Create Notification"
+msgstr "Создать Уведомление"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION_TOOLTIP"
+msgid "Create a new notification assigned to the selected errands.\n You can configure the new notification before creating it."
+msgstr "Создать новое уведомление для выбранных поручений.\nПеред созданием нового уведомления, его можно настроить."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND"
+msgid "Manage Notification"
+msgstr "Управление Уведомлением"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_HOVER"
+msgid "Add Errand"
+msgstr "Добавить Поручения"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_TOOLTIP"
+msgid "Add new errands to an already existing notification, or change the notification's settings."
+msgstr "Добавить новые поручения в существующее уведомление или изменить его настройки."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID"
+msgid "Notification ID:"
+msgstr "ID уведомления:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_TOOLTIP"
+msgid "ID of the notification that will be modified.\n\"NEW\" means that you configure a new notification.\n\"NONE\" means that there are no notifications to modify."
+msgstr "ID уведомления для редактирования.\n\"НОВОЕ\" — создаётся новое уведомление.\n\"НЕТ\" — уведомления для редактирования отсутствуют."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NEW"
+msgid "NEW"
+msgstr "НОВОЕ"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NOTFOUND"
+msgid "NONE"
+msgstr "НЕТ"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.GOTONOTIFICATION_TOOLTIP"
+msgid "Go to this notification"
+msgstr "Перейти к уведомлению"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME"
+msgid "Name:"
+msgstr "Название:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME_TOOLTIP"
+msgid "How the notification will appear when it will be triggered."
+msgstr "Как будет отображаться уведомление при срабатывании."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP"
+msgid "Tooltip:"
+msgstr "Подсказка:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP_TOOLTIP"
+msgid "What will be displayed when hovered over the notification."
+msgstr "Что будет отображено при наведении на уведомление."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE"
+msgid "Type:"
+msgstr "Тип:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE_TOOLTIP"
+msgid "Type of the notification."
+msgstr "Тип уведомления."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE"
+msgid "Pause:"
+msgstr "Пауза:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE_TOOLTIP"
+msgid "Whether the game should be paused upon the errands' completion."
+msgstr "Останавливать ли игру после завершения поручений."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM"
+msgid "Zoom:"
+msgstr "Приблизить:"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM_TOOLTIP"
+msgid "Whether the camera should zoom to the errands upon their completion."
+msgstr "Приближать ли камеру к месту поручения после его завершения."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION"
+msgid "Delete Notification"
+msgstr "Удалить Уведомление"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION_TOOLTIP"
+msgid "Delete a notification."
+msgstr "Удалить уведомление."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND"
+msgid "Delete Errand"
+msgstr "Удалить Поручения"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND_TOOLTIP"
+msgid "Delete selected errands from the notification assigned to them."
+msgstr "Удалить выбранные поручения из привязанного уведомления."
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_PREFIX"
+msgid ""
+msgstr ""
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_POSTFIX"
+msgid " is completed"
+msgstr " завершено"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.DEFAULT_ERRAND"
+msgid "Errand"
+msgstr "Поручение"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX"
+msgid "Construction of "
+msgstr "Строительство постройки \""
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_POSTFIX"
+msgid ""
+msgstr "\""
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.TOOLTIP"
+msgid "Press to zoom to the errand's location"
+msgstr "Нажмите, чтобы перейти к месту выполнения поручения"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS"
+msgid "Persistent Notifications"
+msgstr "Постоянные Уведомления"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS_TOOLTIP"
+msgid "If enabled, the notifications will stay on screen until the player dismisses them."
+msgstr "Если включено, уведомления будут оставаться на экране, пока игрок их не отклонит."

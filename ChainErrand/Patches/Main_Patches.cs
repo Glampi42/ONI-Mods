@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static STRINGS.MISC.STATUSITEMS;
@@ -27,6 +28,8 @@ namespace ChainErrand.Patches {
             MYSPRITES.SaveSprite("ce_create_link");
             MYSPRITES.SaveSprite("ce_delete_chain");
             MYSPRITES.SaveSprite("ce_delete_link");
+
+            Main.ChainedErrandPrecondition.description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK;// updating the field for localization
 
             Main.autoChainNotification = new(MYSTRINGS.UI.AUTOCHAINNOTIFICATION.NAME, NotificationType.Neutral,
                (List<Notification> List, object data) => MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP, expires: false,

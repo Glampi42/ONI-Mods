@@ -34,6 +34,9 @@ using static CrewJobsEntry;
 
 namespace ChainErrand {
    public sealed class ChainToolMenu : KMonoBehaviour {
+      private static readonly float panelWidth = 250f;
+      private static readonly float gotoButtonSize = 24f;
+
       /// <summary>
 		/// The singleton instance of this class.
 		/// </summary>
@@ -93,6 +96,7 @@ namespace ChainErrand {
       private GameObject chainNumDecrease;
       private GameObject chainNumIncrease;
       private GameObject linkNumberLabel;
+      private GameObject gotoButtonGO;
       private GameObject linkNumDecrease;
       private GameObject linkNumIncrease;
 
@@ -187,6 +191,7 @@ namespace ChainErrand {
             SetArrowButtonEnabled(chainNumDecrease, false);
             SetArrowButtonEnabled(chainNumIncrease, false);
          }
+
          if(ChainsContainer.ChainsCount > 0)
          {
             SetTextFieldText(chainNumberField, Main.chainTool.GetSelectedChain().ToString());
@@ -200,6 +205,8 @@ namespace ChainErrand {
          {
             SetArrowButtonEnabled(linkNumDecrease, Main.chainTool.GetSelectedLink() > 0 || !Main.chainTool.GetInsertNewLink());// true if previous link(s) exist
             SetArrowButtonEnabled(linkNumIncrease, Main.chainTool.GetSelectedLink() <= chain.LastLinkNumber());// true if next link(s) exist
+
+            gotoButtonGO.SetActive(true);
 
             if(Main.chainTool.GetInsertNewLink() || Main.chainTool.GetSelectedLink() > chain.LastLinkNumber())
             {
@@ -222,6 +229,8 @@ namespace ChainErrand {
          {
             SetArrowButtonEnabled(linkNumDecrease, false);
             SetArrowButtonEnabled(linkNumIncrease, false);
+
+            gotoButtonGO.SetActive(false);
 
             SetTextFieldText(linkNumberField, MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_NOTFOUND);
          }
@@ -374,7 +383,7 @@ namespace ChainErrand {
          };
          title.AddOnRealize(go => {
             var layoutElem = go.AddOrGet<LayoutElement>();
-            layoutElem.minWidth = 200f;// same width as Tool Filter menu
+            layoutElem.minWidth = panelWidth;
          });
 
          PLabel titleText = new PLabel("Text") {
@@ -524,12 +533,51 @@ namespace ChainErrand {
 
          chainNumberInput.AddChild(chainField);
 
+         PPanel linkNumberPanel = new PPanel("LinkNumberPanel") {
+            Alignment = TextAnchor.MiddleLeft,
+            Direction = PanelDirection.Horizontal,
+            FlexSize = new Vector2(1f, 1f),
+            Spacing = 0,
+         };
+
          PLabel linkNumberLabel = new PLabel("LinkNumberLabel") {
             TextAlignment = TextAnchor.MiddleLeft,
             TextStyle = PUITuning.Fonts.TextLightStyle,
             Text = MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER,
          };
          linkNumberLabel.AddOnRealize(label => this.linkNumberLabel = label);
+
+         PButton gotoButton = new PButton("GotoButton") {
+            Sprite = Assets.GetSprite("action_mirror"),// the "copy settings" icon
+            SpriteTransform = ImageTransform.FlipHorizontal,// to not confuse the icon with "copy settings" icon (it's different now lol)
+            SpriteSize = new Vector2(gotoButtonSize, gotoButtonSize),
+            ToolTip = MYSTRINGS.UI.CHAINTOOLSMENU.GOTOLINK_TOOLTIP,
+         };
+         gotoButton.SetKleiBlueStyle();
+         gotoButton.AddOnRealize(button => {
+            var layoutElem = button.AddOrGet<LayoutElement>();
+            layoutElem.minHeight = gotoButtonSize;
+            layoutElem.minWidth = gotoButtonSize;
+            layoutElem.preferredHeight = gotoButtonSize;
+            layoutElem.preferredWidth = gotoButtonSize;
+
+            this.gotoButtonGO = button;
+         });
+         gotoButton.OnClick = button => {
+            if(ChainsContainer.TryGetChain(Main.chainTool.GetSelectedChain(), out Chain chain) &&
+            chain.TryGetLink((Main.chainTool.GetInsertNewLink() || Main.chainTool.GetSelectedLink() > chain.LastLinkNumber()) &&
+            Main.chainTool.GetSelectedLink() != 0 ? Main.chainTool.GetSelectedLink() - 1 : Main.chainTool.GetSelectedLink(), out Link link))
+            {
+               ChainedErrand cErrand = link.errands?.Last();
+               if(cErrand != null)
+               {
+                  int worldID = cErrand.gameObject.GetMyWorldId();
+                  Utils.MoveCamera(new Structs.WorldPosition() { worldID = worldID, position = cErrand.chainNumberBearer?.Get()?.transform.position ?? cErrand.transform.position }, false);
+               }
+            }
+         };
+
+         linkNumberPanel.AddChild(linkNumberLabel).AddChild(new PSpacer() { FlexSize = Vector2.one }).AddChild(gotoButton);
 
          PPanel linkNumberInput = new PPanel("LinkNumberInput") {
             Alignment = TextAnchor.MiddleCenter,
@@ -585,52 +633,8 @@ namespace ChainErrand {
 
          linkNumberInput.AddChild(linkField);
 
-         numberSelectorPanel.AddChild(chainNumberLabel).AddChild(chainNumberInput).AddChild(linkNumberLabel).AddChild(linkNumberInput);
+         numberSelectorPanel.AddChild(chainNumberLabel).AddChild(chainNumberInput).AddChild(linkNumberPanel).AddChild(linkNumberInput);
          createPanel.AddChild(numberSelectorPanel);
-
-         //PPanel createChain = new PPanel("CreateChain") {
-         //   Alignment = TextAnchor.MiddleLeft,
-         //   Direction = PanelDirection.Horizontal,
-         //   FlexSize = Vector2.right,
-         //   Spacing = 5
-         //};
-         //PCheckBox createChainToggle = new PCheckBox("CreateChainToggle");
-         //createChainToggle.InitialState = PCheckBox.STATE_PARTIAL;
-         //createChainToggle.CheckColor = PUITuning.Colors.ComponentDarkStyle;
-         //createChainToggle.AddOnRealize(toggle => {
-         //   var checkboxBorder = toggle.transform.GetChildSafe(0)?.GetChildSafe(0)?.GetComponent<Image>();
-         //   if(checkboxBorder != null)
-         //   {
-               
-         //   }
-         //});
-         //PLabel createChainLabel = new PLabel("CreateChainLabel");
-         //createChainLabel.Text = MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN;
-         //createChainLabel.ToolTip = MYSTRINGS.UI.CHAINTOOLSMENU.CREATECHAIN_TOOLTIP;
-         //createChainLabel.FlexSize = Vector2.right;
-         //createChainLabel.TextAlignment = TextAnchor.MiddleLeft;
-         //createChainLabel.TextStyle = PUITuning.Fonts.TextLightStyle;
-
-         //createChain.AddChild(createChainToggle).AddChild(createChainLabel);
-
-         //PPanel createLink = new PPanel("CreateLink") {
-         //   Alignment = TextAnchor.MiddleLeft,
-         //   Direction = PanelDirection.Horizontal,
-         //   FlexSize = Vector2.right,
-         //   Spacing = 5
-         //};
-         //PCheckBox createLinkToggle = new PCheckBox("CreateLinkToggle");
-         //createLinkToggle.InitialState = PCheckBox.STATE_UNCHECKED;
-         //PLabel createLinkLabel = new PLabel("CreateLinkLabel");
-         //createLinkLabel.Text = MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK;
-         //createLinkLabel.ToolTip = MYSTRINGS.UI.CHAINTOOLSMENU.CREATELINK_TOOLTIP;
-         //createLinkLabel.FlexSize = Vector2.right;
-         //createLinkLabel.TextAlignment = TextAnchor.MiddleLeft;
-         //createLinkLabel.TextStyle = PUITuning.Fonts.TextLightStyle;
-
-         //createLink.AddChild(createLinkToggle).AddChild(createLinkLabel);
-
-         //createPanel.AddChild(createChain).AddChild(createLink);
          //------------------Setting create panel------------------UP
          //------------------Setting delete panel------------------DOWN
          PPanel deletePanel = new PPanel("DeletePanel") {

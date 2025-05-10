@@ -74,6 +74,10 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.LINKNUMBER_TOOLTIP"
 msgid "Number of the link\nIf the number is whole, an existing link will be expanded\nIf the number is a fraction, a new link will be inserted inbetween"
 msgstr "Номер звена цепи\nЕсли число целое, тогда уже существующее звено будет расширено\nЕсли число дробное, тогда будет вставлено новое звено"
 
+msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.GOTOLINK_TOOLTIP"
+msgid "Go to this chain link"
+msgstr "Перейти к этому звену цепи"
+
 msgctxt "ChainErrand.Strings.MYSTRINGS.UI.CHAINTOOLSMENU.CHAINNUMBER_NOTFOUND"
 msgid "NO CHAINS"
 msgstr "НЕТ ЦЕПЕЙ"

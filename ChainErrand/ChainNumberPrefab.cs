@@ -27,14 +27,14 @@ namespace ChainErrand {
          if(font == null)
          {
             font = Localization.GetFont("GRAYSTROKE REGULAR SDF");// some localizations don't have the outline font for some reason (but it looks better than the regular because it doesn't have artifacts with big outlines)
-            Main.outlineWidthMultiplier = 0.0191f;// this font has other scale for the outline
+            Main.outlineWidth = 0.53f;// this font has other scale for the outline
          }
 
          chainNumberPrefab.font = font;
          chainNumberPrefab.alignment = TextAlignmentOptions.Center;
          chainNumberPrefab.fontSize = Main.maxChainNumberFontSize;
          chainNumberPrefab.outlineColor = Color.white;
-         chainNumberPrefab.outlineWidth = Main.outlineWidthMultiplier * chainNumberPrefab.fontSize;
+         chainNumberPrefab.outlineWidth = Main.outlineWidth;
          chainNumberPrefab.characterSpacing = -1f;
          chainNumberPrefab.lineSpacing = -10f;
          chainNumberPrefab.enableKerning = true;

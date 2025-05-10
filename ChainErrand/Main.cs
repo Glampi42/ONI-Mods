@@ -27,11 +27,11 @@ namespace ChainErrand {
       public static readonly float maxChainNumberFontSize = 28f;
       public static readonly float minChainNumberFontSize = 13f;
       public static readonly double chainNumberDecreaseRate = 0.16;// modifies how quickly the font size goes from max to min for increasing chain numbers
-      public static float outlineWidthMultiplier = 0.0127f;// used to get Chain Numbers' outline width from font size
+      public static float outlineWidth = 0.36f;
 
       public static readonly Color DefaultChainNumberColor = PUITuning.Colors.ButtonPinkStyle.activeColor;
 
-      public static readonly Chore.Precondition ChainedErrandPrecondition = new() {
+      public static Chore.Precondition ChainedErrandPrecondition = new() {
          id = nameof(ChainedErrandPrecondition),
          description = MYSTRINGS.UI.CHOREPRECONDITION.NOTFIRSTLINK,
          fn = (ref Chore.Precondition.Context context, object preconditionEnabled) => {
