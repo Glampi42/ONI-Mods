@@ -54,16 +54,11 @@ namespace AdvancedFlowManagement {
             }
         };
 
-      private static readonly ColorStyleSetting directionsColor;
-      private static readonly ColorStyleSetting directionsDisabledColor;
-      private static readonly ColorStyleSetting directionsIllegalColor;
-      private static readonly ColorStyleSetting directionsIllegalDisabledColor;
-      private static Color transparentize(Color color) {
-         color.a = 0.9f;
-         return color;
-      }
-
-      static FlowConfigurationSideScreen() {
+      private static ColorStyleSetting directionsColor;
+      private static ColorStyleSetting directionsDisabledColor;
+      private static ColorStyleSetting directionsIllegalColor;
+      private static ColorStyleSetting directionsIllegalDisabledColor;
+      private static void CreateColorStyleSettings() {
          directionsColor = (ColorStyleSetting)ScriptableObject.CreateInstance(typeof(ColorStyleSetting));
          directionsColor.activeColor = transparentize(CrossingSprite.normalColor);
          directionsColor.inactiveColor = transparentize(CrossingSprite.normalColor);
@@ -83,6 +78,10 @@ namespace AdvancedFlowManagement {
          directionsIllegalDisabledColor.activeColor = transparentize(CrossingSprite.dimHighlightedColor);
          directionsIllegalDisabledColor.inactiveColor = transparentize(CrossingSprite.dimHighlightedColor);
          directionsIllegalDisabledColor.hoverColor = transparentize(CrossingSprite.dimHighlightedColor);
+      }
+      private static Color transparentize(Color color) {
+         color.a = 0.9f;
+         return color;
       }
 
       public static FlowConfigurationSideScreen Instance;
@@ -110,6 +109,8 @@ namespace AdvancedFlowManagement {
       private bool isUpdating = false;
 
       public override void OnPrefabInit() {
+         CreateColorStyleSettings();
+
          RectOffset rectOffset = new RectOffset(0, 0, 4, 4);
          BoxLayoutGroup component = this.gameObject.GetComponent<BoxLayoutGroup>();
          if(component != null)
