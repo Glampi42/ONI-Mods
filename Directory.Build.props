@@ -31,7 +31,7 @@
 	<!--Copyright notice-->
 	<PropertyGroup>
 		<CurrentYear>$([System.DateTime]::Now.ToString(`yyyy`))</CurrentYear>
-		<Author>Sgt_Imalas</Author>
+		<Author>Glampi</Author>
 		<AssemblyCopyright>Copyright ©$(Author) $(CurrentYear)</AssemblyCopyright>
 	</PropertyGroup>
 
