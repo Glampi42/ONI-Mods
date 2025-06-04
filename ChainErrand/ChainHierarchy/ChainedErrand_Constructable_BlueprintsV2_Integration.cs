@@ -23,7 +23,7 @@ namespace ChainErrand.ChainHierarchy
 			{
 				return new JObject()
 					{
-						{ "serializedChainID", component.parentLink?.parentChain.chainID ?? -1},
+						{ "serializedChainID", component.parentLink?.parentChain?.chainID ?? -1},
 						{ "serializedLinkNumber", component.parentLink?.linkNumber ?? -1}
 					};
 			}
@@ -50,7 +50,6 @@ namespace ChainErrand.ChainHierarchy
 				if (t2 == null)
 					return;
 
-				//alternatively use SerializationUtils.ReconstructChain, but that comes with an issue of it potentially not creating a new chain, but instead hooking into an existing one.
 				AccumulateBlueprintChainData(t1.Value<int>(), t2.Value<int>(), targetComponent);
 			}
 		}
