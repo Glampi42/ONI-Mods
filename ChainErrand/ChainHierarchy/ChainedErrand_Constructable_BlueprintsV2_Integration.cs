@@ -64,7 +64,7 @@ namespace ChainErrand.ChainHierarchy
 		/// </summary>
 		/// <param name="chainId">chainId of the chain from blueprint creation, used to group the errands</param>
 		/// <param name="linkNumber">link number in the chain</param>
-		/// <param name="chainedErrand">the errant itself</param>
+		/// <param name="chainedErrand">the errand itself</param>
 		public static void AccumulateBlueprintChainData(int chainId, int linkNumber, ChainedErrand_Constructable chainedErrand)
 		{
 			if (chainId == -1 || linkNumber == -1 || chainedErrand == null || chainedErrand.IsNullOrDestroyed())
@@ -100,29 +100,28 @@ namespace ChainErrand.ChainHierarchy
 				var chainData = AccumulatedChains[cachedChain];
 				if (chainData.Count == 0)
 					continue;
-				// Create a new chain
-				var chain = ChainsContainer.CreateNewChain();
-				foreach (var cachedConstructable in chainData)
+
+				// creating a new chain:
+				var errands = new Dictionary<int, Dictionary<GameObject, HashSet<Workable>>>();
+
+				foreach(var cachedConstructable in chainData)
 				{
 					int linkNumber = cachedConstructable.Value;
 					var chainedErrand = cachedConstructable.Key;
 
-					if (cachedConstructable.Key == null || cachedConstructable.Key.IsNullOrDestroyed() || linkNumber == -1)
+					if (chainedErrand == null || chainedErrand.IsNullOrDestroyed() || linkNumber == -1)
 						continue;
 
-					//add the constructable to the chain, copied from SerializationUtils.ReconstructChain
-					Link link;
-
-					if (!chain.TryGetLink(linkNumber, out link))
+               Dictionary<GameObject, HashSet<Workable>> linkErrands;
+					if(!errands.TryGetValue(linkNumber, out linkErrands))
 					{
-						link = chain.CreateOrExpandLink(linkNumber, true, null, true);
+						linkErrands = new();
+						errands.Add(linkNumber, linkErrands);
 					}
-					link.errands.Add(chainedErrand);
 
-					chainedErrand.parentLink = link;
-					chainedErrand.enabled = true;
+					linkErrands.Add(chainedErrand.gameObject, new() { chainedErrand.Errand });
 
-					///Grab potential diggables
+					// grabbing potential diggables:
 					if (chainedErrand.Errand is Constructable constructable)
 					{
 						constructable.building.RunOnArea(cell =>
@@ -132,12 +131,18 @@ namespace ChainErrand.ChainHierarchy
 							if (diggable.IsNullOrDestroyed() || !diggable.enabled)
 								return;
 
-							Dictionary<GameObject, HashSet<Workable>> newErrands = new();
-							newErrands.Add(diggable.gameObject, new([diggable]));
-							link.parentChain.CreateOrExpandLink(link.linkNumber, false, newErrands);
+							linkErrands.Add(diggable.gameObject, new() { diggable });
 						});
 					}
 				}
+
+            Chain chain = ChainsContainer.CreateNewChain();
+            foreach(int linkNumber in errands.Keys)
+				{
+					chain.CreateOrExpandLink(linkNumber, true, errands[linkNumber], true);
+				}
+
+				SerializationUtils.CleanupEmptyDeserializedChains();// in case some links are missing for whatever reason
 			}
 			ConstructionPending = false;
 			AccumulatedChains.Clear();
