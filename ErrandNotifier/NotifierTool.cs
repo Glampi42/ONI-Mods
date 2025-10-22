@@ -222,8 +222,8 @@ namespace ErrandNotifier {
          notificationName_new = DefaultNotificationName();
          tooltip_new = MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.TOOLTIP;
          type_new = GNotificationType.POP;
-         pause_new = false;
-         zoom_new = false;
+         pause_new = ModConfig.Instance.DefaultPause;
+         zoom_new = ModConfig.Instance.DefaultZoom;
       }
       /// <summary>
       /// Updates the default name of the new notification in case it wasn't changed by the player.

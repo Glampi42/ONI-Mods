@@ -169,3 +169,20 @@ msgstr "Постоянные Уведомления"
 msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS_TOOLTIP"
 msgid "If enabled, the notifications will stay on screen until the player dismisses them."
 msgstr "Если включено, уведомления будут оставаться на экране, пока игрок их не отклонит."
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE"
+msgid "Default Pause Setting"
+msgstr "Пауза По Умолчанию"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE_TOOLTIP"
+msgid "Determines the default setting of the \"pause\" option for new notifications (unchecked = don't pause, checked = pause)."
+msgstr "Определяет, будет ли новое уведомление по умолчанию ставить игру на паузу (не отмечено = не ставить на паузу, отмечено = ставить на паузу)."
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM"
+msgid "Default Zoom Setting"
+msgstr "Приближение По Умолчанию"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM_TOOLTIP"
+msgid "Determines the default setting of the \"zoom\" option for new notifications (unchecked = stay, checked = zoom)."
+msgstr "Определяет, будет ли камера по умолчанию приближаться к месту события (не отмечено = не приближать, отмечено = приближать)."
+

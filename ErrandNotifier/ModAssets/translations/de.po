@@ -169,3 +169,19 @@ msgstr "Beständige Benachrichtigungen"
 msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS_TOOLTIP"
 msgid "If enabled, the notifications will stay on screen until the player dismisses them."
 msgstr "Wenn aktiviert, bleiben die Benachrichtigungen auf dem Bildschirm, bis der Spieler sie verwirft."
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE"
+msgid "Default Pause Setting"
+msgstr "Standard-Pauseneinstellung"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE_TOOLTIP"
+msgid "Determines the default setting of the \"pause\" option for new notifications (unchecked = don't pause, checked = pause)."
+msgstr "Bestimmt die Standardeinstellung der Option \"Pause\" für neue Benachrichtigungen (nicht aktiviert = nicht pausieren, aktiviert = pausieren)."
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM"
+msgid "Default Zoom Setting"
+msgstr "Standard-Zoominstellung"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM_TOOLTIP"
+msgid "Determines the default setting of the \"pause\" option for new notifications (unchecked = don't pause, checked = pause)."
+msgstr "Bestimmt die Standardeinstellung der Option \"Zoom\" für neue Benachrichtigungen (nicht aktiviert = nicht zoomen, aktiviert = zoomen)."

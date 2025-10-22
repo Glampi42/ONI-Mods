@@ -183,3 +183,20 @@ msgstr "Notifications persistante"
 msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS_TOOLTIP"
 msgid "If enabled, the notifications will stay on screen until the player dismisses them."
 msgstr "Si activé, les notifications resteront à l'écran jusqu'à ce que le joueur les rejette."
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE"
+msgid "Default Pause Setting"
+msgstr "Pause par défaut"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE_TOOLTIP"
+msgid "Determines the default setting of the \"pause\" option for new notifications (unchecked = don't pause, checked = pause)."
+msgstr "Définit si les nouvelles notifications mettront le jeu en pause par défaut (non coché = ne pas mettre en pause, coché = mettre en pause)."
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM"
+msgid "Default Zoom Setting"
+msgstr "Zoom par défaut"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM_TOOLTIP"
+msgid "Determines the default setting of the \"zoom\" option for new notifications (unchecked = stay, checked = zoom)."
+msgstr "Définit si la caméra se rapprochera de l’emplacement par défaut (non coché = rester, coché = zoomer)."
+

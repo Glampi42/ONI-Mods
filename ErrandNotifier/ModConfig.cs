@@ -16,8 +16,18 @@ namespace ErrandNotifier {
       [JsonProperty]
       public bool PersistentNotifications { get; set; }
 
+      [Option("STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE", "STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE_TOOLTIP")]
+      [JsonProperty]
+      public bool DefaultPause { get; set; }
+
+      [Option("STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM", "STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM_TOOLTIP")]
+      [JsonProperty]
+      public bool DefaultZoom { get; set; }
+
       public ModConfig() {
          PersistentNotifications = false;
+         DefaultPause = false;
+         DefaultZoom = false;
       }
    }
 }
