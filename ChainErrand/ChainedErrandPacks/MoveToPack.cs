@@ -158,7 +158,7 @@ namespace ChainErrand.ChainedErrandPacks {
          return [new GPatchInfo(targetMethod, null, postfix)];
       }
       private static void OnMarkForMove(Movable __instance) {
-         AutoChainUtils.TryAddToAutomaticChain(__instance.gameObject, __instance);
+         AutoChainUtils.TryAddToAutomaticChain(__instance.StorageProxy.gameObject, __instance);
       }
 
 

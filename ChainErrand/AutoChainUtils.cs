@@ -27,9 +27,9 @@ namespace ChainErrand {
       /// Tries to add the newly created errand to a chain. If the "auto chain" toggle is off, this action won't be performed. This method automatically handles the bundling of errands
       /// (= if errands were created simultaneously, they will be added to the same link).
       /// </summary>
-      /// <param name="parentGO">The parent GameObject of the new errand</param>
+      /// <param name="chainNumberBearer">The GameObject that will hold the chain number</param>
       /// <param name="errand">The newly created errand</param>
-      public static void TryAddToAutomaticChain(GameObject parentGO, Workable errand) {
+      public static void TryAddToAutomaticChain(GameObject chainNumberBearer, Workable errand) {
          if(!Main.autoChainEnabled)
             return;
 
@@ -40,7 +40,7 @@ namespace ChainErrand {
 
          var errands = new Dictionary<GameObject, HashSet<Workable>>() {
                {
-                  parentGO,
+                  chainNumberBearer,
                   new HashSet<Workable>([errand])
                }
             };

@@ -67,7 +67,7 @@ namespace AdvancedFlowManagement {
          crossingIcon.sprite = newSprite;
          crossingIcon.color = (isIllegal = !IsCrossingConfigurationLegal(crossingCmp)) ? highlightedColor : normalColor;
          crossingIcon_go.transform.rotation = rotation;
-         crossingIcon.enabled = Utils.ConduitTypeToOverlayModeID(crossingCmp.conduitType).Equals(OverlayScreen.Instance.GetMode()) &&
+         crossingIcon.enabled = (OverlayScreen.Instance != null && Utils.ConduitTypeToOverlayModeID(crossingCmp.conduitType).Equals(OverlayScreen.Instance.GetMode())) &&
             Utils.ConduitTypeToShowCrossingsBool(crossingCmp.conduitType);
 
          crossingCmp.isIllegal = isIllegal;

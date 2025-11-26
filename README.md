@@ -1,0 +1,1 @@
+These are my mods for the game Oxygen Not Included. You can subscribe to them at [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=3170589604) or build this repository to install them locally. To learn how to build it, read the README of this repository: [Sgt_Imalas-Oni-Mods](https://github.com/Sgt-Imalas/Sgt_Imalas-Oni-Mods)
