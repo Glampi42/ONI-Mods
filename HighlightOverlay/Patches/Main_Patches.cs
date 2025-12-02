@@ -48,7 +48,7 @@ namespace HighlightOverlay.Patches {
          }
       }
       private static void OnGamePausedChanged(object pause) {
-         bool isPaused = (bool)pause;
+         bool isPaused = Boxed<bool>.Unbox(pause);
          Utils.UpdateHighlightDiagramOptions();
          if(!isPaused && !ModConfig.Instance.AllowNotPaused && Main.highlightMode != default && !Main.highlightMode.isEnabled && !Main.highlightMode.dataIsClear)
          {
