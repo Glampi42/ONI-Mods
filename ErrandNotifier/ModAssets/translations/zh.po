@@ -1,0 +1,203 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: GLaMPI\n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Application: Oxygen Not IncludedPOT Version: 2.0\n"
+"X-Generator: Poedit 3.6\n"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.NOTIFIER.NAME"
+msgid "Notifier"
+msgstr "任务通知器"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.NAME"
+msgid "Mopping"
+msgstr "擦拭"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOP.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Mopping</style> errands only"
+msgstr "仅针对<style=\"KKeyword\">擦拭</style>任务"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.EMPTYPIPE.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Empty Pipe</style> errands only"
+msgstr "仅针对<style=\"KKeyword\">清空管道</style>任务"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLS.FILTERLAYERS.MOVETO.TOOLTIP"
+msgid "Target <style=\"KKeyword\">Relocate To</style> errands only"
+msgstr "仅针对<style=\"KKeyword\">移动到</style>任务"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.TOOLTIPS.NOTIFIERBUTTON"
+msgid "Assign a notification to an errand that will be triggered upon the errand's completion {Hotkey}"
+msgstr "为任务分配一个完成时触发的通知 {Hotkey}"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TITLE"
+msgid "Errand Notifier"
+msgstr "任务通知器"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATEBUTTON"
+msgid "Create"
+msgstr "创建"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETEBUTTON"
+msgid "Delete"
+msgstr "删除"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION"
+msgid "Create Notification"
+msgstr "创建通知"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.CREATENOTIFICATION_TOOLTIP"
+msgid ""
+"Create a new notification assigned to the selected errands.\n"
+" You can configure the new notification before creating it."
+msgstr ""
+"为选定的任务创建新通知。\n"
+"创建前可配置新通知。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND"
+msgid "Manage Notification"
+msgstr "管理通知"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_HOVER"
+msgid "Add Errand"
+msgstr "添加任务"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ADDERRAND_TOOLTIP"
+msgid "Add new errands to an already existing notification, or change the notification's settings."
+msgstr "向已有通知添加新任务，或更改通知设置。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID"
+msgid "Notification ID:"
+msgstr "通知ID："
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_TOOLTIP"
+msgid ""
+"ID of the notification that will be modified.\n"
+"\"NEW\" means that you configure a new notification.\n"
+"\"NONE\" means that there are no notifications to modify."
+msgstr ""
+"将要修改的通知ID。\n"
+"\"新建\"表示配置新通知。\n"
+"\"无\"表示没有可修改的通知。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NEW"
+msgid "NEW"
+msgstr "新建"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NOTIFICATIONID_NOTFOUND"
+msgid "NONE"
+msgstr "无"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.GOTONOTIFICATION_TOOLTIP"
+msgid "Go to this notification"
+msgstr "镜头转到此通知"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME"
+msgid "Name:"
+msgstr "标题："
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.NAME_TOOLTIP"
+msgid "How the notification will appear when it will be triggered."
+msgstr "通知触发时的显示名称。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP"
+msgid "Tooltip:"
+msgstr "悬停提示："
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TOOLTIP_TOOLTIP"
+msgid "What will be displayed when hovered over the notification."
+msgstr "当鼠标悬停在通知上时显示的内容。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE"
+msgid "Type:"
+msgstr "类型："
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.TYPE_TOOLTIP"
+msgid "Type of the notification."
+msgstr "通知的类型。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE"
+msgid "Pause:"
+msgstr "暂停："
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.PAUSE_TOOLTIP"
+msgid "Whether the game should be paused upon the errands' completion."
+msgstr "选中此项后，任务完成后将暂停游戏。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM"
+msgid "Zoom:"
+msgstr "聚焦："
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.ZOOM_TOOLTIP"
+msgid "Whether the camera should zoom to the errands upon their completion."
+msgstr "选中此项后，任务完成后会将镜头缩放至任务位置。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION"
+msgid "Delete Notification"
+msgstr "删除通知"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DELETENOTIFICATION_TOOLTIP"
+msgid "Delete a notification."
+msgstr "删除通知。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND"
+msgid "Delete Errand"
+msgstr "删除任务"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.REMOVEERRAND_TOOLTIP"
+msgid "Delete selected errands from the notification assigned to them."
+msgstr "从已分配的通知中删除选定的任务。"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_PREFIX"
+msgid ""
+msgstr ""
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.NAME_POSTFIX"
+msgid " is completed"
+msgstr "已完成"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.DEFAULT_ERRAND"
+msgid "Errand"
+msgstr "任务"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_PREFIX"
+msgid "Construction of "
+msgstr "建造"
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.CONSTRUCTION_ERRAND_POSTFIX"
+msgid ""
+msgstr ""
+
+msgctxt "ErrandNotifier.Strings.MYSTRINGS.UI.NOTIFIERTOOLMENU.DEFAULTENTRIES.TOOLTIP"
+msgid "Press to zoom to the errand's location"
+msgstr "点击以缩放至任务位置"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS"
+msgid "Persistent Notifications"
+msgstr "持久通知"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.PERSISTENTNOTIFICATIONS_TOOLTIP"
+msgid "If enabled, the notifications will stay on screen until the player dismisses them."
+msgstr "启用后，通知将持续显示直到玩家手动关闭。"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE"
+msgid "Default Pause Setting"
+msgstr "默认暂停设置"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTPAUSE_TOOLTIP"
+msgid "Determines the default setting of the \"pause\" option for new notifications (unchecked = don't pause, checked = pause)."
+msgstr "确定新通知的\"暂停\"选项默认设置（未选中=不暂停，选中=暂停）。"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM"
+msgid "Default Zoom Setting"
+msgstr "默认缩放设置"
+
+msgctxt "ErrandNotifier.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DEFAULTZOOM_TOOLTIP"
+msgid "Determines the default setting of the \"zoom\" option for new notifications (unchecked = stay, checked = zoom)."
+msgstr "确定新通知的\"缩放\"选项默认设置（未选中为保持原位，选中即缩放至此位置）。"
