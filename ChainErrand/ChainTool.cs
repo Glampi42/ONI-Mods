@@ -303,7 +303,7 @@ namespace ChainErrand {
          base.OnDragComplete(cursorDown, cursorUp);
 
          Vector2I dragMin = new Vector2I((int)Math.Floor(Math.Min(cursorDown.x, cursorUp.x)), (int)Math.Floor(Math.Min(cursorDown.y, cursorUp.y)));
-         Vector2I dragMax = new Vector2I((int)Math.Ceiling(Math.Max(cursorDown.x, cursorUp.x)), (int)Math.Ceiling(Math.Max(cursorDown.y, cursorUp.y)));
+         Vector2I dragMax = new Vector2I((int)Math.Floor(Math.Max(cursorDown.x, cursorUp.x)) + 1, (int)Math.Floor(Math.Max(cursorDown.y, cursorUp.y)) + 1);
          Extents extents = new Extents(dragMin.x, dragMin.y, dragMax.x - dragMin.x, dragMax.y - dragMin.y);
 
          Dictionary<GameObject, HashSet<Workable>> collectedErrands = new();

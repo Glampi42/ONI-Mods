@@ -568,8 +568,8 @@ namespace ChainErrand {
             chain.TryGetLink((Main.chainTool.GetInsertNewLink() || Main.chainTool.GetSelectedLink() > chain.LastLinkNumber()) &&
             Main.chainTool.GetSelectedLink() != 0 ? Main.chainTool.GetSelectedLink() - 1 : Main.chainTool.GetSelectedLink(), out Link link))
             {
-               ChainedErrand cErrand = link.errands?.Last();
-               if(cErrand != null)
+               ChainedErrand cErrand = link.errands?.LastOrDefault();
+               if(cErrand != default)
                {
                   int worldID = cErrand.gameObject.GetMyWorldId();
                   Utils.MoveCamera(new Structs.WorldPosition() { worldID = worldID, position = cErrand.chainNumberBearer?.Get()?.transform.position ?? cErrand.transform.position }, false);

@@ -115,7 +115,7 @@ namespace ChainErrand {
          });
          // no need to clear notVisibleErrands
 
-         Extents gatherExtents = new Extents(vis_min.x, vis_min.y, vis_max.x - vis_min.x, vis_max.y - vis_min.y);
+         Extents gatherExtents = new Extents(vis_min.x, vis_min.y, vis_max.x + 1 - vis_min.x, vis_max.y + 1 - vis_min.y);
 
          HashSet<GameObject> visibleErrands_GOs = new(visibleErrands.Select(errand => errand.isNull ? null : errand.gameObject));
          foreach(GameObject obj in Utils.CollectPrioritizableObjects(gatherExtents))
