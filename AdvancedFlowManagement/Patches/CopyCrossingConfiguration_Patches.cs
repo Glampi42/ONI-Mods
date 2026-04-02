@@ -17,11 +17,11 @@ namespace AdvancedFlowManagement.Patches {
 
       [HarmonyPatch(typeof(CopyBuildingSettings), "ApplyCopy")]
       public static class OnCopyConfiguration_Patch {
-         public static bool Prefix(int targetCell, GameObject sourceGameObject) {
+         public static bool Prefix(KPrefabID other_id, GameObject sourceGameObject, KPrefabID source_id, CopyBuildingSettings source_settings) {
             if(sourceGameObject.TryGetComponent(out CrossingCmp sourceCmp))
             {
-               GameObject targetCrossing = Grid.Objects[targetCell, (int)Utils.ConduitTypeToObjectLayer(sourceCmp.conduitType)];
-               if(targetCrossing != null && targetCrossing.TryGetComponent(out CrossingCmp targetCmp))
+               GameObject targetCrossing = other_id?.gameObject;
+               if(targetCrossing != null && targetCrossing.TryGetComponent(out CrossingCmp targetCmp) && targetCmp.conduitType == sourceCmp.conduitType)
                {
                   string sourceID = sourceCmp.crossingID;
                   string targetID = targetCmp.crossingID;

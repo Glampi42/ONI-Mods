@@ -29,8 +29,7 @@ namespace AdvancedFlowManagement {
          try
          {
             byte[] data = File.ReadAllBytes(path);
-            texture = new Texture2D(1, 1);
-            texture.LoadImage(data);
+            texture = ModUtil.LoadTexture(path);
          }
          catch(Exception ex)
          {

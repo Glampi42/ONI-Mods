@@ -964,6 +964,11 @@ namespace AdvancedFlowManagement {
             set.Add(element);
       }
 
+      public static void AddRange<Tkey, Tval>(this Dictionary<Tkey, Tval> dict, Dictionary<Tkey, Tval> another) {
+         foreach(var pair in another)
+            dict.AddItem(pair);
+      }
+
       public static void RemoveRange(this ListDictionary dictionary, Func<DictionaryEntry, bool> predicate) {
          List<DictionaryEntry> temp = new List<DictionaryEntry>(dictionary.Cast<DictionaryEntry>());
          foreach(DictionaryEntry entry in temp)
