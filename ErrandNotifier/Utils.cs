@@ -64,18 +64,19 @@ namespace ErrandNotifier {
          HashSet<GameObject> collectedGOs = new();
 
          List<ScenePartitionerEntry> gatheredObjects = new List<ScenePartitionerEntry>();
-         GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.prioritizableObjects, gatheredObjects);
-         foreach(ScenePartitionerEntry gatheredObject in gatheredObjects)
-         {
-            GameObject obj = ((Component)gatheredObject?.obj)?.gameObject;
+         GameScenePartitioner.Instance.VisitEntries(extents.x, extents.y, extents.width, extents.height, GameScenePartitioner.Instance.prioritizableObjects,
+            (gatheredObject, _) => {
+               GameObject obj = (gatheredObject as Component)?.gameObject;
 
-            if(obj != null && Grid.IsValidCell(Grid.PosToCell(obj)) && Grid.IsVisible(Grid.PosToCell(obj)))
-            {
-               collectedGOs.Add(obj);
-            }
-         }
+               if(obj != null && Grid.IsValidCell(Grid.PosToCell(obj)) && Grid.IsVisible(Grid.PosToCell(obj)))
+               {
+                  collectedGOs.Add(obj);
+               }
 
-         // double-checking the buildings layer (GatherEntries() works with GameObjects' center points; a building might be partially in the extents):
+               return Util.IterationInstruction.Continue;
+            }, (object) null);
+
+         // double-checking the buildings layer (VisitEntries() possibly works with GameObjects' center points; a building might be partially in the extents):
          for(int x = extents.x; x < extents.x + extents.width; x++)
          {
             for(int y = extents.y; y < extents.y + extents.height; y++)
@@ -202,9 +203,7 @@ namespace ErrandNotifier {
          string path = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "assets" + (additional_path ?? "")), name + ".png");
          try
          {
-            byte[] data = File.ReadAllBytes(path);
-            texture = new Texture2D(1, 1);
-            texture.LoadImage(data);
+            texture = ModUtil.LoadTexture(path);
          }
          catch(Exception ex)
          {

@@ -16,7 +16,7 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          var targetMethod = typeof(Movable).GetMethod(nameof(Movable.ClearMove), Utils.GeneralBindingFlags);
          var prefix = SymbolExtensions.GetMethodInfo(() => ClearMovePrefix(default));
 
-         var targetMethod2 = typeof(MovePickupableChore.States).GetMethod("<InitializeStates>b__16_5", Utils.GeneralBindingFlags);// inner lambda expression inside of success.Enter([...]) inside of InitializeStates()
+         var targetMethod2 = typeof(MovePickupableChore.States).GetMethod("<InitializeStates>b__16_6", Utils.GeneralBindingFlags);// inner lambda expression inside of success.Enter([...]) inside of InitializeStates()
          var prefix2 = SymbolExtensions.GetMethodInfo(() => OnChoreSuccessPrefix(default));
 
          var targetMethod3 = typeof(ElementSplitterComponents).GetMethod(nameof(ElementSplitterComponents.OnTake), Utils.GeneralBindingFlags, null, [typeof(Pickupable), typeof(HandleVector<int>.Handle), typeof(float)], null);

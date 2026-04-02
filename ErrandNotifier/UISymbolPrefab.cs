@@ -32,8 +32,6 @@ namespace ErrandNotifier {
          uiSymbolPrefab.outlineWidth = 0.4f;
          uiSymbolPrefab.characterSpacing = -1f;
          uiSymbolPrefab.lineSpacing = -10f;
-         uiSymbolPrefab.enableKerning = true;
-         uiSymbolPrefab.enableWordWrapping = true;
          uiSymbolPrefab.overflowMode = TextOverflowModes.Overflow;
          uiSymbolPrefab.UpdateMeshPadding();
 
