@@ -26,7 +26,7 @@
 		<ModName>Highlight Overlay</ModName>
 		<ModDescription>An overlay for finding and visualizing correlating resources/buildings etc.</ModDescription>
 		<SupportedContent>ALL</SupportedContent> <!-- Use "EXPANSION1_ID" for dlc only -->
-		<MinimumSupportedBuild>700386</MinimumSupportedBuild>
+		<MinimumSupportedBuild>719533</MinimumSupportedBuild>
 		<APIVersion>2</APIVersion>
 	</PropertyGroup>
 
