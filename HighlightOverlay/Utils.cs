@@ -45,13 +45,11 @@ namespace HighlightOverlay {
          string path = Path.Combine(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "assets" + (additional_path ?? "")), name + ".png");
          try
          {
-            byte[] data = File.ReadAllBytes(path);
-            texture = new Texture2D(1, 1);
-            texture.LoadImage(data);
+            texture = ModUtil.LoadTexture(path);
          }
          catch(Exception ex)
          {
-            Debug.LogError((object)(Main.debugPrefix + "Could not load texture at " + path));
+            Debug.LogError((Main.debugPrefix + "Could not load texture at " + path));
             Debug.LogException(ex);
          }
          return texture;

@@ -32,7 +32,7 @@ namespace HighlightOverlay.Structs {
          CASE_ELEMENT(element.id.CreateTag());
 
          if(prefabID == Tag.Invalid)
-            throw new Exception(Main.debugPrefix + $"The {nameof(prefabID)} was not given a value in ObjectType {objectType}'s case");
+            Debug.LogError(Main.debugPrefix + $"The {nameof(prefabID)} was not given a value in ObjectType {objectType}'s case");
       }
       public ObjectProperties(KPrefabID obj, ObjectType objType = ObjectType.NOTVALID) {
          objectType = objType == ObjectType.NOTVALID ? GetObjectType(obj) : objType;
@@ -92,7 +92,7 @@ namespace HighlightOverlay.Structs {
          //---------------Generating HighlightOptions, AdditionalInfo & prefabID---------------UP
 
          if(prefabID == Tag.Invalid)
-            throw new Exception(Main.debugPrefix + $"The {nameof(prefabID)} was not given a value in ObjectType {objectType}'s case");
+            Debug.LogError(Main.debugPrefix + $"The {nameof(prefabID)} was not given a value in ObjectType {objectType}'s case");
       }
 
 
@@ -482,6 +482,9 @@ namespace HighlightOverlay.Structs {
             throw new Exception(Main.debugPrefix + $"No cached objectID found for {obj.PrefabTag} inside of {nameof(Main.cachedObjectIDs)}");
 
          Tag objectID = Main.cachedObjectIDs[obj.PrefabTag];// objectID != prefab tag of the object itself (f.e. objectID for seeds is the prefab tag of their plant)
+
+         if(objectID == Tag.Invalid)
+            return null;// just for safety
 
          switch(objectType)
          {

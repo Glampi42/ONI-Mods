@@ -57,8 +57,6 @@ namespace HighlightOverlay {
          UpdateTileHighlight(Main.selectedTile, true);
       }
 
-      private static int testCount = 0;
-      private static long cumulativeElapsed = 0;
       public override void Update() {
          if(!ModConfig.Instance.AllowNotPaused && !Game.Instance.IsPaused)
          {
@@ -86,42 +84,44 @@ namespace HighlightOverlay {
                Vector2I max = new Vector2I((int)activeWorld.maximumBounds.x, (int)activeWorld.maximumBounds.y);
                Extents extents = new Extents(min.x, min.y, max.x - min.x, max.y - min.y);
 
-               List<ScenePartitionerEntry> visibleObjects = new List<ScenePartitionerEntry>();
+               // debris, items, critters, duplicants:
+               GameScenePartitioner.Instance.VisitEntries(extents.x, extents.y, extents.width, extents.height, GameScenePartitioner.Instance.pickupablesLayer, (visibleObject, _) => {
+                  GameObject obj = (visibleObject as Component)?.gameObject;
 
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.pickupablesLayer, visibleObjects);// debris, items, critters, duplicants
-               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-               {
-                  if(((Component)visibleObject.obj).TryGetComponent(out PrimaryElement _))
+                  if(obj != null && obj.TryGetComponent(out PrimaryElement _))
                   {
-                     TryAddObjectToHighlightedObjects(((Component)visibleObject.obj).gameObject);
+                     TryAddObjectToHighlightedObjects(obj);
                   }
-               }
 
-               visibleObjects.Clear();
+                  return Util.IterationInstruction.Continue;
+               }, (object)null);
 
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.completeBuildings, visibleObjects);// buildings
-               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-               {
-                  BuildingComplete buildingComplete = (BuildingComplete)visibleObject.obj;
+               // buildings:
+               GameScenePartitioner.Instance.VisitEntries(extents.x, extents.y, extents.width, extents.height, GameScenePartitioner.Instance.completeBuildings, (visibleObject, _) => {
+                  BuildingComplete buildingComplete = visibleObject as BuildingComplete;
 
-                  if(buildingComplete.gameObject.layer != 0)
-                     continue;
+                  if(buildingComplete == null || buildingComplete.gameObject.layer != 0)
+                     return Util.IterationInstruction.Continue;
 
-                  if(Utils.IsTile(buildingComplete.gameObject, out _))
-                     continue;// tiles are highlighted via the cells system
+                  if(Utils.IsTile(buildingComplete.gameObject, out SimCellOccupier _))
+                     return Util.IterationInstruction.Continue;// tiles are highlighted via the cells system
 
                   TryAddObjectToHighlightedObjects(buildingComplete.gameObject);
-               }
 
-               visibleObjects.Clear();
+                  return Util.IterationInstruction.Continue;
+               }, (object)null);
 
-               GameScenePartitioner.Instance.GatherEntries(extents, GameScenePartitioner.Instance.plants, visibleObjects);// plants
-               foreach(ScenePartitionerEntry visibleObject in visibleObjects)
-               {
-                  TryAddObjectToHighlightedObjects(((Component)visibleObject.obj).gameObject);
-               }
+               // plants:
+               GameScenePartitioner.Instance.VisitEntries(extents.x, extents.y, extents.width, extents.height, GameScenePartitioner.Instance.plants, (visibleObject, _) => {
+                  GameObject obj = (visibleObject as Component)?.gameObject;
 
-               visibleObjects.Clear();
+                  if(obj != null)
+                  {
+                     TryAddObjectToHighlightedObjects(obj);
+                  }
+
+                  return Util.IterationInstruction.Continue;
+               }, (object)null);
 
                GatherSpecialObjectsOnBuildingsLayer(out HashSet<GameObject> buildings);// geysers, oil wells, gravitas buildings
                foreach(GameObject building in buildings)
