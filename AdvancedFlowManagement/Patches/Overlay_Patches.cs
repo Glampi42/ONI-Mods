@@ -35,21 +35,25 @@ namespace AdvancedFlowManagement {
          }
       }
       private static void AddCrossingsFilter(OverlayModes.ConduitMode instance) {
-         Dictionary<string, ToolParameterMenu.ToggleState> filters = new Dictionary<string, ToolParameterMenu.ToggleState>
-             {
-                    {
-                        "SHOWCROSSINGS",
-                        ToolParameterMenu.ToggleState.On
-                    },
-                    {
-                        "HIDECROSSINGS",
-                        ToolParameterMenu.ToggleState.Off
-                    }
-                };
-         if(instance.legendFilters == null)
-            instance.legendFilters = filters;
+         ToolParameterMenu.ToggleData[] filters;
+
+         if(instance.legendFilters != null)
+         {
+            filters = new ToolParameterMenu.ToggleData[instance.legendFilters.Length + 2];
+            for(int i = 0; i < instance.legendFilters.Length; i++)
+            {
+               filters[i] = instance.legendFilters[i];
+            }
+         }
          else
-            instance.legendFilters.AddRange(filters);
+         {
+            filters = new ToolParameterMenu.ToggleData[2];
+         }
+
+         filters[filters.Length - 2] = new ToolParameterMenu.ToggleData("SHOWCROSSINGS", ToolParameterMenu.ToggleState.On);
+         filters[filters.Length - 1] = new ToolParameterMenu.ToggleData("HIDECROSSINGS", ToolParameterMenu.ToggleState.Off);
+
+         instance.legendFilters = filters;
       }
 
       [HarmonyPatch(typeof(OverlayLegend), "OnSpawn")]
@@ -97,7 +101,7 @@ namespace AdvancedFlowManagement {
             if(conduit_type.Equals(ConduitType.None))
                return;
 
-            Utils.ConduitTypeToShowCrossingsBoolRef(conduit_type) = __instance.currentMode.legendFilters.ContainsKey("SHOWCROSSINGS") && __instance.currentMode.legendFilters["SHOWCROSSINGS"] == ToolParameterMenu.ToggleState.On;
+            Utils.ConduitTypeToShowCrossingsBoolRef(conduit_type) = __instance.currentMode.InFilter("SHOWCROSSINGS", __instance.currentMode.legendFilters);
             bool shouldBeAdapted = Utils.ConduitTypeToShowCrossingsBool(conduit_type);
             foreach(int crossing_cell in Utils.ConduitTypeToCrossingsSet(conduit_type))
             {
