@@ -22,7 +22,7 @@ namespace ChainErrand {
          if(!overlayRenderInfos.TryGetValue(key, out RenderInfo renderInfo))
          {
             renderInfo = new RenderInfo(World.Instance.blockTileRenderer, isReplacement ? (int)tileDef.ReplacementLayer : (int)tileDef.TileLayer,
-               Main.chainOverlay.targetLayer, tileDef, element);
+               Main.chainOverlay.targetLayer, tileDef, element, false);
             overlayRenderInfos.Add(key, renderInfo);
          }
          if(!renderInfo.occupiedCells.ContainsKey(cell))
