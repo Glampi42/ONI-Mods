@@ -849,7 +849,7 @@ namespace AdvancedFlowManagement {
       public static GameObject GetConduitGO(int conduit_cell, ConduitType conduit_type) => Grid.Objects[conduit_cell, (int)Utils.ConduitTypeToObjectLayer(conduit_type)];
       public static bool TryGetConduitGO(int conduit_cell, ConduitType conduit_type, out GameObject conduitGO) {
          conduitGO = GetConduitGO(conduit_cell, conduit_type);
-         return conduitGO != null;
+         return conduitGO != null && Utils.ConduitTypeToConduitFlow(conduit_type).GetConduit(conduit_cell).idx != -1;
       }
 
       public static CrossingCmp GetCrossingCmp(int crossing_cell, ConduitType conduit_type) => GetConduitGO(crossing_cell, conduit_type)?.GetComponent<CrossingCmp>();
