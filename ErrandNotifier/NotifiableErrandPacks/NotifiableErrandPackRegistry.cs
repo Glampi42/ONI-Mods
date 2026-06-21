@@ -21,9 +21,12 @@ namespace ErrandNotifier.NotifiableErrandPacks {
          return GetNotifiableErrandPack(notifiableErrand?.GetType());
       }
       public static INotifiableErrandPack GetNotifiableErrandPack(Type type) {
-         if(_typeToPackMappings.TryGetValue(type, out var instance))
+         // this also handles subclasses of the registered types
+         var typePackPair = _typeToPackMappings.FirstOrDefault(pair => pair.Key.IsAssignableFrom(type));
+
+         if(typePackPair.Key != default)
          {
-            return instance;
+            return typePackPair.Value;
          }
 
          throw new InvalidOperationException(Main.debugPrefix + $"No instance of NotifiableErrandPack registered for the provided type {type}");
