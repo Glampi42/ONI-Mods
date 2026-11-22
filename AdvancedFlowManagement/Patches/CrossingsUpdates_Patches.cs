@@ -502,8 +502,7 @@ namespace AdvancedFlowManagement.Patches {
             }
 
             CopyBuildingSettings copysettings = crossingCmp.gameObject.GetComponent<CopyBuildingSettings>();
-            KObjectManager.Instance.GetOrCreateObject(crossingCmp.gameObject).GetEventSystem(out EventSystem evSys);
-            evSys.Unsubscribe(493375141, CopyBuildingSettings.OnRefreshUserMenuDelegate, true);
+            Utils.UnsubscribeExtended(crossingCmp.gameObject, 493375141, CopyBuildingSettings.OnRefreshUserMenuDelegate);
             UnityEngine.Object.Destroy(copysettings);
          }
 

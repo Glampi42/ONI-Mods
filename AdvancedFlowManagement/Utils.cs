@@ -1,20 +1,23 @@
-﻿using AdvancedFlowManagement.Patches;
-using AdvancedFlowManagement;
+﻿using AdvancedFlowManagement;
+using AdvancedFlowManagement.Patches;
+using HarmonyLib;
+using rail;
+using Steamworks;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using static AdvancedFlowManagement.Main;
-using System.Collections.Specialized;
-using static ConduitFlow;
+using UnityEngine;
+using UnityEngine.UI;
 using static AdvancedFlowManagement.CrossingCmp;
-using HarmonyLib;
-using System.Linq.Expressions;
+using static AdvancedFlowManagement.Main;
+using static ConduitFlow;
+using static UnityEngine.GraphicsBuffer;
 
 namespace AdvancedFlowManagement {
    static class Utils {
@@ -1030,6 +1033,56 @@ namespace AdvancedFlowManagement {
 
       public static FieldInfo GetFieldInfo<TClass, TField>(Expression<Func<TClass, TField>> expr) {
          return ((MemberExpression)expr.Body).Member as FieldInfo;
+      }
+
+      /// <summary>
+      /// Unsubscribe from a Action<object, object> handler (for some reason ONI source code only provides Unsubscribe() for Action<object> handler).
+      /// </summary>
+      /// <param name="go">GameObject whom to unsubscribe</param>
+      /// <param name="hash">Hash of the event</param>
+      /// <param name="handler">Handler of the event</param>
+      public static void UnsubscribeExtended(GameObject go, int hash, Action<object, object> handler) {
+         var entryMap = KObjectManager.Instance.GetOrCreateObject(go).GetOrCreateEventSystem().entryMap;
+         if(!entryMap.TryGetValue(hash, out var vector))
+            return;
+         int id = Find(vector, entry => entry.extHandler == handler).id;
+
+         KObjectManager.Instance.GetOrCreateObject(go).GetOrCreateEventSystem().Unsubscribe(id);
+
+
+         static int FindIndex<T>(SBOVector4<T> vector, Predicate<T> match) {
+            if(match == null)
+            {
+               throw new ArgumentNullException(nameof(match));
+            }
+
+            int count = vector.Count;
+            for(int i = 0; i < count; i++)
+            {
+               if(match(vector[i]))
+               {
+                  return i;
+               }
+            }
+
+            return -1;
+         }
+
+         static bool TryFind<T>(SBOVector4<T> vector, Predicate<T> match, out T result) {
+            int index = FindIndex(vector, match);
+            if(index >= 0)
+            {
+               result = vector[index];
+               return true;
+            }
+
+            result = default(T);
+            return false;
+         }
+
+         static T Find<T>(SBOVector4<T> vector, Predicate<T> match) {
+            return TryFind(vector, match, out T result) ? result : default(T);
+         }
       }
    }
 }
