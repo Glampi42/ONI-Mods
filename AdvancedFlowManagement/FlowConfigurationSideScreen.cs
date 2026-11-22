@@ -352,6 +352,10 @@ namespace AdvancedFlowManagement {
             FlowPriorityManagement_Patches.RecalculateUpdateOrder(conduitFlow.GetNetwork(conduitFlow.GetConduit(crossingCmp.crossingCell)), conduitFlow);
 
             UpdateSideScreen();
+            if(OverlayLegend.Instance.currentMode is OverlayModes.ConduitMode)
+            {
+               ConduitFlowKAnimVisualizer.OnOverlayFiltersChangedShared();// update the in-overlay flow direction visualization
+            }
          }
 
          void SwitchPriorityVisibility(bool showInputsPriority, bool showOutputsPriority) {

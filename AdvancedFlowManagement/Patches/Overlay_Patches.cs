@@ -22,86 +22,61 @@ namespace AdvancedFlowManagement {
          }
       }
       //-------------------Adding&managing crossings filter in overlay legend-------------------DOWN
-      [HarmonyPatch(typeof(OverlayModes.LiquidConduits), MethodType.Constructor)]
-      public class AddCrossingsFilter_Liquid_Patch {
-         public static void Postfix(OverlayModes.LiquidConduits __instance) {
-            AddCrossingsFilter(__instance);
-         }
-      }
-      [HarmonyPatch(typeof(OverlayModes.GasConduits), MethodType.Constructor)]
-      public class AddCrossingsFilter_Gas_Patch {
-         public static void Postfix(OverlayModes.GasConduits __instance) {
-            AddCrossingsFilter(__instance);
-         }
-      }
-      private static void AddCrossingsFilter(OverlayModes.ConduitMode instance) {
-         ToolParameterMenu.ToggleData[] filters;
-
-         if(instance.legendFilters != null)
-         {
-            filters = new ToolParameterMenu.ToggleData[instance.legendFilters.Length + 2];
-            for(int i = 0; i < instance.legendFilters.Length; i++)
+      [HarmonyPatch(typeof(OverlayModes.Mode), nameof(OverlayModes.Mode.GetCustomLegendData))]
+      public static class AddCustomLegendEntries_Patch {
+         public static void Postfix(OverlayModes.Mode __instance, ref List<LegendEntry> __result) {
+            if(__instance is OverlayModes.ConduitMode)
             {
-               filters[i] = instance.legendFilters[i];
-            }
-         }
-         else
-         {
-            filters = new ToolParameterMenu.ToggleData[2];
-         }
+               if(OverlayModes.ConduitMode.IsViewConduitFlowEnabled)
+               {
+                  // display the custom legend entries when conduit flow is enabled
 
-         filters[filters.Length - 2] = new ToolParameterMenu.ToggleData("SHOWCROSSINGS", ToolParameterMenu.ToggleState.On);
-         filters[filters.Length - 1] = new ToolParameterMenu.ToggleData("HIDECROSSINGS", ToolParameterMenu.ToggleState.Off);
+                  ConduitType conduit_type = __instance is OverlayModes.LiquidConduits ? ConduitType.Liquid : ConduitType.Gas;
 
-         instance.legendFilters = filters;
-      }
+                  List<LegendEntry> entries = new(4);
 
-      [HarmonyPatch(typeof(OverlayLegend), "OnSpawn")]
-      public static class EnableCrossingsFilter_Patch {
-         public static void Postfix(OverlayLegend __instance) {
-            foreach(ConduitType conduit_type in Main.allConduitTypes)
-            {
-               OverlayLegend.OverlayInfo overlayInfo = __instance.overlayInfoList.Find(info => info.mode == Utils.ConduitTypeToOverlayModeID(conduit_type));
+                  entries.Add(new LegendEntry(
+                     Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME),
+                     "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME + "</b>\n" + MYSTRINGS.OVERLAYITEMS.JUNCTION.TOOLTIP,
+                     CrossingSprite.normalColor,
+                     sprite: MYSPRITES.GetSprite("afm_crossingThick_ui")));
+                  entries.Add(new LegendEntry(
+                     Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME),
+                     "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME + "</b>\n" + (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_GAS),
+                     CrossingSprite.normalColor,
+                     sprite: MYSPRITES.GetSprite("afm_crossingInput_L_ui")));
+                  entries.Add(new LegendEntry(
+                     Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME),
+                     "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME + "</b>\n" + (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_GAS),
+                     CrossingSprite.normalColor,
+                     sprite: MYSPRITES.GetSprite("afm_crossingOutput_R_ui")));
+                  entries.Add(new LegendEntry(
+                     Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME),
+                     "<b>" + MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME + "</b>\n" + (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_GAS),
+                     CrossingSprite.highlightedColor,
+                     sprite: MYSPRITES.GetSprite("afm_crossingThick_ui")));
 
-               OverlayLegend.OverlayInfoUnit crossing_infoUnit1 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingThick_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME), CrossingSprite.normalColor, Color.white);
-               crossing_infoUnit1.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTION.NAME + "</b>\n" +
-                       MYSTRINGS.OVERLAYITEMS.JUNCTION.TOOLTIP;
-
-               OverlayLegend.OverlayInfoUnit crossing_infoUnit2 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingInput_L_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME), CrossingSprite.normalColor, Color.white);
-               crossing_infoUnit2.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.NAME + "</b>\n" +
-                       (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.JUNCTIONINPUT.TOOLTIP_GAS);
-
-               OverlayLegend.OverlayInfoUnit crossing_infoUnit3 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingOutput_R_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME), CrossingSprite.normalColor, Color.white);
-               crossing_infoUnit3.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.NAME + "</b>\n" +
-                       (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.JUNCTIONOUTPUT.TOOLTIP_GAS);
-
-               OverlayLegend.OverlayInfoUnit crossing_infoUnit4 = new OverlayLegend.OverlayInfoUnit(MYSPRITES.GetSprite("afm_crossingThick_ui"), Util.StripTextFormatting(MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME), CrossingSprite.highlightedColor, Color.white);
-               crossing_infoUnit4.tooltip = "<b>" + MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.NAME + "</b>\n" +
-                       (conduit_type.Equals(ConduitType.Liquid) ? MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_LIQUID : MYSTRINGS.OVERLAYITEMS.ILLEGALJUNCTION.TOOLTIP_GAS);
-
-               overlayInfo.infoUnits.AddRange(new OverlayLegend.OverlayInfoUnit[] { crossing_infoUnit1, crossing_infoUnit2, crossing_infoUnit3, crossing_infoUnit4 });
-               overlayInfo.isProgrammaticallyPopulated = true;// Needed for the crossings filter to appear
-            }
-         }
-      }
-      [HarmonyPatch(typeof(OverlayLegend), "PopulateGeneratedLegend")]
-      public static class DevCodeBugFix_Patch {
-         public static void Postfix(OverlayLegend __instance) {
-            if(__instance.currentMode is OverlayModes.ConduitMode)
-            {
-               __instance.activeUnitsParent.SetActive(true);// Needed for the infoUnits to appear
+                  __result = entries;
+               }
+               else
+               {
+                  __result = null;
+               }
             }
          }
       }
 
       [HarmonyPatch(typeof(OverlayLegend), "OnFiltersChanged")]
       public static class OnFiltersChanged_Patch {
-         public static void Prefix(OverlayLegend __instance) {
+         public static void Postfix(OverlayLegend __instance) {
+            if(__instance.currentMode is not OverlayModes.ConduitMode)
+               return;
+
             ConduitType conduit_type = Utils.ConduitTypeFromOverlayMode(__instance.currentMode);
             if(conduit_type.Equals(ConduitType.None))
                return;
 
-            Utils.ConduitTypeToShowCrossingsBoolRef(conduit_type) = __instance.currentMode.InFilter("SHOWCROSSINGS", __instance.currentMode.legendFilters);
+            Utils.ConduitTypeToShowCrossingsBoolRef(conduit_type) = OverlayModes.ConduitMode.IsViewConduitFlowEnabled;
             bool shouldBeAdapted = Utils.ConduitTypeToShowCrossingsBool(conduit_type);
             foreach(int crossing_cell in Utils.ConduitTypeToCrossingsSet(conduit_type))
             {

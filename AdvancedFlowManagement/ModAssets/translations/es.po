@@ -9,22 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es_ES\n"
 
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.NAME"
-msgid "Show Junctions"
-msgstr "Mostrar Uniones"
-
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.TOOLTIP"
-msgid "Make junctions visible"
-msgstr "Muestra las uniones"
-
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.NAME"
-msgid "Hide Junctions"
-msgstr "Ocultar Uniones"
-
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.TOOLTIP"
-msgid "Make junctions invisible"
-msgstr "Oculta las uniones"
-
 msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
 msgid "Buffer Contents: {Contents}"
 msgstr "Contenido Búfer: {Contents}"

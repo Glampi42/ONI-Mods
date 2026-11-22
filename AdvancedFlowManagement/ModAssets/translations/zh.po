@@ -13,22 +13,6 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.NAME"
-msgid "Show Junctions"
-msgstr "显示连接点"
-
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.SHOWCROSSINGS.TOOLTIP"
-msgid "Make junctions visible"
-msgstr "使连接点可见"
-
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.NAME"
-msgid "Hide Junctions"
-msgstr "隐藏连接点"
-
-msgctxt "AdvancedFlowManagement.Strings.STRINGS.UI.TOOLS.FILTERLAYERS.HIDECROSSINGS.TOOLTIP"
-msgid "Make junctions invisible"
-msgstr "使连接点不可见"
-
 msgctxt "AdvancedFlowManagement.Strings.STRINGS.BUILDING.STATUSITEMS.BUFFERSTORAGE.NAME"
 msgid "Buffer Contents: {Contents}"
 msgstr "缓冲区内容：{Contents}"
