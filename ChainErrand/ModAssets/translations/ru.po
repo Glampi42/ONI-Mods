@@ -167,14 +167,6 @@ msgid "All newly created errands will be chained up\n\nPress to disable"
 msgstr "Все созданные поручения будут добавлены в цепь\n\nНажмите, чтобы отключить"
 
 
-msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
-msgid "Disable Auto Chain Vignette"
-msgstr "Отключить Виньетку Авто Цепи"
-
-msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
-msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its defaut state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
-msgstr "Если эта опция включена, синяя виньетка вокруг экрана не будет отображаться при включенной \"Авто Цепи\".\nДля вашего удобства рекомендуется оставить эту опцию в состоянии по умолчанию\n(вы можете забыть о включенной \"Авто Цепи\", если виньетка отсутствует)."
-
 msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
 msgid "Disable UI Help"
 msgstr "Отключить UI Помощь"

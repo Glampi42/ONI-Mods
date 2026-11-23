@@ -167,14 +167,6 @@ msgid "All newly created errands will be chained up\n\nPress to disable"
 msgstr "Alle neu erstellten Aufträge werden verkettet\n\nDrücken Sie, um zu deaktivieren"
 
 
-msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
-msgid "Disable Auto Chain Vignette"
-msgstr "Vignette der Auto Kette Deaktivieren"
-
-msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
-msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its defaut state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
-msgstr "Wenn diese Option aktiviert ist, wird die blaue Vignette um den Bildschirm nicht angezeigt, wenn die \"Auto Kette\" aktiviert ist.\nEs wird empfohlen, diese Option aus praktischen Gründen in ihrem Standardzustand zu belassen.\n(Sie können vergessen, dass die \"Auto Kette\" aktiviert ist, wenn keine Vignette vorhanden ist)."
-
 msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
 msgid "Disable UI Help"
 msgstr "UI-Hilfe Deaktivieren"

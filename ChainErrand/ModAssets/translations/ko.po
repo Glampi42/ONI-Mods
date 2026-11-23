@@ -166,14 +166,6 @@ msgctxt "ChainErrand.Strings.MYSTRINGS.UI.AUTOCHAINNOTIFICATION.TOOLTIP"
 msgid "All newly created errands will be chained up\n\nPress to disable"
 msgstr "새로 생성된 모든 용무가 체인으로 연결됩니다.\n\n비활성화하려면 누르십시오."
 
-msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE"
-msgid "Disable Auto Chain Vignette"
-msgstr "자동 체인 경보 비활성화"
-
-msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEAUTOCHAINVIGNETTE_TOOLTIP"
-msgid "If enabled, the blue vignette around the screen will not be shown when auto chain is enabled.\nIt is recommended to leave this option in its default state for your own convenience\n(you can forget that auto chain is enabled if there is no vignette)."
-msgstr "활성화 시 자동 체인이 적용될 때 화면 주변의 파란색 경보가 표시되지 않습니다.\n편의를 위해 이 설정을 기본 상태로 두는 것을 권장합니다.\n(경보가 없으면 자동 체인이 활성화 된 상태라는 것을 잊어버릴 수 있습니다)"
-
 msgctxt "ChainErrand.Strings.STRINGS.GLAMPISTRINGS.MODCONFIG.DISABLEUIHELP"
 msgid "Disable UI Help"
 msgstr "UI 도움말 비활성화"
