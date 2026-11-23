@@ -222,9 +222,6 @@ namespace ChainErrand {
          if(!menu.HasOptions)
             menu.PopulateMenu();
          menu.ShowMenu();
-
-         ToolMenu.Instance.PriorityScreen.Show(false);
-         OverlayScreen.Instance.ToggleOverlay(ChainOverlay.ID);
       }
 
       public override void OnCleanUp() {
@@ -236,8 +233,6 @@ namespace ChainErrand {
          base.OnDeactivateTool(newTool);
 
          ChainToolMenu.Instance.HideMenu();
-         ToolMenu.Instance.PriorityScreen.Show(false);
-         OverlayScreen.Instance.ToggleOverlay(OverlayModes.None.ID);
 
          if(!ModConfig.Instance.DisableUIHelp)
          {
@@ -252,6 +247,8 @@ namespace ChainErrand {
 
       public override void OnPrefabInit() {
          base.OnPrefabInit();
+
+         viewMode = ChainOverlay.ID;
 
          // store prefabs:
          CREATE_AREA_GO = Util.KInstantiate(DigTool.Instance.areaVisualizer, gameObject, "ChainToolCreateAreaVisualizer");

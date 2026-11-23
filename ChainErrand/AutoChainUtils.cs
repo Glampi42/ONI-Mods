@@ -73,7 +73,7 @@ namespace ChainErrand {
             automaticChain = null;
       }
 
-      public static void ToggleAutoChain() {
+      public static void ToggleAutoChain(bool toggleOverlay) {
          Main.autoChainEnabled = !Main.autoChainEnabled;
 
          if(AutoChain_Patches.autoChainToggle != null)
@@ -94,24 +94,20 @@ namespace ChainErrand {
             NotificationManager.Instance.RemoveNotification(Main.autoChainNotification);
          }
 
-         // adding blue vignette:
-         if(!ModConfig.Instance.DisableAutoChainVignette && Vignette.Instance.image != null)
+         if(Main.autoChainEnabled)
          {
-            if(Main.autoChainEnabled)
+            OverlayScreen.Instance.ToggleOverlay(ChainOverlay.ID);
+         }
+         else
+         {
+            if(toggleOverlay && !Main.chainTool.isActiveAndEnabled)
             {
-               if(Vignette.Instance.image.color == Vignette.Instance.defaultColor)
-               {
-                  Vignette.Instance.SetColor(Main.autoChainVignetteColor);
-               }
-            }
-            else
-            {
-               if(Vignette.Instance.image.color == Main.autoChainVignetteColor)
-               {
-                  Vignette.Instance.SetColor(Vignette.Instance.defaultColor);
-               }
+               OverlayScreen.Instance.ToggleOverlay(OverlayModes.None.ID);
             }
          }
+      }
+      public static void ToggleAutoChain() {
+         ToggleAutoChain(true);
       }
    }
 }

@@ -50,20 +50,6 @@ namespace ChainErrand.Patches {
          }
       }
 
-      [HarmonyPatch(typeof(Vignette))]
-      [HarmonyPatch(nameof(Vignette.Reset))]
-      public static class AddAutoChainVignette_Patch {
-         public static void Postfix(Vignette __instance) {
-            if(!ModConfig.Instance.DisableAutoChainVignette && __instance.image != null && __instance.image.color == __instance.defaultColor)
-            {
-               if(Main.autoChainEnabled)
-               {
-                  __instance.SetColor(Main.autoChainVignetteColor);
-               }
-            }
-         }
-      }
-
       /// <summary>
       /// This patch enables the addition of errands to the same link if they were created simultaneously via a drag tool (f.e. multiple dig errands).
       /// </summary>

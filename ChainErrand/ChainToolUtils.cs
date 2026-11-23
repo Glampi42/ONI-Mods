@@ -1,6 +1,7 @@
 ﻿using ChainErrand.ChainedErrandPacks;
 using ChainErrand.ChainHierarchy;
 using ChainErrand.Enums;
+using Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,76 +26,78 @@ namespace ChainErrand {
          if(errand_go == null)
             return errands;
 
+         ChainToolFilter activeFilter = ChainToolFilter.ALL;// default filter is ALL, e.g. if the chain tool hasn't been used yet
          foreach(ChainToolFilter filter in Enum.GetValues(typeof(ChainToolFilter)))
          {
             if(filter.IsOn())
             {
-               switch(filter)
-               {
-                  case ChainToolFilter.ALL:
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
-                     // pipes can have multiple errands(deconstruct + empty)
-
-                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
-                        break;// buildings can't have other errands
-
-                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
-                        break;// buildings can't have other errands
-
-                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference))
-                        break;// digging markers can't have other errands
-
-                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference))
-                        break;// mopping markers can't have other errands
-
-                     if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference))
-                        break;// moveto markers can't have other errands
-                     break;
-
-                  case ChainToolFilter.CONSTRUCTION:
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
-                     break;
-
-                  case ChainToolFilter.DIG:
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference);
-                     break;
-
-                  case ChainToolFilter.MOP:
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference);
-                     break;
-
-                  case ChainToolFilter.EMPTY_PIPE:
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
-                     break;
-
-                  case ChainToolFilter.MOVE_TO:
-                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference);
-                     break;
-
-                  case ChainToolFilter.STANDARD_BUILDINGS:
-                  case ChainToolFilter.LIQUID_PIPES:
-                  case ChainToolFilter.GAS_PIPES:
-                  case ChainToolFilter.CONVEYOR_RAILS:
-                  case ChainToolFilter.WIRES:
-                  case ChainToolFilter.AUTOMATION:
-                  case ChainToolFilter.BACKWALLS:
-                     if(errand_go.TryGetComponent(out Building building))
-                     {
-                        ObjectLayer objLayer = building.Def.ObjectLayer;
-                        if(Utils.ObjectLayersFromChainToolFilter(filter).Contains(objLayer))
-                        {
-                           ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
-                           ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
-                        }
-                     }
-                     break;
-               }
-
+               activeFilter = filter;
                break;
             }
+         }
+
+         switch(activeFilter)
+         {
+            case ChainToolFilter.ALL:
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
+               // pipes can have multiple errands(deconstruct + empty)
+
+               if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
+                  break;// buildings can't have other errands
+
+               if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference))
+                  break;// buildings can't have other errands
+
+               if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference))
+                  break;// digging markers can't have other errands
+
+               if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference))
+                  break;// mopping markers can't have other errands
+
+               if(ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference))
+                  break;// moveto markers can't have other errands
+               break;
+
+            case ChainToolFilter.CONSTRUCTION:
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
+               break;
+
+            case ChainToolFilter.DIG:
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Diggable)).CollectErrands(errand_go, errands, ref errandReference);
+               break;
+
+            case ChainToolFilter.MOP:
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Moppable)).CollectErrands(errand_go, errands, ref errandReference);
+               break;
+
+            case ChainToolFilter.EMPTY_PIPE:
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptyConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(EmptySolidConduitWorkable)).CollectErrands(errand_go, errands, ref errandReference);
+               break;
+
+            case ChainToolFilter.MOVE_TO:
+               ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Movable)).CollectErrands(errand_go, errands, ref errandReference);
+               break;
+
+            case ChainToolFilter.STANDARD_BUILDINGS:
+            case ChainToolFilter.LIQUID_PIPES:
+            case ChainToolFilter.GAS_PIPES:
+            case ChainToolFilter.CONVEYOR_RAILS:
+            case ChainToolFilter.WIRES:
+            case ChainToolFilter.AUTOMATION:
+            case ChainToolFilter.BACKWALLS:
+               if(errand_go.TryGetComponent(out Building building))
+               {
+                  ObjectLayer objLayer = building.Def.ObjectLayer;
+                  if(Utils.ObjectLayersFromChainToolFilter(activeFilter).Contains(objLayer))
+                  {
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Constructable)).CollectErrands(errand_go, errands, ref errandReference);
+                     ChainedErrandPackRegistry.GetChainedErrandPack(typeof(Deconstructable)).CollectErrands(errand_go, errands, ref errandReference);
+                  }
+               }
+               break;
          }
 
          if(searchMode != ErrandsSearchMode.ALL_ERRANDS)

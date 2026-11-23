@@ -28,7 +28,7 @@ namespace ChainErrand {
       private readonly int layerMask;
 
       private UIPool<LocText> chainNumbersUIPool;
-      private HashSet<KMonoBehaviour> visibleErrands = new();
+      private HybridListHashSet<KMonoBehaviour> visibleErrands = new();
       private HashSet<GameObject> notVisibleErrands = new();
       public ChainNumbersCollection chainNumbers = new();
 
@@ -82,8 +82,7 @@ namespace ChainErrand {
          Utils.ClampToActiveWorldBounds(ref vis_max);
 
          // cleanup:
-         visibleErrands.Remove(null);// HashSets can contain one null item at most
-         notVisibleErrands.Remove(null);
+         notVisibleErrands.Remove(null);// HashSets can contain one null item at most
          visibleErrands.RemoveWhere(errand => errand.isNull);
          Dictionary<GameObject, HashSet<ChainNumber>> chainNumbersToRemove = new();
          foreach(var pair in chainNumbers.GetAllChainNumbers())
@@ -106,7 +105,7 @@ namespace ChainErrand {
                RemoveChainNumber(pair.Key, chainNumber);
             }
          }
-         OverlayModes.Mode.ClearOutsideViewObjects(this.visibleErrands, vis_min, vis_max, null, errand => {// don't use RemoveOffscreenTargets()
+         ClearOutsideViewObjects(this.visibleErrands, vis_min, vis_max, errand => {
             if(errand != null)
             {
                ResetErrandGODisplay(errand, false);
@@ -217,7 +216,7 @@ namespace ChainErrand {
          }
       }
       private void RemoveAllFromVisible(bool update) {
-         foreach(var errand in visibleErrands)
+         foreach(var errand in visibleErrands.AsList())
          {
             ResetErrandGODisplay(errand, update);
             RemoveAttachedChainNumbers(errand.gameObject);
@@ -439,6 +438,37 @@ namespace ChainErrand {
                OverlayTileRenderer.RenderTile(cell, cellOccupier.building.Def, false, cellOccupier.building.GetVisualizationElementID(cellOccupier.primaryElement));
             }
          }
+      }
+
+      /// <summary>
+      /// This is a custom implementation of OverlayModes.Mode.ClearOutsideViewObjects() without the HashSet<Tag> item_ids argument.
+      /// </summary>
+      private static void ClearOutsideViewObjects<T>(HybridListHashSet<T> targets, Vector2I vis_min, Vector2I vis_max, Action<T> on_remove) where T : KMonoBehaviour {
+         Extents viewExtents = new Extents(vis_min, vis_max);
+         ListPool<T, FunctionScope>.PooledList pooledList = ListPool<T, FunctionScope>.Allocate();
+         foreach(T item in targets.AsList())
+         {
+            if(item == null)
+            {
+               continue;
+            }
+
+            Vector2I grid_pos = Grid.PosToXY(item.transform.GetPosition());
+            if(IsGridPositionVisibleInActiveWorld(viewExtents, grid_pos, out var _))
+            {
+               continue;
+            }
+
+            pooledList.Add(item);
+         }
+
+         foreach(T item2 in pooledList)
+         {
+            on_remove(item2);
+            targets.Remove(item2);
+         }
+
+         pooledList.Recycle();
       }
    }
 }
