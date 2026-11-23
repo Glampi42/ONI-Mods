@@ -353,9 +353,6 @@ namespace ErrandNotifier {
          if(!menu.HasOptions)
             menu.PopulateMenu();
          menu.ShowMenu();
-
-         ToolMenu.Instance.PriorityScreen.Show(false);
-         OverlayScreen.Instance.ToggleOverlay(NotifierOverlay.ID);
       }
 
       public override void OnCleanUp() {
@@ -367,8 +364,6 @@ namespace ErrandNotifier {
          base.OnDeactivateTool(newTool);
 
          NotifierToolMenu.Instance?.HideMenu();
-         ToolMenu.Instance.PriorityScreen.Show(false);
-         OverlayScreen.Instance.ToggleOverlay(OverlayModes.None.ID);
 
          SetToolMode(NotifierToolMode.CREATE_NOTIFICATION);
 
@@ -380,6 +375,8 @@ namespace ErrandNotifier {
 
       public override void OnPrefabInit() {
          base.OnPrefabInit();
+
+         viewMode = NotifierOverlay.ID;
 
          // store prefabs:
          CREATE_AREA_GO = Util.KInstantiate(DigTool.Instance.areaVisualizer, gameObject, "NotifierToolCreateAreaVisualizer");

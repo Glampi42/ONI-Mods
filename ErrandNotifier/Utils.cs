@@ -285,6 +285,29 @@ namespace ErrandNotifier {
 
          return default;
       }
+
+      public static int RemoveWhere<T>(this HybridListHashSet<T> list, System.Predicate<T> match) {
+         int num = 0;
+         for(int i = list.Count - 1; i >= 0; i--)
+         {
+            if(match(list[i]) && list.Remove(list[i]))
+            {
+               num++;
+            }
+         }
+
+         return num;
+      }
+
+      public static List<TResult> Select<T, TResult>(this HybridListHashSet<T> list, System.Func<T, TResult> selector) {
+         List<TResult> result = new List<TResult>(list.Count);
+         for(int i = 0; i < list.Count; i++)
+         {
+            result.Add(selector(list[i]));
+         }
+
+         return result;
+      }
       //---------------------Extensions---------------------UP
    }
 }
